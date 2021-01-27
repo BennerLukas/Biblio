@@ -5,7 +5,11 @@
 The used database schema und functionalities are described in the following:
 
 ## Tables:
-Books, Borrow, User
+Books
+User
+Borrow
+
+
 ### Book
 - ISBN (ID)
 - Location_ID
