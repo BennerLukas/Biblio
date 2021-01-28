@@ -14,7 +14,7 @@ DROP TABLE IF EXISTS ADDRESSES;
 CREATE TABLE ADDRESSES
 (
 address_id	 	SERIAL UNIQUE		NOT NULL,
-street 			VARCHAR(20) 		NOT NULL,
+street 			VARCHAR(128) 		NOT NULL,
 house_number	VARCHAR(20) 		NOT NULL,
 city			VARCHAR(20) 	    NOT NULL,
 country			VARCHAR(20) 		NOT NULL,
@@ -25,8 +25,8 @@ PRIMARY KEY (address_id)
 CREATE TABLE AUTHOR
 (
 author_id 	SERIAL UNIQUE		NOT NULL,
-first_name 	VARCHAR(20) 		NOT NULL,
-last_name 	VARCHAR(20)			NOT NULL,
+first_name 	VARCHAR(128) 		NOT NULL,
+last_name   VARCHAR(128)			NOT NULL,
 address_id	INT,
 PRIMARY KEY (author_id),
 FOREIGN KEY (address_id) REFERENCES ADDRESSES(address_id) 
@@ -35,7 +35,7 @@ FOREIGN KEY (address_id) REFERENCES ADDRESSES(address_id)
 CREATE TABLE PUBLISHER
 (
 publisher_id 	SERIAL UNIQUE		NOT NULL,
-pub_name 		VARCHAR(20) 	NOT NULL,
+pub_name 		VARCHAR(128) 	NOT NULL,
 address_id		INT,
 PRIMARY KEY (publisher_id),
 FOREIGN KEY (address_id) REFERENCES ADDRESSES(address_id) 
@@ -48,7 +48,7 @@ location_id 	SERIAL UNIQUE		NOT NULL,
 compartment 	VARCHAR(20),
 shelf			VARCHAR(20),
 room			VARCHAR(20),
-loc_floor		VARCHAR(20),
+loc_floor		INT,
 address_id		INT,
 PRIMARY KEY (location_id),
 FOREIGN KEY (address_id) REFERENCES ADDRESSES(address_id) 
@@ -77,8 +77,8 @@ FOREIGN KEY (location_id) REFERENCES LIB_LOCATION(location_id)
 CREATE TABLE USERS
 (
 user_id         SERIAL UNIQUE		NOT NULL,
-first_name      VARCHAR(20)         NOT NULL,
-last_name       VARCHAR(20)         NOT NULL,
+first_name      VARCHAR(128)         NOT NULL,
+last_name       VARCHAR(128)         NOT NULL,
 date_of_birth   DATE,
 address_id      INT,
 PRIMARY KEY (user_id),
