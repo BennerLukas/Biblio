@@ -1,6 +1,6 @@
 DROP VIEW IF EXISTS overview;
 CREATE VIEW overview AS
-SELECT s_title 'Title', s_genre, STRING_AGG (s_last_name, ', ') 'Author', s_pub_name 'Publisher'
+SELECT books.s_title Title, books.s_genre Genre, STRING_AGG (s_last_name, ', ') Author, s_pub_name Publisher
 FROM books
 LEFT JOIN wrote ON (books.n_book_id = wrote.n_book_id)
 LEFT JOIN author ON (wrote.n_author_id = author.n_author_id)
