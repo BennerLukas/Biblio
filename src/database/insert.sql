@@ -32,28 +32,34 @@ VALUES
 
 INSERT INTO USERS(s_first_name, s_last_name, dt_date_of_birth, n_address_id)
 VALUES
-('Hell', 'Ben', DATE '1987-04-03', 3),
-('Tall', 'Nadia', DATE '1968-10-31', 4),
-('Nieble', 'Susanne',  DATE'2001-02-25', NULL);
+('Ben', 'Hell',  DATE '1987-04-03', 3),
+('Nadia', 'Tall',  DATE '1968-10-31', 4),
+('Susanne', 'Nieble',  DATE'2001-02-25', NULL);
 
-INSERT INTO LOAN (ts_now(), n_user_id)
+INSERT INTO LOAN (ts_now, n_user_id)
 VALUES
 ('2020-11-28 12:12:12', 1),
 ('2020-12-28 14:23:51', 2),
 ('2021-01-28 08:56:22', 3);
 
 INSERT INTO BORROW_ITEM (n_duration, n_book_id, n_loan_id)
-(14, 1, 2)
-(7, 3, 2)
-(7, 2, 1)
-(21, 4, 3)
+VALUES
+(14, 1, 2),
+(7, 3, 2),
+(7, 2, 1),
+(21, 4, 3);
 
-INSERT INTO READ_BOOKS (n_read_books_id, n_book_id, n_user_id)
-
+INSERT INTO READ_BOOKS(n_book_id, n_user_id)
+VALUES
+(1, 2),
+(3, 2),
+(2, 1),
+(4, 3);
 
 INSERT INTO WROTE(n_book_id, n_author_id)
 VALUES
 (1, 1),
 (2, 1),
+(2, 3),
 (3, 3),
 (4, 2);
