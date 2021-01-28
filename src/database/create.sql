@@ -13,118 +13,118 @@ DROP TABLE IF EXISTS ADDRESSES;
 
 CREATE TABLE ADDRESSES
 (
-address_id	 	SERIAL UNIQUE		NOT NULL,
-street 			VARCHAR(128) 		NOT NULL,
-house_number	VARCHAR(20) 		NOT NULL,
-city			VARCHAR(20) 	    NOT NULL,
-country			VARCHAR(20) 		NOT NULL,
-zipcode			INT					NOT NULL,
-PRIMARY KEY (address_id) 
+n_address_id	 	SERIAL UNIQUE		NOT NULL,
+s_street 			VARCHAR(128) 		NOT NULL,
+s_house_number	VARCHAR(20) 		NOT NULL,
+s_city			VARCHAR(20) 	    NOT NULL,
+s_country			VARCHAR(20) 		NOT NULL,
+n_zipcode			INT					NOT NULL,
+PRIMARY KEY (n_address_id) 
 );
 
 CREATE TABLE AUTHOR
 (
-author_id 	SERIAL UNIQUE		NOT NULL,
-first_name 	VARCHAR(128) 		NOT NULL,
-last_name   VARCHAR(128)			NOT NULL,
-address_id	INT,
-PRIMARY KEY (author_id),
-FOREIGN KEY (address_id) REFERENCES ADDRESSES(address_id) 
+n_author_id 	SERIAL UNIQUE		NOT NULL,
+s_first_name 	VARCHAR(128) 		NOT NULL,
+s_last_name   VARCHAR(128)			NOT NULL,
+n_address_id	INT,
+PRIMARY KEY (n_author_id),
+FOREIGN KEY (n_address_id) REFERENCES ADDRESSES(n_address_id) 
 );
 
 CREATE TABLE PUBLISHER
 (
-publisher_id 	SERIAL UNIQUE		NOT NULL,
-pub_name 		VARCHAR(128) 	NOT NULL,
-address_id		INT,
-PRIMARY KEY (publisher_id),
-FOREIGN KEY (address_id) REFERENCES ADDRESSES(address_id) 
+n_publisher_id 	SERIAL UNIQUE		NOT NULL,
+s_pub_name 		VARCHAR(128) 	NOT NULL,
+n_address_id		INT,
+PRIMARY KEY (n_publisher_id),
+FOREIGN KEY (n_address_id) REFERENCES ADDRESSES(n_address_id) 
 );
 
 
 CREATE TABLE LIB_LOCATION
 (
-location_id 	SERIAL UNIQUE		NOT NULL,
-compartment 	VARCHAR(20),
-shelf			VARCHAR(20),
-room			VARCHAR(20),
-loc_floor		INT,
-address_id		INT,
-PRIMARY KEY (location_id),
-FOREIGN KEY (address_id) REFERENCES ADDRESSES(address_id) 
+n_location_id 	SERIAL UNIQUE		NOT NULL,
+s_compartment 	VARCHAR(20),
+s_shelf			VARCHAR(20),
+s_room			VARCHAR(20),
+n_loc_floor		INT,
+n_address_id		INT,
+PRIMARY KEY (n_location_id),
+FOREIGN KEY (n_address_id) REFERENCES ADDRESSES(n_address_id) 
 );
 
 
 
 CREATE TABLE BOOKS
 ( 
-book_id           SERIAL UNIQUE		NOT NULL,
-isbn              VARCHAR(13),
-title             VARCHAR(4096)    NOT NULL,
-book_edition      INT,
-genre             CHAR(20),
-publishing_date   DATE,
-book_language     CHAR(3),
-recommended_age   INT,
-is_availalbe      BOOL             NOT NULL,
-publisher_id      INT,
-location_id       INT,
-PRIMARY KEY (book_id),
-FOREIGN KEY (publisher_id) REFERENCES PUBLISHER(publisher_id),
-FOREIGN KEY (location_id) REFERENCES LIB_LOCATION(location_id)
+n_book_id           SERIAL UNIQUE		NOT NULL,
+s_isbn              VARCHAR(13),
+s_title             VARCHAR(4096)    NOT NULL,
+n_book_edition      INT,
+s_genre             CHAR(20),
+dt_publishing_date   DATE,
+s_book_language     CHAR(3),
+n_recommended_age   INT,
+b_is_availalbe      BOOL             NOT NULL,
+n_publisher_id      INT,
+n_location_id       INT,
+PRIMARY KEY (n_book_id),
+FOREIGN KEY (n_publisher_id) REFERENCES PUBLISHER(n_publisher_id),
+FOREIGN KEY (n_location_id) REFERENCES LIB_LOCATION(n_location_id)
 );
 
 CREATE TABLE USERS
 (
-user_id         SERIAL UNIQUE		NOT NULL,
-first_name      VARCHAR(128)         NOT NULL,
-last_name       VARCHAR(128)         NOT NULL,
-date_of_birth   DATE,
-address_id      INT,
-PRIMARY KEY (user_id),
-FOREIGN KEY (address_id) REFERENCES ADDRESSES(address_id)
+n_user_id         SERIAL UNIQUE		NOT NULL,
+s_first_name      VARCHAR(128)         NOT NULL,
+s_last_name       VARCHAR(128)         NOT NULL,
+dt_date_of_birth   DATE,
+n_address_id      INT,
+PRIMARY KEY (n_user_id),
+FOREIGN KEY (n_address_id) REFERENCES ADDRESSES(n_address_id)
 );
 
 CREATE TABLE LOAN
 ( 
-loan_id           SERIAL UNIQUE		NOT NULL,
-timestamp         TIMESTAMP        NOT NULL DEFAULT current_timestamp,
-user_id           INT              NOT NULL,
-PRIMARY KEY   (loan_id),
-FOREIGN KEY (user_id) REFERENCES USERS(user_id) 
+n_loan_id           SERIAL UNIQUE	 NOT NULL,
+ts_now         TIMESTAMP             NOT NULL DEFAULT current_timestamp,
+n_user_id           INT              NOT NULL,
+PRIMARY KEY   (n_loan_id),
+FOREIGN KEY (n_user_id) REFERENCES USERS(n_user_id) 
 );
 
 
 CREATE TABLE BORROW_ITEM
 (
-borrow_item_id    SERIAL UNIQUE		NOT NULL,
-duration          INT              NOT NULL,
-book_id           INT              NOT NULL,
-loan_id           INT              NOT NULL,
-PRIMARY KEY (borrow_item_id),
-FOREIGN KEY (book_id) REFERENCES BOOKS(book_id),
-FOREIGN KEY (loan_id) REFERENCES LOAN(loan_id)
+n_borrow_item_id    SERIAL UNIQUE	 NOT NULL,
+n_duration          INT              NOT NULL,  --in days
+n_book_id           INT              NOT NULL,
+n_loan_id           INT              NOT NULL,
+PRIMARY KEY (n_borrow_item_id),
+FOREIGN KEY (n_book_id) REFERENCES BOOKS(n_book_id),
+FOREIGN KEY (n_loan_id) REFERENCES LOAN(n_loan_id)
 );
 
 
 CREATE TABLE READ_BOOKS
 (
-read_books_id   SERIAL UNIQUE		NOT NULL,
-book_id         INT                 NOT NULL,
-user_id         INT                 NOT NULL,
-PRIMARY KEY (read_books_id),
-FOREIGN KEY (book_id) REFERENCES BOOKS(book_id),
-FOREIGN KEY (user_id) REFERENCES USERS(user_id)
+n_read_books_id   SERIAL UNIQUE		NOT NULL,
+n_book_id         INT               NOT NULL,
+n_user_id         INT               NOT NULL,
+PRIMARY KEY (n_read_books_id),
+FOREIGN KEY (n_book_id) REFERENCES BOOKS(n_book_id),
+FOREIGN KEY (n_user_id) REFERENCES USERS(n_user_id)
 );
 
 
 
 CREATE TABLE WROTE
 (
-wrote_id        SERIAL UNIQUE		NOT NULL,
-book_id         INT                 NOT NULL,
-author_id       INT                 NOT NULL,
-PRIMARY KEY (wrote_id),
-FOREIGN KEY (book_id) REFERENCES BOOKS(book_id),
-FOREIGN KEY (author_id) REFERENCES AUTHOR(author_id)
+n_wrote_id        SERIAL UNIQUE		NOT NULL,
+n_book_id         INT                 NOT NULL,
+n_author_id       INT                 NOT NULL,
+PRIMARY KEY (n_wrote_id),
+FOREIGN KEY (n_book_id) REFERENCES BOOKS(n_book_id),
+FOREIGN KEY (n_author_id) REFERENCES AUTHOR(n_author_id)
 );

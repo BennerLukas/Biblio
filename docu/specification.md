@@ -2,6 +2,8 @@
 
 'Biblio' will be a webapp for organizing your private book collection.
 
+Group-member: Alina Buss (4163246), Phillip Lange (5920414), Lukas Benner (6550912)
+
 The used database schema und functionalities are described in the following:
 
 - Books: Every book is stored in the database with following attributes: title, ISBN, recommended Age, language, publishing date, genre, edition, wether its available and a unique Identifier.
