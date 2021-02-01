@@ -47,7 +47,7 @@ BEGIN
                     NULL, 
                     true, 
                     (SELECT n_author_id FROM author WHERE   author_last_name = s_last_name AND author_first_name = s_first_name),
-                    (SELECT n_publisher_id FROM PUBLISHER WHERE publisher_name = s_pub_name)    --2nd time executing same query --> Performance?!
+                    (SELECT n_publisher_id FROM PUBLISHER WHERE publisher_name = s_pub_name)
                     )
     END
 
