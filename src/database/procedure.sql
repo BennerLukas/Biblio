@@ -18,27 +18,37 @@ as '
 
 	end;'
 
-create or replace procedure not_available(
-    loan_user int,
-    book int,
-    duration int
-)
+
+
+
+-- create or replace procedure last_not_available(
+-- )
+-- language plpgsql
+-- as '
+--     BEGIN
+--         UPDATE books
+--         SET b_is_availalbe = false
+--         WHERE n_book_id = (SELECT n_book_id FROM borrow_item WHERE n_loan_id = (SELECT n_loan_id FROM LOAN ORDER BY n_loan_id DESC LIMIT 1));
+--     COMMIT; 
+-- 	end;'
+
+
+create or replace function last_not_available()
+RETURNS TRIGGER
 language plpgsql
 as '
-    BEGIN
-        SELECT n_book_id FROM borrow_item WHERE n_loan_id = (SELECT n_loan_id FROM LOAN ORDER BY n_loan_id DESC LIMIT 1);
-
-       
-    COMMIT; 
-
-	end;'
-
-
-
+   BEGIN
+        UPDATE books
+        SET b_is_availalbe = false
+        WHERE n_book_id = (SELECT n_book_id FROM borrow_item WHERE n_loan_id = (SELECT n_loan_id FROM LOAN ORDER BY n_loan_id DESC LIMIT 1));
+	END;'
 
 
 CREATE TRIGGER loan_happened
 AFTER INSERT 
 ON LOAN 
 FOR EACH ROW
-EXECUTE procedure
+EXECUTE procedure last_not_available();
+
+
+
