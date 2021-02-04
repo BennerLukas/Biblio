@@ -11,5 +11,5 @@
 9. count (total) loans for books (most borrowed book). (TOP 10) --> (by genre)
 10. count total loans for particular user.                  --> Define thresholds for (gold-, silver-, bronze- user)
 11. most read/loaned genre/author/... for particular user
-
+12. list all borrowed books which due date is over but is still active.
 Cluster different editions togehter.
