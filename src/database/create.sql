@@ -101,6 +101,7 @@ n_borrow_item_id    SERIAL UNIQUE	 NOT NULL,
 n_duration          INT              NOT NULL,  --in days
 n_book_id           INT              NOT NULL,
 n_loan_id           INT              NOT NULL,
+b_active            BOOL           NOT NULL DEFAULT true,
 PRIMARY KEY (n_borrow_item_id),
 FOREIGN KEY (n_book_id) REFERENCES BOOKS(n_book_id),
 FOREIGN KEY (n_loan_id) REFERENCES LOAN(n_loan_id)

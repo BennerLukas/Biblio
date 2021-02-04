@@ -1,37 +1,36 @@
+--DROP PROCEDURE new_loan(INT, INT[], INT);
 create or replace procedure new_loan(
     loan_user int,
-    book int,
+    book_ids INT[],
     duration int
 )
 language plpgsql
-as '
-    BEGIN
+AS '
+		DECLARE
+			book INT;
+			loan_id INT;
+    	BEGIN
 
-        INSERT INTO LOAN (ts_now, n_user_id)
-        VALUES(now(), loan_user);
+        	INSERT INTO LOAN (ts_now, n_user_id)
+        	VALUES(now(), loan_user)
+        	RETURNING n_loan_id INTO loan_id;
+			
+			
+		   FOREACH book IN ARRAY $2
+			LOOP
+        		INSERT INTO BORROW_ITEM (n_duration, n_book_id, n_loan_id)
+        		VALUES (duration, book,loan_id);
+        		
+        		UPDATE books
+	        	SET b_is_availalbe = false
+   	     	WHERE n_book_id = book;
+        	END loop;
 
-        INSERT INTO BORROW_ITEM (n_duration, n_book_id, n_loan_id)
-        VALUES (duration, book,(SELECT n_loan_id FROM LOAN ORDER BY n_loan_id DESC LIMIT 1));
         
-        CALL last_not_available();
+        
 		END;
-	'
-
-create or replace procedure last_not_available()
-language plpgsql
-as '
-   BEGIN
-        UPDATE books
-        SET b_is_availalbe = false
-        WHERE n_book_id = (SELECT n_book_id FROM borrow_item WHERE n_loan_id = (SELECT n_loan_id FROM LOAN ORDER BY n_loan_id DESC LIMIT 1));
-	END;'
-
-
-DROP TRIGGER IF EXISTS loan_happened ON LOAN;
-
-CREATE TRIGGER loan_happened
-AFTER INSERT 
-ON LOAN 
-FOR EACH ROW
-EXECUTE procedure last_not_available();
+	';
+	
+-- Test
+-- CALL new_loan(1,ARRAY[1,2,3],31);
 
