@@ -1,17 +1,19 @@
-DECLARE 
-    author_first_name   VARCHAR(128);
-    author_last_name    VARCHAR(128);
-    author_address      INT;       
-    publisher_name      VARCHAR(128);
-    publisher_address   INT;       
-    book_title          VARCHAR(4096);
-    book_edition        INT;
-    book_language       CHAR(3);
-    book_genre          CHAR(20);
-    book_isbn           VARCHAR(13);
 
+create or replace procedure add_book( 
+    author_first_name   VARCHAR(128),
+    author_last_name    VARCHAR(128),
+    author_address      INT;      ,
+    publisher_name      VARCHAR(128),
+    publisher_address   INT;      ,
+    book_title          VARCHAR(4096),
+    book_edition        INT,
+    book_language       CHAR(3),
+    book_genre          CHAR(20),
+    book_isbn           VARCHAR(13)
+)
 -- without addresses
-
+language plpgsql
+AS '
 BEGIN
     IF NOT EXISTS   (   SELECT n_author_id
                     FROM author
@@ -51,4 +53,5 @@ BEGIN
                     )
     END IF
 
-COMMIT;
+COMMIT;'
+;

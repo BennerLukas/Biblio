@@ -59,21 +59,21 @@ FROM users AS u
 	LEFT JOIN books AS bo ON bi.n_book_id = bo.n_book_id
 WHERE bi.b_active = 'true';
 
-SELECT u.s_first_name AS User_first_namel.n_loan_id = bi.n_loan_id
-	LEFT JOIN books AS bo ON bi.n_book_id = bo.n_book_id
-WHERE bi.b_active = 'true' and u., u.s_last_name AS User_last_name, l.n_loan_id AS Loan_id,
+SELECT u.s_first_name AS User_first_name, u.s_last_name AS User_last_name, l.n_loan_id AS Loan_id,
 l.ts_now AS Loan_timestamp, bi.n_duration AS Loan_duration, bi.b_active AS Loan_active, bo.s_isbn AS Book_ISBN,
 bo.s_title AS Book_title, bo.n_book_edition AS Book_edition
 FROM users AS u
-	LEFT JOIN loan AS l ON u.n_user_id = l.n_user_id
-	LEFT JOIN borrow_item AS bi ON n_user_id = '1';
+    LEFT JOIN loan AS l ON u.n_user_id = l.n_user_id
+    LEFT JOIN borrow_item AS bi ON l.n_loan_id = bi.n_loan_id
+    LEFT JOIN books AS bo ON bi.n_book_id = bo.n_book_id
+WHERE bi.b_active = 'true' and u.n_user_id = '1';
 
 -- 4. borrowed items who exceeded there due date.
 
 SELECT bi.n_borrow_item_id AS Borrowed_item, bi.n_loan_id AS Loan_id, bi.n_duration + DATE(l.ts_now) AS Due_Date
 FROM borrow_item AS bi
 LEFT JOIN loan AS l ON bi.n_loan_id = l.n_loan_id
-WHERE CURRENT_DATE > bi.n_duration + DATE(l.ts_now);
+WHERE CURRENT_DATE > bi.n_duration + DATE(l.ts_now) AND bi.b_active = 'TRUE';
 
 
 -- 5. get location for particular book.
@@ -101,16 +101,16 @@ WHERE b.s_book_language = 'en';
 
 -- 7. get the sum of books by genre/publisher/author. 
 
-SELECT  b.s_genre AS Genre, COUNT(DISTINCT(b.s_isbn)) AS Book_count
+SELECT  b.s_genre AS Genre, COUNT(DISTINCT(b.n_book_id)) AS Book_count
 FROM books AS b
 GROUP BY b.s_genre;
 
-SELECT  pu.s_pub_name AS Publisher, COUNT(DISTINCT(b.s_isbn)) AS Book_count
+SELECT  pu.s_pub_name AS Publisher, COUNT(DISTINCT(b.n_book_id)) AS Book_count
 FROM books AS b
 	LEFT JOIN publisher AS pu ON b.n_publisher_id = pu.n_publisher_id
 GROUP BY pu.s_pub_name;
 
-SELECT  au.s_first_name AS Author_first_name, au.s_last_name AS Author_last_name, COUNT(DISTINCT(b.s_isbn)) AS Book_count
+SELECT  au.s_first_name AS Author_first_name, au.s_last_name AS Author_last_name, COUNT(DISTINCT(b.n_book_id)) AS Book_count
 FROM books AS b
 	LEFT JOIN wrote AS w ON b.n_book_id =  w.n_book_id
 	LEFT JOIN author AS au ON w.n_author_id = au.n_author_id
@@ -154,17 +154,19 @@ FROM (SELECT u.s_first_name AS User_first_name, u.s_last_name AS User_last_name,
 		GROUP BY  u.s_first_name, u.s_last_name, pu.s_pub_name) AS rp
 WHERE rank <= 10;
 
--- 9. count (total) loans for books (most borrowed book). (TOP 10) --> (by genre)
+-- 9. count (total) loans for books (most borrowed book).
 
 SELECT bo.s_isbn AS Book_ISBN, bo.s_title AS Book_title, COUNT(DISTINCT(bi.n_loan_id)) AS Count_loans
 FROM books AS bo
 	JOIN borrow_item AS bi ON bo.n_book_id = bi.n_book_id
-GROUP BY bo.s_isbn, bo.s_title;
+GROUP BY bo.s_isbn, bo.s_title
+ORDER BY COUNT(DISTINCT(bi.n_loan_id)) DESC;
 
 SELECT bo.s_genre AS Book_genre, bo.s_isbn AS Book_ISBN, bo.s_title AS Book_title, COUNT(DISTINCT(bi.n_loan_id)) AS Count_loans
 FROM books AS bo
 	JOIN borrow_item AS bi ON bo.n_book_id = bi.n_book_id
-GROUP BY bo.s_genre, bo.s_isbn, bo.s_title;
+GROUP BY bo.s_genre, bo.s_isbn, bo.s_title
+ORDER BY COUNT(DISTINCT(bi.n_loan_id)) DESC;
 
 SELECT rp.Book_ISBN, rp.Book_title, rp.Count_loans
 FROM (SELECT  bo.s_isbn AS Book_ISBN, bo.s_title AS Book_title, 
@@ -173,7 +175,7 @@ FROM (SELECT  bo.s_isbn AS Book_ISBN, bo.s_title AS Book_title,
 		FROM books AS bo
 			JOIN borrow_item AS bi ON bo.n_book_id = bi.n_book_id
 		GROUP BY bo.s_isbn, bo.s_title) AS rp
-WHERE rank <= 10;
+WHERE rank <= 10
 
 SELECT rp.Book_genre, rp.Book_ISBN, rp.Book_title, rp.Count_loans
 FROM (SELECT bo.s_genre AS Book_genre, bo.s_isbn AS Book_ISBN, bo.s_title AS Book_title, 
