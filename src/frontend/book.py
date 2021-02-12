@@ -1,5 +1,4 @@
 import isbnlib
-import re
 
 class Book:
 
