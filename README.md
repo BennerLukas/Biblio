@@ -1,3 +1,6 @@
+<img src="https://raw.githubusercontent.com/BennerLukas/biblio/main/doc/Design/svg/Logo.svg" alt="Logo" width="200"/>
+
+
 # biblio
 
 private library tool for books and magazines.

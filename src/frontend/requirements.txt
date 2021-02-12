@@ -2,3 +2,4 @@ numpy
 flask
 sqlalchemy
 psycopg2
+isbnlib

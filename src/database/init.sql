@@ -242,8 +242,8 @@ GROUP BY books.n_book_id, wrote.n_wrote_id, author.n_author_id, publisher.n_publ
 
 -- Create procedures
 create or replace procedure add_book( 
-    author_first_name   VARCHAR(128),
-    author_last_name    VARCHAR(128),
+    author_first_name   VARCHAR(128)[],
+    author_last_name    VARCHAR(128)[],
     author_address      INT,
     publisher_name      VARCHAR(128),
     publisher_address   INT,
@@ -321,3 +321,34 @@ ON borrow_item
 FOR EACH ROW
 EXECUTE PROCEDURE book_returned_triggered();
 
+create or replace procedure new_loan(
+    loan_user int,
+    book_ids INT[],
+    duration int
+)
+language plpgsql
+AS '
+		DECLARE
+			book INT;
+			loan_id INT;
+    	BEGIN
+
+        	INSERT INTO LOAN (ts_now, n_user_id)
+        	VALUES(now(), loan_user)
+        	RETURNING n_loan_id INTO loan_id;
+			
+			
+		   FOREACH book IN ARRAY $2
+			LOOP
+        		INSERT INTO BORROW_ITEM (n_duration, n_book_id, n_loan_id)
+        		VALUES (duration, book,loan_id);
+        		
+        		UPDATE books
+	        	SET b_is_availalbe = false
+   	     	WHERE n_book_id = book;
+        	END loop;
+
+        
+        
+		END;
+	';

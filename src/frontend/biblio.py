@@ -65,6 +65,8 @@ class Biblio:
         
         return True
 
+    def add_new_book(self, obj_book):
+        pass
 
 
 if __name__ == "__main__":
