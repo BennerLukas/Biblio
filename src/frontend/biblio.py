@@ -22,6 +22,8 @@ class Biblio:
 
         self.connect()
 
+    ############################################################################################################    INIT FUNCTIONS
+
     def connect(self):
         try:
             self.engine = sqlalchemy.create_engine('postgres+psycopg2://postgres:1234@localhost:5433/postgres')
@@ -54,13 +56,19 @@ class Biblio:
             self.b_initialised = True
             return True
 
+    ############################################################################################################    USING FUNCTIONS
+
     def get_select(self, s_sql_statement):
+        """This Function gets a Select-Statements and returns the result in a df."""
         try:
             df = pd.read_sql_query(s_sql_statement, self.connection)
         except:
             logging.error("Query couldn't be executed.")
             return False
         return df
+
+    ############################################################################################################    EXECUTING FUNCTIONS
+
 
     def list_read_books(self):
         df = self.get_select(self.Selections.sql_read_books(self.s_user))
@@ -95,6 +103,8 @@ class Biblio:
 
     def add_new_book(self, obj_book):
         pass
+
+    ############################################################################################################    MAIN
 
 
 if __name__ == "__main__":
