@@ -77,14 +77,6 @@ class Biblio:
             return False
         return True
 
-    def get_select(self, s_sql_statement):
-        try:
-           df = pd.read_sql_query(s_sql_statement, self.connection)
-        except:
-            logging.error("Query couldn't be executed.")
-            return False
-        return df
-
 
     def make_loan(self, book_ids, duration):
         
