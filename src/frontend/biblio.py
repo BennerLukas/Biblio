@@ -9,6 +9,7 @@ class Biblio:
 
     def __init__(self):
         self.s_user = None
+        self.s_user = 1
 
         self.engine = None
         self.connection = None
@@ -33,7 +34,7 @@ class Biblio:
 
     def test(self, b_verbose=True):
         
-        if self.b_connected and self.b_initialised:
+        if self.b_connected:
             df = pd.read_sql_query('SELECT * FROM books LIMIT 1', self.connection)
             if b_verbose:
                 print(df)
@@ -54,15 +55,33 @@ class Biblio:
 
     def list_read_books(self):
         
-        books = []
-        return books
+        s__book_ids = f'SELECT n_book_id FROM read_books WHERE n_user_id = {self.s_user}'
+        s_select = f'SELECT title, author, publisher, isbn FROM overview WHERE bookid IN ({s__book_ids});'
+        
+        df = pd.read_sql_query(s_select, self.connection)
+        print(df)
+
+        return df
+
     
     def make_loan(self, book_ids, duration):
         
+        call = f"CALL new_loan({self.s_user}, ARRAY{book_ids}, {duration});"
+
+        # results = self.cursor.callproc('new_loan', [self.s_user, book_ids, duration])
+
+        # results = self.connection.execute(f'CALL new_loan({self.s_user}, ARRAY{book_ids}, {duration});')
+        # results = self.connection.execute(f'SELECT {"b_active"} from {"borrow_items"};')
+        self.engine
+
+        # print(results)
         return True
 
     def return_book(self, book_id):
         
+        s_update = f'UPDATE borrow_item SET b_active = false WHERE n_book_id = {book_id};'
+        self.connection.execute(s_update)
+
         return True
 
     def add_new_book(self, obj_book):
@@ -71,5 +90,8 @@ class Biblio:
 
 if __name__ == "__main__":
     my_class = Biblio()
+    # my_class.init_db()
+    # my_class.list_read_books()
+    my_class.return_book(2)
+    # my_class.make_loan([4], 22)
     # my_class.test()
-    my_class.init_db()

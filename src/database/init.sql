@@ -146,9 +146,9 @@ VALUES
 
 INSERT INTO AUTHOR(s_first_name, s_last_name, n_address_id)
 VALUES
-('Aaronovitch', 'Ben', 1),
-('Abawi', 'Atia', 2),
-('Abel', 'Susanne', 3);
+('Ben', 'Aaronovitch', 1),
+('Atia', 'Abawi', 2),
+('Susanne', 'Abel', 3);
 
 INSERT INTO PUBLISHER(s_pub_name, n_address_id)
 VALUES
@@ -208,8 +208,9 @@ VALUES
 
 -- Create views
 CREATE VIEW overview AS
-SELECT  books.s_title Title, 
-        books.s_genre Genre,
+SELECT  books.n_book_id BookID,
+        books.s_title Title, 
+        books.dt_publishing_date,
         books.s_isbn Isbn, 
         STRING_AGG (s_last_name, ', ') Author, 
         s_pub_name Publisher
