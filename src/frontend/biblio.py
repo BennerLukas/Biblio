@@ -5,6 +5,7 @@ import re
 
 from selections import Selections
 
+
 class Biblio:
 
     def __init__(self):
@@ -22,7 +23,8 @@ class Biblio:
 
         self.connect()
 
-    ############################################################################################################    INIT FUNCTIONS
+    # ###########################################################################################################
+    # INIT FUNCTIONS
 
     def connect(self):
         try:
@@ -48,7 +50,8 @@ class Biblio:
     def init_db(self):
         if self.b_connected:
             s_sql_statement = open(r"src\database\init.sql", "r").read()
-            s_sql_statement = re.sub(r"--.*|\n|\t", " ", s_sql_statement)   # cleaning file from comments and escape functions
+            s_sql_statement = re.sub(r"--.*|\n|\t", " ",
+                                     s_sql_statement)  # cleaning file from comments and escape functions
 
             self.connection.execute(s_sql_statement)
 
@@ -56,7 +59,8 @@ class Biblio:
             self.b_initialised = True
             return True
 
-    ############################################################################################################    USING FUNCTIONS
+    # ###########################################################################################################
+    # USING FUNCTIONS
 
     def get_select(self, s_sql_statement):
         """This Function gets a Select-Statements and returns the result in a df."""
@@ -67,8 +71,8 @@ class Biblio:
             return False
         return df
 
-    ############################################################################################################    EXECUTING FUNCTIONS
-
+    # ###########################################################################################################
+    # EXECUTING FUNCTIONS
 
     def list_read_books(self):
         df = self.get_select(self.Selections.sql_read_books(self.s_user))
@@ -85,9 +89,8 @@ class Biblio:
             return False
         return True
 
-
     def make_loan(self, book_ids, duration):
-        
+
         call = f"CALL new_loan({self.s_user}, ARRAY{book_ids}, {duration});"
 
         # results = self.cursor.callproc('new_loan', [self.s_user, book_ids, duration])
@@ -99,12 +102,11 @@ class Biblio:
         # print(results)
         return True
 
-
-
     def add_new_book(self, obj_book):
         pass
 
-    ############################################################################################################    MAIN
+    # ############################################################################################################
+    # MAIN
 
 
 if __name__ == "__main__":
