@@ -1,29 +1,22 @@
-<!doctype html>
-<html>
-    <head>
-        <title>Biblio</title>
-        <!-- Bootstrap CSS --> 
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">    </head>
-    <body>
-        <div class="header" style="padding:10px" align="center">
-            <h1>Biblio</h1>
-            <br>
-            Hallo User: {{ user }}
-        </div>
-        <div class="container" style="padding:10px">
-                <div class="card mb-3 h-100">
-                    <div class="card-header"> Function tests:</div>
-                    <div class="card-body"> 
-                        <form method="POST" action="list_read_books">
-                            <div class="btn-group" role="group" > 
-                                <button name="list_read_books" type="submit" class="btn btn-secondary" value="list_read_books">list_read_books</button>
-                            </div>
-                             <p>
-                                    Result is: {{ result }}
-                                </p>
-                        </form> 
-                    </div>    
-                </div>
-        </div>
-    </body>
-</html>    
+<!-- index.html-->
+
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block body %}
+<div class="jumbotron">
+  <h1>Biblio Is Awesome</h1>
+  <p class="lead">And I'm glad to be learning so much about it!</p>
+</div>
+<div class="jumbotron">
+  <h1>Functions</h1>
+  <form action="/list_read_books" method="post">
+    <input type="submit" name="execute_list_read_books" value="list_read_books">
+  </form>
+  <br>
+  <form action="/return_book" method="post">
+    <input type="test" name="book_id" value="1">
+    <input type="submit" name="execute_return_book" value="return_book">
+    <p>{{ return_book_result }}</p>
+  </form>
+</div>
+{% endblock %}

@@ -5,7 +5,7 @@ import pandas as pd
 import logging
 import re
 
-from selections import Selections
+from api.selections import Selections
 
 
 class Biblio:
@@ -74,7 +74,7 @@ class Biblio:
         :return:
         """
         if self.b_connected:
-            s_sql_statement = open("../database/init.sql", "r").read()
+            s_sql_statement = open("../../database/init.sql", "r").read()
             s_sql_statement = re.sub(r"--.*|\n|\t", " ",
                                      s_sql_statement)  # cleaning file from comments and escape functions
 
