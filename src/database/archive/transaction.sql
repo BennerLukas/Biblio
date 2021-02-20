@@ -39,7 +39,7 @@ BEGIN
                         OR      (book_title = s_title AND book_edition = n_book_edition AND book_language = s_book_language)
                         )
     THEN
-        INSERT INTO BOOKS(s_isbn, s_title, n_book_edition, s_genre, dt_publishing_date, s_book_language, n_recommended_age, b_is_availalbe, n_publisher_id, n_location_id)
+        INSERT INTO BOOKS(s_isbn, s_title, n_book_edition, s_genre, n_publishing_date, s_book_language, n_recommended_age, b_is_availalbe, n_publisher_id, n_location_id)
         VALUES  (   book_isbn, 
                     book_title,  
                     book_edition, 

@@ -246,6 +246,7 @@ create or replace procedure add_book(
     author_first_name   VARCHAR(128)[],
     author_last_name    VARCHAR(128)[],
     author_address      INT,
+    n_publishing_year   INT,
     publisher_name      VARCHAR(128),
     publisher_address   INT,
     book_title          VARCHAR(4096),
@@ -267,7 +268,7 @@ BEGIN
         INSERT INTO AUTHOR(s_first_name, s_last_name, n_address_id)
         VALUES (author_first_name, author_last_name, author_address);
     END IF;
-
+    
     IF NOT EXISTS    (   SELECT n_publisher_id
                         FROM PUBLISHER
                         WHERE publisher_name = s_pub_name)
@@ -286,7 +287,8 @@ BEGIN
         VALUES  (   book_isbn, 
                     book_title,  
                     book_edition, 
-                    book_genre, 
+                    book_genre,
+                    n_publishing_year, 
                     NULL, 
                     book_language, 
                     NULL, 
