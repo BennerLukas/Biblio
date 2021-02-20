@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Biblio</title>
+        <!-- Bootstrap CSS --> 
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">    </head>
+    <body>
+        <div class="header" style="padding:10px" align="center">
+            <h1>Biblio</h1>
+            <br>
+            Hallo User: {{ user }}
+        </div>
+        <div class="container" style="padding:10px">
+                <div class="card mb-3 h-100">
+                    <div class="card-header"> Function tests:</div>
+                    <div class="card-body"> 
+                        <form method="POST" action="list_read_books">
+                            <div class="btn-group" role="group" > 
+                                <button name="list_read_books" type="submit" class="btn btn-secondary" value="list_read_books">list_read_books</button>
+                            </div>
+                             <p>
+                                    Result is: {{ result }}
+                                </p>
+                        </form> 
+                    </div>    
+                </div>
+        </div>
+    </body>
+</html>    
