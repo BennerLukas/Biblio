@@ -37,7 +37,7 @@ class Book:
         self.book_genre = book_genre
         self.book_isbn = book_isbn
 
-    def get_meta_from_isbn(self, s_isbn="9780582446939"):
+    def get_meta_from_isbn(self, s_isbn="9780062893338"):
         meta_data = isbnlib.meta(s_isbn)
 
         self.author_first_names = []
@@ -55,8 +55,22 @@ class Book:
         self.book_language = meta_data["Language"]
         self.book_isbn = list(meta_data.values())[0]
 
-        print(meta_data)
+        #print(meta_data)
+        
+    def __str__(self):
+        return(f"""ISBN: {self.book_isbn}
+Titel: {self.book_title}
+Author First Names: {self.author_first_names}
+Author Last Names: {self.author_last_names}
+Language: {self.book_language}
+Publisher: {self.publisher_name}""")
 
 if __name__ == "__main__":
     my_class = Book()
-    my_class.get_meta_from_isbn()
+    isbn = input("ISBN eingeben: ")
+    if isbn != str():
+        my_class.get_meta_from_isbn(isbn)
+        print(my_class)
+    else:
+        my_class.get_meta_from_isbn()
+        print(my_class)
