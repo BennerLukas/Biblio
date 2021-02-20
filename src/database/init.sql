@@ -70,7 +70,7 @@ s_isbn              VARCHAR(13),
 s_title             VARCHAR(4096)    NOT NULL,
 n_book_edition      INT,
 s_genre             CHAR(20),
-dt_publishing_date   DATE,
+n_publishing_year   INT,
 s_book_language     CHAR(3),
 n_recommended_age   INT,
 b_is_availalbe      BOOL             NOT NULL,
@@ -162,10 +162,10 @@ VALUES
 (NULL, 'A', 'Lesezimmer', 8, 1),
 ('A', '15', '104', 1, 2);
 
-INSERT INTO BOOKS(s_isbn, s_title, n_book_edition, s_genre, dt_publishing_date, s_book_language, n_recommended_age, b_is_availalbe, n_publisher_id, n_location_id)
+INSERT INTO BOOKS(s_isbn, s_title, n_book_edition, s_genre, n_publishing_year, s_book_language, n_recommended_age, b_is_availalbe, n_publisher_id, n_location_id)
 VALUES
-('9780575097568', 'Rivers of London', 1, 'Urban Fantasy', DATE '2011-01-10', 'en', NULL, true, 1, 2), -- Author 1
-('9780345524591', 'Moon Over Soho', 2, 'Urban Fantasy', DATE '2011-04-21', NULL , NULL, true, 1, 2),  -- Author 1
+('9780575097568', 'Rivers of London', 1, 'Urban Fantasy', 2010, 'en', NULL, true, 1, 2), -- Author 1
+('9780345524591', 'Moon Over Soho', 2, 'Urban Fantasy', 2011, NULL , NULL, true, 1, 2),  -- Author 1
 ('9780525516019', 'A Land of Permanent Goodbyes', NULL, NULL, NULL, 'en', 18, true, 1, 1), -- Author 3
 (NULL, 'Der Text des Lebens', NULL, NULL, NULL, 'de', 40, true, 2, 3); -- Author 2 
 
@@ -210,7 +210,7 @@ VALUES
 CREATE VIEW overview AS
 SELECT  books.n_book_id BookID,
         books.s_title Title, 
-        books.dt_publishing_date,
+        books.n_publishing_year,
         books.s_isbn Isbn, 
         STRING_AGG (s_last_name, ', ') Author, 
         s_pub_name Publisher
@@ -226,7 +226,7 @@ SELECT      books.n_book_id,
             books.s_title , 
             books.n_book_edition, 
             books.s_genre, 
-            books.dt_publishing_date, 
+            books.n_publishing_year,
             books.s_book_language, 
             books.n_recommended_age, 
             books.b_is_availalbe, 
