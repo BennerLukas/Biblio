@@ -18,5 +18,5 @@ Biblio is a tool for your private library. It manages your books and magazines.
 ## Using
 
 ```bash
-docker container run -p 5433:5432 --network dock-net --name biblio -e POSTGRES_PASSWORD=1234 postgres:12.2 
+docker container run -p 5433:5432 --name biblio -e POSTGRES_PASSWORD=1234 postgres:12.2 
 ````
