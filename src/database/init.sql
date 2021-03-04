@@ -245,7 +245,7 @@ GROUP BY books.n_book_id, wrote.n_wrote_id, author.n_author_id, publisher.n_publ
 create or replace procedure add_book( 
     author_first_name   VARCHAR(128)[],
     author_last_name    VARCHAR(128)[],
-    author_address      INT,
+    author_address      INT[],
     n_publishing_year   INT,
     publisher_name      VARCHAR(128),
     publisher_address   INT,
@@ -259,15 +259,20 @@ create or replace procedure add_book(
 language plpgsql
 AS '
 BEGIN
-    IF NOT EXISTS   (   SELECT n_author_id
-                    FROM author
-                    WHERE   author_last_name = s_last_name
-                    AND     author_first_name = s_first_name
-                )
-    THEN
-        INSERT INTO AUTHOR(s_first_name, s_last_name, n_address_id)
-        VALUES (author_first_name, author_last_name, author_address);
-    END IF;
+    DECLARE returned_author_ids     INT[];
+    DECLARE book_id                 INT;
+    FOR loop_counter FROM 1 .. (cardinality(author_first_name) + 1) LOOP 
+        IF NOT EXISTS   (   SELECT n_author_id
+                        FROM author
+                        WHERE   author_last_name[loop_counter] = s_last_name
+                        AND     author_first_name[loop_counter] = s_first_name
+                    )
+        THEN
+            returend_author_ids || INSERT INTO AUTHOR(s_first_name, s_last_name, n_address_id)
+            VALUES (author_first_name[loop_counter], author_last_name[loop_counter], author_address[loop_counter])
+            RETURNING n_authord_id;
+        END IF;
+    END LOOP;
     
     IF NOT EXISTS    (   SELECT n_publisher_id
                         FROM PUBLISHER
@@ -283,7 +288,7 @@ BEGIN
                         OR      (book_title = s_title AND book_edition = n_book_edition AND book_language = s_book_language)
                         )
     THEN
-        INSERT INTO BOOKS(s_isbn, s_title, n_book_edition, s_genre, n_publishing_year, s_book_language, n_recommended_age, b_is_availalbe, n_publisher_id, n_location_id)
+        book_id := INSERT INTO BOOKS(s_isbn, s_title, n_book_edition, s_genre, n_publishing_year, s_book_language, n_recommended_age, b_is_availalbe, n_publisher_id, n_location_id)
         VALUES  (   book_isbn, 
                     book_title,  
                     book_edition, 
@@ -293,11 +298,18 @@ BEGIN
                     book_language, 
                     NULL, 
                     true, 
-                    (SELECT n_author_id FROM author WHERE   author_last_name = s_last_name AND author_first_name = s_first_name),
+                    (SELECT n_author_id FROM author WHERE author_last_name = s_last_name AND author_first_name = s_first_name),
                     (SELECT n_publisher_id FROM PUBLISHER WHERE publisher_name = s_pub_name)
-                    );
+                    )
+        RETURNING n_book_id;
     END IF;
-
+    
+    FOR loop_counter FROM 1 .. (cardinality(author_first_name) + 1) LOOP 
+        INSERT INTO WROTE(n_book_id, s_author_id)
+        VALUES  (   book_id,
+                    returend_author_ids[loopcounter]
+                );    
+    END LOOP;
 END;'
 ;
 
