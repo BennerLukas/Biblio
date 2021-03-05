@@ -5,6 +5,7 @@ import pandas as pd
 import logging
 import re
 
+from api import book
 from api.selections import Selections
 
 
@@ -148,7 +149,14 @@ class Biblio:
         return True
 
     def add_new_book(self, obj_book):
-        pass
+        try:
+            call = obj_book.get_s_sql_call()
+            self.exec_statement(call)
+        except Exception as an_exception:
+            logging.error(an_exception)
+            logging.error("Book couldn't be loaned.")
+            return False
+        return True
 
     # ############################################################################################################
 
@@ -158,5 +166,5 @@ if __name__ == "__main__":
     my_class.init_db()
     # my_class.test(True)
     # my_class.list_read_books()
-    my_class.make_loan([1, 2], 14)
-    my_class.return_book(1)
+    # my_class.make_loan([1, 2], 14)
+    # my_class.return_book(1)
