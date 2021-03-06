@@ -1,6 +1,5 @@
-# views.py
 
-from flask import render_template, redirect, url_for, request, session
+from flask import render_template, request, session
 
 from app import app
 from api.biblio import Biblio
