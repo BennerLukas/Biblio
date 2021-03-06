@@ -2,8 +2,9 @@ from flask import render_template, request, session
 from pandas import DataFrame
 
 from api.selections import Selections
-from app import app
 from api.biblio import Biblio
+from api.book import Book
+from app import app
 
 bib = Biblio()
 app.secret_key = 'dljsawadslqk24e21cjn!Ew@@dsa5'
@@ -25,7 +26,7 @@ def index():
     return render_template("/index.html")
 
 
-@app.route('/book')  # Books
+@app.route('/book')
 def book():
     result = bib.get_select("SELECT * FROM book_extended")
     print(request)
@@ -33,16 +34,74 @@ def book():
     if isinstance(result, DataFrame):
         return render_template("includes/table.html", column_names=result.columns.values,
                                row_data=list(result.values.tolist()),
-                               title='Books', sub_header='List of all your books', link_column='b_is_available',
+                               title='Books', sub_header='List of all your books', link_column='none',
                                zip=zip)
     else:
         return render_template("includes/fail.html", title='Error',
                                text='Site could not be loaded.')
 
 
-@app.route('/add_book', methods=['POST', 'GET'])  # Return Book
+@app.route('/loan_or_read_book', methods=['POST', 'GET'])
+def loan_or_read_book():
+    if request.method == 'POST':
+        id = request.form['book_id']
+        if request.form['loan'] == 'Loan':
+            result = bib.make_loan(int(request.form['book_id']))
+        if request.form['read'] == 'Read':
+            request = False
+        if result is True:
+            return render_template("includes/success.html", title='Book borrowed',
+                                   text='You have borrowed the book successfully.')
+    return render_template("includes/fail.html", title='No book added',
+                           text='You have not borrowed the book.')
+
+
+@app.route('/add_book', methods=['POST', 'GET'])
 def add_book():
     return render_template("add_book.html")
+
+
+@app.route('/execute_add_book', methods=['POST', 'GET'])
+def execute_add_book():
+    new_book = Book()
+    new_book.set_via_isbn(request.form['book_isbn'])
+    result = bib.add_new_book(new_book)
+    if result is True:
+        return render_template("includes/success.html", title='New book added',
+                               text='You have add a new book successfully.')
+    return render_template("includes/fail.html", title='No book added',
+                           text='You have not added the book.')
+
+
+@app.route('/execute_add_book_manually', methods=['POST', 'GET'])
+def execute_add_book_manually():
+    new_book = Book()
+    edition = request.form['book_edition']
+    if edition == "":
+        edition = 1
+    param_list = [request.form['author_first_names'],
+                  request.form['author_first_names'],
+                  request.form['publisher_name'],
+                  request.form['book_title'],
+                  edition,
+                  request.form['book_language'],
+                  request.form['book_genre'],
+                  request.form['book_isbn'],
+                  request.form['publishing_year'],
+                  request.form['location_id'],
+                  request.form['reco_age']]
+    final_list = list()
+    for param in param_list:
+        if param == "":
+            param = None
+        final_list.append(param)
+    new_book.set_manually(final_list)
+    result = bib.add_new_book(new_book)
+    if result is True:
+        return render_template("includes/success.html", title='New book added',
+                               text='You have add a new book successfully.')
+    return render_template("includes/fail.html", title='No book added',
+                           text='You have not added the book.')
 
 
 @app.route('/profile')  # Profile
@@ -50,14 +109,41 @@ def profile():
     return render_template("profile.html")
 
 
-@app.route('/return_book', methods=['POST', 'GET'])  # Return Book
+@app.route('/return_book', methods=['POST', 'GET'])
 def return_book():
     return render_template("return_book.html")
 
 
+@app.route('/return_book_by_isbn', methods=['POST', 'GET'])
+def return_book_by_isbn():
+    if request.method == 'POST':
+        book_id = bib.get_book_id_by_isbn(request.form["book_isbn"])
+        result = bib.return_book(book_id)
+        if result is True:
+            return render_template("includes/success.html", title='Book Returned',
+                                   text='You have returned the book successfully.')
+        return render_template("includes/fail.html", title='Book not Returned',
+                               text='You have not returned the book.')
+
+
+@app.route('/return_book_by_title', methods=['POST', 'GET'])
+def return_book_by_title():
+    if request.method == 'POST':
+        edition = request.form['book_edition']
+        if edition == "":
+            edition = 1
+        book_id = bib.get_book_id_by_title_edition(request.form["book_title"], edition)
+        result = bib.return_book(book_id)
+        if result is True:
+            return render_template("includes/success.html", title='Book Returned',
+                                   text='You have returned the book successfully.')
+        return render_template("includes/fail.html", title='Book not Returned',
+                               text='You have not returned the book.')
+
+
 @app.route('/list_read_books', methods=['POST', 'GET'])  # Reading History
 def list_read_books():
-    result = bib.list_read_books()
+    result = bib.get_select(Selections.sql_read_books(session.get('user_id', None)))
     print(request)
     print(result)
     if isinstance(result, DataFrame):

@@ -8,7 +8,7 @@
 <div>
     <p>Return via isbn:</p>
     <form action="/return_book_by_isbn" method="post">
-        <input type="isbn" name="book_isbn" placeholder="isbn">
+        <input type="isbn" name="book_isbn" placeholder="isbn" required>
         <br><br>
         <input type="submit" name="execute_return_book" value="Return Book">
     </form>
@@ -20,9 +20,9 @@
 <div>
     <p>Return via titel and edition:</p>
     <form action="/return_book_by_title" method="post">
-        <input type="title" name="book_title" placeholder="title">
+        <input type="title" name="book_title" placeholder="title" required>
         <br><br>
-        <input type="edition" name="book_editon" placeholder="edition">
+        <input type="edition" name="book_edition" placeholder="edition">
         <br><br>
         <input type="submit" name="execute_return_book" value="Return Book">
     </form>

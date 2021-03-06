@@ -129,14 +129,25 @@ class Biblio:
         self.s_user = self.get_select(s_sql)
         return self.s_user
 
-    def list_read_books(self):
-        df = self.get_select(self.Selections.sql_read_books(self.s_user))
-        print(df)
-        return df
+    def get_book_id_by_isbn(self, isbn):
+        s_sql = f"SELECT n_book_id FROM books WHERE s_isbn = '{isbn}'"
+        df = self.get_select(s_sql)
+        if df.shape == (1, 1):
+            n_id = int(df['n_book_id'])
+            return n_id
+        return False
+
+    def get_book_id_by_title_edition(self, title, edition=1):
+        s_sql = f"SELECT n_book_id FROM books WHERE s_title = '{title}' AND n_book_edition = {edition}"
+        df = self.get_select(s_sql)
+        if df.shape == (1, 1):
+            n_id = int(df['n_book_id'])
+            return n_id
+        return False
 
     def return_book(self, book_id):
         try:
-            s_update = f'UPDATE borrow_item SET b_active = false WHERE n_book_id = {book_id};'
+            s_update = f"UPDATE borrow_item SET b_active = false WHERE n_book_id = {book_id};"
             self.exec_statement(s_update)
             logging.info(f"Book {book_id} returned")
         except Exception as an_exception:
@@ -145,8 +156,10 @@ class Biblio:
             return False
         return True
 
-    def make_loan(self, book_ids, duration):
+    def make_loan(self, book_ids, duration=14):
         try:
+            if isinstance(book_ids, int):
+                book_ids = [book_ids]
             call = f"CALL new_loan({self.s_user}, ARRAY{book_ids}, {duration});"
             self.exec_statement(call)
         except Exception as an_exception:
@@ -171,6 +184,7 @@ class Biblio:
 if __name__ == "__main__":
     my_class = Biblio()
     my_class.init_db()
+    my_class.get_book_id_by_isbn(9780575097568)
     # my_class.test(True)
     # my_class.list_read_books()
     # my_class.make_loan([1, 2], 14)
