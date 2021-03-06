@@ -95,17 +95,3 @@ class Book:
                 Author Last Names: {self.author_last_names}
                 Language: {self.book_language}
                 Publisher: {self.publisher_name}""")
-
-
-if __name__ == "__main__":
-    my_class = Book()
-
-    my_class.set_via_isbn()
-    my_class.get_s_sql_call()
-    isbn = input("ISBN eingeben: ")
-    if isbn != str():
-        my_class.set_via_isbn(isbn)
-        print(my_class)
-    else:
-        my_class.set_via_isbn()
-        print(my_class)

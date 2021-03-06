@@ -73,7 +73,7 @@ CREATE TABLE BOOKS
     n_publishing_year INT,
     s_book_language   CHAR(3),
     n_recommended_age INT,
-    b_is_availalbe    BOOL          NOT NULL,
+    b_is_available    BOOL          NOT NULL,
     n_publisher_id    INT,
     n_location_id     INT,
     PRIMARY KEY (n_book_id),
@@ -84,8 +84,11 @@ CREATE TABLE BOOKS
 CREATE TABLE USERS
 (
     n_user_id        SERIAL UNIQUE NOT NULL,
-    s_first_name     VARCHAR(128)  NOT NULL,
-    s_last_name      VARCHAR(128)  NOT NULL,
+    s_user_name      VARCHAR(128) UNIQUE NOT NULL,
+    s_password       VARCHAR(128)  NOT NULL,
+    s_first_name     VARCHAR(128),
+    s_last_name      VARCHAR(128),
+
     dt_date_of_birth DATE,
     n_address_id     INT,
     PRIMARY KEY (n_user_id),
@@ -159,16 +162,16 @@ VALUES ('2B', '3', '203', 1, 2),
        ('A', '15', '104', 1, 2);
 
 INSERT INTO BOOKS(s_isbn, s_title, n_book_edition, s_genre, n_publishing_year, s_book_language, n_recommended_age,
-                  b_is_availalbe, n_publisher_id, n_location_id)
+                  b_is_available, n_publisher_id, n_location_id)
 VALUES ('9780575097568', 'Rivers of London', 1, 'Urban Fantasy', 2010, 'en', NULL, true, 1, 2),   -- Author 1
        ('9780345524591', 'Moon Over Soho', 2, 'Urban Fantasy', 2011, NULL, NULL, true, 1, 2),     -- Author 1
        ('9780525516019', 'A Land of Permanent Goodbyes', NULL, NULL, NULL, 'en', 18, true, 1, 1), -- Author 3
        (NULL, 'Der Text des Lebens', NULL, NULL, NULL, 'de', 40, true, 2, 3); -- Author 2
 
-INSERT INTO USERS(s_first_name, s_last_name, dt_date_of_birth, n_address_id)
-VALUES ('Ben', 'Hell', DATE '1987-04-03', 3),
-       ('Nadia', 'Tall', DATE '1968-10-31', 4),
-       ('Susanne', 'Nieble', DATE'2001-02-25', NULL);
+INSERT INTO USERS(s_user_name, s_password,s_first_name, s_last_name, dt_date_of_birth, n_address_id)
+VALUES ('benni', '1234', 'Ben', 'Hell', DATE '1987-04-03', 3),
+       ('nadia', '1234', 'Nadia', 'Tall', DATE '1968-10-31', 4),
+       ('susi', '1234', 'Susanne', 'Nieble', DATE'2001-02-25', NULL);
 
 INSERT INTO LOAN (ts_now, n_user_id)
 VALUES ('2020-11-28 12:12:12', 1),
@@ -219,7 +222,7 @@ SELECT books.n_book_id,
        books.n_publishing_year,
        books.s_book_language,
        books.n_recommended_age,
-       books.b_is_availalbe,
+       books.b_is_available,
        author.s_first_name,
        author.s_last_name,
        publisher.s_pub_name
@@ -286,7 +289,7 @@ BEGIN
         )
     THEN
         INSERT INTO BOOKS(s_isbn, s_title, n_book_edition, s_genre, n_publishing_year, s_book_language,
-                          n_recommended_age, b_is_availalbe, n_publisher_id, n_location_id)
+                          n_recommended_age, b_is_available, n_publisher_id, n_location_id)
         VALUES (book_isbn,
                 book_title,
                 book_edition,
@@ -322,7 +325,7 @@ $$
 BEGIN
     IF new.b_active <> old.b_active then
         UPDATE books
-        SET b_is_availalbe = true
+        SET b_is_available = true
         WHERE books.n_book_id = new.n_book_id;
     END if;
 
@@ -362,7 +365,7 @@ BEGIN
             VALUES (duration, book, loan_id);
 
             UPDATE books
-            SET b_is_availalbe = false
+            SET b_is_available = false
             WHERE n_book_id = book;
         END loop;
 

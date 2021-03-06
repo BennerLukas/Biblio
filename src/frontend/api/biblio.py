@@ -5,8 +5,8 @@ import pandas as pd
 import logging
 import re
 
-from api import book
 from api.selections import Selections
+from api.updates import Updates
 
 
 class Biblio:
@@ -121,6 +121,12 @@ class Biblio:
 
     # ###########################################################################################################
     # EXECUTING FUNCTIONS
+
+    def set_user(self, s_username, s_pwd):
+
+        s_sql = f"SELECT s_user_id FROM user WHERE s_user_name = {s_username} AND s_password = {s_pwd}"
+        self.s_user = self.get_select(s_sql)
+        return self.s_user
 
     def list_read_books(self):
         df = self.get_select(self.Selections.sql_read_books(self.s_user))
