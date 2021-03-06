@@ -66,9 +66,9 @@ CREATE TABLE LIB_LOCATION
 CREATE TABLE BOOKS
 (
     n_book_id         SERIAL UNIQUE NOT NULL,
-    s_isbn            VARCHAR(13),
+    s_isbn            VARCHAR(13) UNIQUE,
     s_title           VARCHAR(4096) NOT NULL,
-    n_book_edition    INT,
+    n_book_edition    INT NOT NULL DEFAULT 1,
     s_genre           CHAR(20),
     n_publishing_year INT,
     s_book_language   CHAR(3),

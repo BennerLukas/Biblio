@@ -8,7 +8,7 @@ class Book:
         self.author_last_names = None
         self.publisher_name = None
         self.book_title = None
-        self.book_edition = None
+        self.book_edition = 1
         self.book_language = None
         self.book_genre = None
         self.book_isbn = None
