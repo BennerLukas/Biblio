@@ -4,20 +4,6 @@
 {% block title %}Home{% endblock %}
 {% block heading %}Home{% endblock %}
 {% block body %}
-<div class="jumbotron">
   <h1>Biblio Is Awesome</h1>
-  <p class="lead">And I'm glad to be learning so much about it!</p>
-</div>
-<div class="jumbotron">
-  <h1>Functions</h1>
-  <form action="/list_read_books" method="post">
-    <input type="submit" name="execute_list_read_books" value="list_read_books">
-  </form>
-  <br>
-  <form action="/return_book" method="post">
-    <input type="test" name="book_id" value="1">
-    <input type="submit" name="execute_return_book" value="return_book">
-    <p>{{ return_book_result }}</p>
-  </form>
-</div>
+
 {% endblock %}

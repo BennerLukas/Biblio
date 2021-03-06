@@ -6,11 +6,28 @@
 {% block body %}
 
 <h4>Choose your book:</h4>
+<br>
+<div>
+    <p>Return via isbn:</p>
+    <form action="/return_book_by_isbn" method="post">
+        <input type="isbn" name="book_isbn" placeholder="isbn">
+        <br><br>
+        <input type="submit" name="execute_return_book" value="Return Book">
+    </form>
+</div>
 
-<form action="/return_book" method="post">
-    <input type="test" name="book_id" value="1">
-    <input type="submit" name="execute_return_book" value="return_book">
-    <p>{{ return_book_result }}</p>
-  </form>
+<br>
+<hr>
+<br>
+<div>
+    <p>Return via titel and edition:</p>
+    <form action="/return_book_by_title" method="post">
+        <input type="title" name="book_title" placeholder="title">
+        <br><br>
+        <input type="edition" name="book_editon" placeholder="edition">
+        <br><br>
+        <input type="submit" name="execute_return_book" value="Return Book">
+    </form>
+</div>
 
 {% endblock %}
