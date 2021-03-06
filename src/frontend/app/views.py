@@ -39,6 +39,10 @@ def list_read_books():
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     return render_template("login.html")
+    # return render_template("includes/success.html", title='Successful Log-In',
+    #                        text='You have been successfully logged in.')
+    # return render_template("includes/fail.html", title='Failed Log-In',
+    #                        text='You have not been logged in.')
 
 
 @app.route('/search', methods=['POST', 'GET'])
