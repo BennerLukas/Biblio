@@ -60,7 +60,7 @@
                         {% if request.path == '/' %}
                         <a class="nav-link active" href="/">
                             {% else %}
-                            <a class="nav-link"href="/">
+                            <a class="nav-link" href="/">
                                 {% endif %}
                                 <span data-feather="home"></span>
                                 Home
@@ -70,47 +70,47 @@
                         {% if request.path == '/books' %}
                         <a class="nav-link active" href="/books">
                             {% else %}
-                            <a class="nav-link"href="/books">
+                            <a class="nav-link" href="/books">
                                 {% endif %}
-                            <span data-feather="book"></span>
-                            Books
-                        </a>
+                                <span data-feather="book"></span>
+                                Books
+                            </a>
                     </li>
                     <li class="nav-item">
                         {% if request.path == '/profile' %}
                         <a class="nav-link active" href="/profile">
                             {% else %}
-                            <a class="nav-link"href="/profile">
+                            <a class="nav-link" href="/profile">
                                 {% endif %}
-                            <span data-feather="user"></span>
-                            Profile
-                        </a>
+                                <span data-feather="user"></span>
+                                Profile
+                            </a>
                     </li>
                     <li class="nav-item">
                         {% if request.path == '/return_book' %}
                         <a class="nav-link active" href="/return_book">
                             {% else %}
-                            <a class="nav-link"href="/return_book">
+                            <a class="nav-link" href="/return_book">
                                 {% endif %}
-                            <span data-feather="rewind"></span>
-                            Return book
-                        </a>
+                                <span data-feather="rewind"></span>
+                                Return book
+                            </a>
                     </li>
                     <li class="nav-item">
                         {% if request.path == '/list_read_books' %}
                         <a class="nav-link active" href="/list_read_books">
                             {% else %}
-                            <a class="nav-link"href="/list_read_books">
+                            <a class="nav-link" href="/list_read_books">
                                 {% endif %}
-                            <span data-feather="book-open"></span>
-                            Reading history
-                        </a>
+                                <span data-feather="book-open"></span>
+                                Reading history
+                            </a>
                     </li>
                 </ul>
 
                 <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
                     <span>Loans</span>
-                    <a class="link-secondary" href="#" aria-label="Add a new report">
+                    <a class="link-secondary" href="#" aria-label="loans">
                         <span data-feather="bookmark"></span>
                     </a>
                 </h6>
@@ -119,28 +119,28 @@
                         {% if request.path == '/active_loans' %}
                         <a class="nav-link active" href="/active_loans">
                             {% else %}
-                            <a class="nav-link"href="/active_loans">
+                            <a class="nav-link" href="/active_loans">
                                 {% endif %}
-                            <span data-feather="file-text"></span>
-                            Active loans
-                        </a>
+                                <span data-feather="file-text"></span>
+                                Active loans
+                            </a>
                     </li>
                     <li class="nav-item">
                         {% if request.path == '/loan_history' %}
                         <a class="nav-link active" href="/loan_history">
                             {% else %}
-                            <a class="nav-link"href="/loan_history">
+                            <a class="nav-link" href="/loan_history">
                                 {% endif %}
-                            <span data-feather="file-text"></span>
-                            Loan History
-                        </a>
+                                <span data-feather="file-text"></span>
+                                Loan History
+                            </a>
                     </li>
                 </ul>
 
                 <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
                     <span>Extra</span>
-                    <a class="link-secondary" href="#" aria-label="Add a new report">
-                        <span data-feather="bookmark"></span>
+                    <a class="link-secondary" href="#" aria-label="extra">
+                        <span data-feather="sliders"></span>
                     </a>
                 </h6>
                 <ul class="nav flex-column mb-2">
@@ -148,27 +148,30 @@
                         {% if request.path == '/about' %}
                         <a class="nav-link active" href="/about">
                             {% else %}
-                            <a class="nav-link"href="/about">
+                            <a class="nav-link" href="/about">
                                 {% endif %}
-                            <span data-feather="info"></span>
-                            About
-                        </a>
+                                <span data-feather="info"></span>
+                                About
+                            </a>
                     </li>
                     <li class="nav-item">
                         {% if request.path == '/settings' %}
                         <a class="nav-link active" href="/settings">
                             {% else %}
-                            <a class="nav-link"href="/settings">
+                            <a class="nav-link" href="/settings">
                                 {% endif %}
-                            <span data-feather="settings"></span>
-                            Settings
-                        </a>
+                                <span data-feather="settings"></span>
+                                Settings
+                            </a>
                     </li>
                 </ul>
             </div>
         </nav>
 
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">{% block heading %}{% endblock %}</h1>
+            </div>
             <!-- Body -->
             {% block body %}
             {% endblock %}
