@@ -145,6 +145,11 @@ class Biblio:
             return n_id
         return False
 
+    def mark_book_as_read(self, book_id):
+        s_insert = f"INSERT INTO READ_BOOKS(n_book_id, n_user_id) VALUES ({book_id}, {self.s_user});"
+        self.exec_statement(s_insert)
+        return True
+
     def return_book(self, book_id):
         try:
             s_update = f"UPDATE borrow_item SET b_active = false WHERE n_book_id = {book_id};"
@@ -160,6 +165,23 @@ class Biblio:
         try:
             if isinstance(book_ids, int):
                 book_ids = [book_ids]
+            idx = -1
+            for book_id in book_ids:
+                idx += 1
+                s_sql = f"SELECT b_is_available FROM BOOKS WHERE n_book_id = {book_id}"
+                df = self.get_select(s_sql)
+                if df.shape == (1, 1):
+                    b_is_available = df['b_is_available'].values[0]
+                else:
+                    continue
+                if bool(b_is_available) is False:
+                    # return book
+                    result = self.return_book(book_id)
+                    if result is True:
+                        book_ids.pop(idx)
+                    continue
+            if len(book_ids) == 0:
+                return True
             call = f"CALL new_loan({self.s_user}, ARRAY{book_ids}, {duration});"
             self.exec_statement(call)
         except Exception as an_exception:

@@ -1,4 +1,5 @@
 from flask import render_template, request, session
+from flask_login import login_required, current_user
 from pandas import DataFrame
 
 from api.selections import Selections
@@ -45,15 +46,16 @@ def book():
 def loan_or_read_book():
     if request.method == 'POST':
         id = request.form['book_id']
-        if request.form['loan'] == 'Loan':
+        if request.form['do'] == 'Loan':
             result = bib.make_loan(int(request.form['book_id']))
-        if request.form['read'] == 'Read':
-            request = False
+        if request.form['do'] == 'Read':
+            result = bib.mark_book_as_read(int(request.form['book_id']))
+            print(f"Book read: {result}")
         if result is True:
-            return render_template("includes/success.html", title='Book borrowed',
-                                   text='You have borrowed the book successfully.')
-    return render_template("includes/fail.html", title='No book added',
-                           text='You have not borrowed the book.')
+            return render_template("includes/success.html", title='Success',
+                                   text='Action executed successfully.')
+    return render_template("includes/fail.html", title='Error',
+                           text='Something went wrong.')
 
 
 @app.route('/add_book', methods=['POST', 'GET'])
@@ -142,6 +144,7 @@ def return_book_by_title():
 
 
 @app.route('/list_read_books', methods=['POST', 'GET'])  # Reading History
+# @login_required
 def list_read_books():
     result = bib.get_select(Selections.sql_read_books(session.get('user_id', None)))
     print(request)
@@ -191,7 +194,7 @@ def active_loans():
     if isinstance(result, DataFrame):
         return render_template("includes/table.html", column_names=result.columns.values,
                                row_data=list(result.values.tolist()),
-                               title='Books', sub_header='List of all your books', link_column='b_is_available',
+                               title='Loans', sub_header='List of all your active loans', link_column='none',
                                zip=zip)
     else:
         return render_template("includes/fail.html", title='Error',
@@ -205,7 +208,7 @@ def loan_history():
     if isinstance(result, DataFrame):
         return render_template("includes/table.html", column_names=result.columns.values,
                                row_data=list(result.values.tolist()),
-                               title='Books', sub_header='List of all your books', link_column='b_is_available',
+                               title='Loans', sub_header='List of all your past loans', link_column='none',
                                zip=zip)
     else:
         return render_template("includes/fail.html", title='Error',

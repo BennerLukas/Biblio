@@ -83,7 +83,7 @@ class Selections:
     def sql_user_active_loans(s_user_id=None):
         if s_user_id is None:
             s_sql = """
-            SELECT u.s_first_name AS User_first_name, u.s_last_name AS User_last_name, l.n_loan_id AS Loan_id,
+            SELECT bo.n_book_id as action, u.s_first_name AS User_first_name, u.s_last_name AS User_last_name, l.n_loan_id AS Loan_id,
                     l.ts_now AS Loan_timestamp, bi.n_duration AS Loan_duration, bi.b_active AS Loan_active, bo.s_isbn AS Book_ISBN,
                     bo.s_title AS Book_title, bo.n_book_edition AS Book_edition
             FROM users AS u

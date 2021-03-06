@@ -20,11 +20,11 @@
                     {{ row_ }}
                 </button>
             </td>
-            {% elif col == 'n_book_id' %}
+            {% elif col == 'n_book_id' or col == 'action' %}
             <td>
                 <form action="/loan_or_read_book" method="post">
-                    <input type="submit" name="loan" value='Loan'>
-                    <input type="submit" name="read" value='Read'>
+                    <input type="submit" name="do" value='Loan'>
+                    <input type="submit" name="do" value='Read'>
                     <input type="hidden" name="book_id" value={{row_}}>
                 </form>
             </td>
