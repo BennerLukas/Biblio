@@ -1,5 +1,5 @@
-
 from flask import render_template, request, session
+from pandas import DataFrame
 
 from app import app
 from api.biblio import Biblio
@@ -21,9 +21,19 @@ def index():
     return render_template("/index.html")
 
 
-@app.route('/books')  # Books
-def books():
-    return render_template("books.html")
+@app.route('/book')  # Books
+def book():
+    result = bib.get_select("SELECT * FROM book_extended")
+    print(request)
+    print(result)
+    if isinstance(result, DataFrame):
+        return render_template("includes/table.html", column_names=result.columns.values,
+                               row_data=list(result.values.tolist()),
+                               title='Books', sub_header='List of all your books', link_column='b_is_available',
+                               zip=zip)
+    else:
+        return render_template("includes/fail.html", title='Error',
+                               text='Site could not be loaded.')
 
 
 @app.route('/profile')  # Profile
@@ -41,8 +51,13 @@ def list_read_books():
     result = bib.list_read_books()
     print(request)
     print(result)
-    return render_template("includes/table.html", column_names=result.columns.values, row_data=list(result.values.tolist()),
-                           title='Reading History', sub_header='Already read')
+    if isinstance(result, DataFrame):
+        return render_template("includes/table.html", column_names=result.columns.values,
+                               row_data=list(result.values.tolist()),
+                               title='Reading History', sub_header='Already read', link_column='none', zip=zip)
+    else:
+        return render_template("includes/fail.html", title='Error',
+                               text='Site could not be loaded.')
 
 
 @app.route('/login', methods=['POST', 'GET'])

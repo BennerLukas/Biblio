@@ -5,6 +5,12 @@
 {% block heading %}Return Book{% endblock %}
 {% block body %}
 
-return book
+<h4>Choose your book:</h4>
+
+<form action="/return_book" method="post">
+    <input type="test" name="book_id" value="1">
+    <input type="submit" name="execute_return_book" value="return_book">
+    <p>{{ return_book_result }}</p>
+  </form>
 
 {% endblock %}

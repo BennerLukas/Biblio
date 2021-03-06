@@ -165,8 +165,8 @@ INSERT INTO BOOKS(s_isbn, s_title, n_book_edition, s_genre, n_publishing_year, s
                   b_is_available, n_publisher_id, n_location_id)
 VALUES ('9780575097568', 'Rivers of London', 1, 'Urban Fantasy', 2010, 'en', NULL, true, 1, 2),   -- Author 1
        ('9780345524591', 'Moon Over Soho', 2, 'Urban Fantasy', 2011, NULL, NULL, true, 1, 2),     -- Author 1
-       ('9780525516019', 'A Land of Permanent Goodbyes', NULL, NULL, NULL, 'en', 18, true, 1, 1), -- Author 3
-       (NULL, 'Der Text des Lebens', NULL, NULL, NULL, 'de', 40, true, 2, 3); -- Author 2
+       ('9780525516019', 'A Land of Permanent Goodbyes', 1, NULL, NULL, 'en', 18, true, 1, 1), -- Author 3
+       (NULL, 'Der Text des Lebens', 1, NULL, NULL, 'de', 40, true, 2, 3); -- Author 2
 
 INSERT INTO USERS(s_user_name, s_password,s_first_name, s_last_name, dt_date_of_birth, n_address_id)
 VALUES ('benni', '1234', 'Ben', 'Hell', DATE '1987-04-03', 3),
