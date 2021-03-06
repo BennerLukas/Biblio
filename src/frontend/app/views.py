@@ -34,7 +34,7 @@ def list_read_books():
         print(request.form)
         result = bib.list_read_books()
         print(result.head())
-        return render_template("base/table.html", tables=[result.to_html(classes="data")], titles=result.columns.values)
+        return render_template("includes/table.html", tables=[result.to_html(classes="data")], titles=result.columns.values)
 
 
 @app.route('/return_book', methods=['POST', 'GET'])
@@ -63,4 +63,9 @@ def reading_history():
 @app.route('/loans', methods=['POST', 'GET'])                       # active and past loans; type table
 def loans():
     return render_template("table.html")
+
+
+@app.route('/dev', methods=['POST', 'GET'])                       # Testing
+def dev():
+    return render_template("dev.html")
 
