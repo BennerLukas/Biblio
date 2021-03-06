@@ -13,9 +13,10 @@ def index():
     return render_template("/index.html")
 
 
-@app.route('/about')
+@app.route('/books')
 def about():
-    return render_template("about.html")
+    return render_template("results/result.html")
+
 
 
 @app.route('/login', methods=['POST', 'GET'])
@@ -68,4 +69,9 @@ def loans():
 @app.route('/dev', methods=['POST', 'GET'])                       # Testing
 def dev():
     return render_template("dev.html")
+
+
+# @app.route('/about')
+# def about():
+#     return render_template("about.html")
 
