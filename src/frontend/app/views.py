@@ -6,6 +6,13 @@ from app import app
 from api.biblio import Biblio
 
 bib = Biblio()
+global_is_logged_in = 'logged_in'
+global_user_name = 'no name'
+
+
+@app.context_processor
+def logged_in():
+    return dict(is_logged_in=global_is_logged_in, user=global_user_name)
 
 
 @app.route('/')  # Home
@@ -31,6 +38,7 @@ def return_book():
 @app.route('/list_read_books', methods=['POST', 'GET'])  # Reading History
 def list_read_books():
     result = bib.list_read_books()
+    print(request)
     print(result)
     return render_template("includes/table.html", column_names=result.columns.values, row_data=list(result.values.tolist()),
                            title='Reading History', sub_header='Already read')
@@ -39,6 +47,15 @@ def list_read_books():
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     return render_template("login.html")
+    # return render_template("includes/success.html", title='Successful Log-In',
+    #                        text='You have been successfully logged in.')
+    # return render_template("includes/fail.html", title='Failed Log-In',
+    #                        text='You have not been logged in.')
+
+
+@app.route('/logout', methods=['POST', 'GET'])
+def logout():
+    return render_template("logout.html")
     # return render_template("includes/success.html", title='Successful Log-In',
     #                        text='You have been successfully logged in.')
     # return render_template("includes/fail.html", title='Failed Log-In',
