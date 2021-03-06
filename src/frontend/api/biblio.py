@@ -42,7 +42,7 @@ class Biblio:
                                                         password="1234",
                                                         host="localhost")
             self.b_connected = True
-            print("Done")
+            print("Database Connected")
             logging.info("Connected to DB")
         except Exception as an_exception:
             logging.error(an_exception)
@@ -82,6 +82,7 @@ class Biblio:
             self.alchemy_connection.execute(s_sql_statement)
 
             logging.info("Database initialised")
+            print("Database initialised")
             self.b_initialised = True
             return True
 
