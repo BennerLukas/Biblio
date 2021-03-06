@@ -5,8 +5,6 @@
 {% block heading %}Return Book{% endblock %}
 {% block body %}
 
-<h4>Choose your book:</h4>
-<br>
 <div>
     <p>Return via isbn:</p>
     <form action="/return_book_by_isbn" method="post">
@@ -29,5 +27,4 @@
         <input type="submit" name="execute_return_book" value="Return Book">
     </form>
 </div>
-
 {% endblock %}

@@ -36,6 +36,11 @@ def book():
                                text='Site could not be loaded.')
 
 
+@app.route('/add_book', methods=['POST', 'GET'])  # Return Book
+def add_book():
+    return render_template("add_book.html")
+
+
 @app.route('/profile')  # Profile
 def profile():
     return render_template("profile.html")
