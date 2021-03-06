@@ -1,22 +1,24 @@
 # views.py
 
-from flask import render_template, redirect, url_for, request
+from flask import render_template, redirect, url_for, request, session
 
 from app import app
 from api.biblio import Biblio
 
 bib = Biblio()
-global_is_logged_in = 'logged_in'
-global_user_name = 'no name'
+app.secret_key = 'dljsawadslqk24e21cjn!Ew@@dsa5'
 
 
 @app.context_processor
 def logged_in():
-    return dict(is_logged_in=global_is_logged_in, user=global_user_name)
+    return dict(is_logged_in=session.get('is_logged_in', None), user=session.get('user_name', None))
 
 
 @app.route('/')  # Home
 def index():
+    session['is_logged_in'] = 'logged_out'
+    session['user_name'] = 'no name'
+
     return render_template("/index.html")
 
 
@@ -46,6 +48,8 @@ def list_read_books():
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
+    session['is_logged_in'] = 'logged_in'
+    session['user_name'] = 'fritz'
     return render_template("login.html")
     # return render_template("includes/success.html", title='Successful Log-In',
     #                        text='You have been successfully logged in.')
@@ -55,6 +59,8 @@ def login():
 
 @app.route('/logout', methods=['POST', 'GET'])
 def logout():
+    session['is_logged_in'] = 'logged_out'
+    session['user_name'] = 'no name'
     return render_template("logout.html")
     # return render_template("includes/success.html", title='Successful Log-In',
     #                        text='You have been successfully logged in.')
