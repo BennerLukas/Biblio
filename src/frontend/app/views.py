@@ -30,7 +30,10 @@ def return_book():
 
 @app.route('/list_read_books', methods=['POST', 'GET'])  # Reading History
 def list_read_books():
-    return render_template("list_read_books.html")
+    result = bib.list_read_books()
+    print(result)
+    return render_template("includes/table.html", column_names=result.columns.values, row_data=list(result.values.tolist()),
+                           title='Reading History', sub_header='Already read')
 
 
 @app.route('/login', methods=['POST', 'GET'])
