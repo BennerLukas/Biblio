@@ -20,10 +20,6 @@ def logged_in():
 
 @app.route('/')  # Home
 def index():
-    session['is_logged_in'] = 'logged_out'
-    session['user_name'] = 'no name'
-    session['user_id'] = None
-
     return render_template("/index.html")
 
 
@@ -160,9 +156,6 @@ def list_read_books():
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
-    session['is_logged_in'] = 'logged_in'
-    session['user_name'] = 'fritz'
-    session['user_id'] = 1
     return render_template("login.html")
     # return render_template("includes/success.html", title='Successful Log-In',
     #                        text='You have been successfully logged in.')
@@ -170,14 +163,27 @@ def login():
     #                        text='You have not been logged in.')
 
 
+@app.route('/logged_in', methods=['POST', 'GET'])
+def logged_in():
+    session['user_id'] = bib.set_user(request.form['user_name'], request.form['password'])
+    if session.get('user_id') is False:
+        return render_template("includes/fail.html", title='Failed Log-In',
+                               text='You have not been logged in.')
+    session['is_logged_in'] = 'logged_in'
+    session['user_name'] = request.form['user_name']
+    print(session.get('user_id', None))
+    return render_template("includes/success.html", title='Successful Login',
+                           text='You have been successfully logged in.')
+
+
 @app.route('/logout', methods=['POST', 'GET'])
 def logout():
     session['is_logged_in'] = 'logged_out'
     session['user_name'] = 'no name'
     session['user_id'] = None
-    return render_template("logout.html")
-    # return render_template("includes/success.html", title='Successful Log-In',
-    #                        text='You have been successfully logged in.')
+    bib.s_user = None
+    return render_template("includes/success.html", title='Successful Logout',
+                           text='You have been successfully logged out.')
     # return render_template("includes/fail.html", title='Failed Log-In',
     #                        text='You have not been logged in.')
 

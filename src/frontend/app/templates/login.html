@@ -5,6 +5,14 @@
 {% block heading %}Login{% endblock %}
 {% block body %}
 
-Login
+<div>
+    <form action="/logged_in" method="post">
+        <input type="text" name="user_name" placeholder="username" required>
+        <br><br>
+        <input type="password" name="password" placeholder="password" required>
+        <br><br>
+        <input type="submit" name="login" value="Login">
+    </form>
+</div>
 
 {% endblock %}

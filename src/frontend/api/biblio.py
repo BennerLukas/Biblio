@@ -124,9 +124,10 @@ class Biblio:
     # EXECUTING FUNCTIONS
 
     def set_user(self, s_username, s_pwd):
-
-        s_sql = f"SELECT s_user_id FROM user WHERE s_user_name = {s_username} AND s_password = {s_pwd}"
-        self.s_user = self.get_select(s_sql)
+        s_sql = f"SELECT n_user_id FROM users WHERE s_user_name = '{s_username}' AND s_password = '{s_pwd}'"
+        df = self.get_select(s_sql)
+        n_id = int(df['n_user_id'])
+        self.s_user = n_id
         return self.s_user
 
     def get_book_id_by_isbn(self, isbn):
