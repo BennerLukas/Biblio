@@ -1,3 +1,13 @@
+.button {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
 body {
   font-size: .875rem;
 }
@@ -17,7 +27,6 @@ a {
     color: #0060B6;
     text-decoration: none;
 }
-
 a:hover
 {
      color:#00A0C6;

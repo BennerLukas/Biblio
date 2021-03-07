@@ -4,7 +4,20 @@
 {% block title %}Profile{% endblock %}
 {% block heading %}Profile{% endblock %}
 {% block body %}
+{% if user == 'no name' %}
+<a href="/login">
+    <div align="right">
+        <span data-feather="user"></span>
+        <h4>Admin</h4>
+    </div>
+</a>
+{% else %}
+<a href="/logout">
 
-Hi das ist das Profil
-
+    <div align="right">
+        <span data-feather="user"></span>
+        <h4>{{user}}</h4>
+    </div>
+</a>
+{% endif %}
 {% endblock %}

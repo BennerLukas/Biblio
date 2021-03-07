@@ -23,6 +23,24 @@ def index():
     return render_template("/index.html", user=session.get('user_name'))
 
 
+@app.route('/search', methods=['POST', 'GET'])  # Home
+def search():
+    req = request
+    print(req)
+    text = request.form['search_text']
+    result = bib.get_select(f"SELECT * FROM book_extended WHERE s_title = '{text}'")
+    print(request)
+    print(result)
+    if isinstance(result, DataFrame):
+        return render_template("includes/table.html", column_names=result.columns.values,
+                               row_data=list(result.values.tolist()),
+                               title='Books', sub_header='List of all your books', link_column='none',
+                               zip=zip)
+    else:
+        return render_template("includes/fail.html", title='Error',
+                               text='No book found.')
+
+
 @app.route('/book')
 def book():
     result = bib.get_select("SELECT * FROM book_extended")
@@ -104,7 +122,7 @@ def execute_add_book_manually():
 
 @app.route('/profile')  # Profile
 def profile():
-    return render_template("profile.html")
+    return render_template("profile.html", user=session.get('user_name', None))
 
 
 @app.route('/return_book', methods=['POST', 'GET'])
@@ -188,11 +206,6 @@ def logout():
     #                        text='You have not been logged in.')
 
 
-@app.route('/search', methods=['POST', 'GET'])
-def search():
-    return render_template("app/templates/search.html")
-
-
 @app.route('/active_loans', methods=['POST', 'GET'])
 def active_loans():
     result = bib.get_select(Selections.sql_user_active_loans(session.get('user_id', None)))
@@ -224,11 +237,6 @@ def loan_history():
 @app.route('/about')
 def about():
     return render_template("about.html")
-
-
-@app.route('/settings')
-def settings():
-    return render_template("settings.html")
 
 
 ###########################################################################

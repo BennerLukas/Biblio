@@ -2,7 +2,14 @@
 {% block title %}{{title}}{% endblock %}
 {% block heading %}{{title}}{% endblock %}
 {% block body %}
-
+<h3>Search Book</h3>
+<div>
+    <form action="/search" method="POST">
+        <input name="search_text" type="text" placeholder="Search">
+        <input type="submit" value="Search" name="search">
+    </form>
+    <br>
+</div>
 <h3>{% block subheading %}{{sub_header}}{% endblock %}</h3>
 <div class="table-responsive">
     <table class="table table-striped table-sm">
