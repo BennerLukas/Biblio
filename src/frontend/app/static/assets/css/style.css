@@ -13,7 +13,17 @@ body {
   display: inline-block;
   border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
 }
+a {
+    color: #0060B6;
+    text-decoration: none;
+}
 
+a:hover
+{
+     color:#00A0C6;
+     text-decoration:none;
+     cursor:pointer;
+}
 /* Tooltip text */
 .tooltip .tooltiptext {
   visibility: hidden;

@@ -20,7 +20,7 @@ def logged_in():
 
 @app.route('/')  # Home
 def index():
-    return render_template("/index.html")
+    return render_template("/index.html", user=session.get('user_name'))
 
 
 @app.route('/book')
