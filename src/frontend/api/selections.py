@@ -750,6 +750,16 @@ class Selections:
         return s_sql
 
     @staticmethod
+    def sql_total_loans_user(user_id):
+        s_sql = f"""
+            SELECT 
+                COUNT(n_borrow_item_id)
+            FROM loan
+                LEFT JOIN borrow_item as bi on loan.n_loan_id = bi.n_loan_id
+            WHERE n_user_id = {user_id};
+        """
+
+    @staticmethod
     def sql_most_read_books_per_genre_publisher_author(b_filter_genre=False, b_filter_publisher=False, b_filter_author=False, n_top_count=10):
         if b_filter_genre is False and b_filter_publisher is False and b_filter_author is False:
             s_sql = f"""
