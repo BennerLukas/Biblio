@@ -4,7 +4,16 @@
 {% block title %}Profile{% endblock %}
 {% block heading %}Profile{% endblock %}
 {% block body %}
+    <h4>You've read {{ read_books_count }} books</h4>
 
-Hi das ist das Profil
+    <table>
+    {% for cell in user_info %}
+        <tr>
+            <td>{{ user_info_name[loop.index0] }}</td>
+            <td>{{ user_info[loop.index0] }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+
 
 {% endblock %}

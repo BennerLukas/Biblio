@@ -47,7 +47,28 @@ def add_book():
 
 @app.route('/profile')  # Profile
 def profile():
-    return render_template("profile.html")
+    active_user_id = session.get('user_id', None)
+    if active_user_id is not None:
+        count_read_books = bib.get_select(f"""  SELECT COUNT(n_borrow_item_id) 
+                                                FROM loan 
+                                                    LEFT JOIN borrow_item as bi on loan.n_loan_id = bi.n_loan_id
+                                                WHERE n_user_id = {active_user_id};""").iat[0, 0]
+
+        user_info = bib.get_select(f""" SELECT 
+                                            s_user_name, 
+                                            s_first_name, 
+                                            s_last_name, 
+                                            dt_date_of_birth, 
+                                            a.s_country
+                                        FROM users
+                                            LEFT JOIN addresses a ON users.n_address_id = a.n_address_id
+                                        WHERE users.n_user_id = {active_user_id}""").values.tolist()
+        user_info_names = ["Username", "First Name", "Last Name", "Da   te of Birth", "Country of Residency"]
+        return render_template("profile.html", read_books_count=count_read_books, user_info=user_info,
+                               user_info_name=user_info_names)
+    else:
+        return render_template("includes/fail.html", title='Error',
+                               text='Site could not be loaded.')
 
 
 @app.route('/return_book', methods=['POST', 'GET'])  # Return Book
