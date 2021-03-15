@@ -285,9 +285,9 @@ class Selections:
         elif b_filter_genre is False and b_filter_publisher is False and b_filter_author is True:
             s_sql = f"""
             SELECT 
-                au.s_first_name AS Author_first_name, 
-                au.s_last_name AS Author_last_name, 
-                COUNT(DISTINCT(b.n_book_id)) AS Book_count
+                au.s_first_name                 AS Author_first_name, 
+                au.s_last_name                  AS Author_last_name, 
+                COUNT(DISTINCT(b.n_book_id))    AS Book_count
             FROM books AS b
                 LEFT JOIN wrote AS w ON b.n_book_id =  w.n_book_id
                 LEFT JOIN author AS au ON w.n_author_id = au.n_author_id
@@ -296,8 +296,8 @@ class Selections:
         elif b_filter_genre is True and b_filter_publisher is True and b_filter_author is False:
             s_sql = f"""
             SELECT 
-                pu.s_pub_name AS Publisher, 
-                COUNT(DISTINCT(b.n_book_id)) AS Book_count
+                pu.s_pub_name                   AS Publisher, 
+                COUNT(DISTINCT(b.n_book_id))    AS Book_count
             FROM books AS b
                 LEFT JOIN publisher AS pu ON b.n_publisher_id = pu.n_publisher_id
             GROUP BY 
@@ -307,9 +307,9 @@ class Selections:
         elif b_filter_genre is False and b_filter_publisher is True and b_filter_author is True:
             s_sql = f"""
             SELECT 
-                au.s_first_name AS Author_first_name, 
-                au.s_last_name AS Author_last_name, 
-                COUNT(DISTINCT(b.n_book_id)) AS Book_count
+                au.s_first_name                 AS Author_first_name, 
+                au.s_last_name                  AS Author_last_name, 
+                COUNT(DISTINCT(b.n_book_id))    AS Book_count
             FROM books AS b
                 LEFT JOIN wrote AS w ON b.n_book_id =  w.n_book_id
                 LEFT JOIN author AS au ON w.n_author_id = au.n_author_id
@@ -320,7 +320,7 @@ class Selections:
             s_sql = f"""
             SELECT 
                 au.s_first_name AS Author_first_name, 
-                au.s_last_name AS Author_last_name, 
+                au.s_last_name  AS Author_last_name, 
                 COUNT(DISTINCT(b.n_book_id)) AS Book_count
             FROM books AS b
                 LEFT JOIN wrote AS w ON b.n_book_id =  w.n_book_id
@@ -331,7 +331,7 @@ class Selections:
             s_sql = f"""
             SELECT 
                 au.s_first_name AS Author_first_name, 
-                au.s_last_name AS Author_last_name, 
+                au.s_last_name  AS Author_last_name, 
                 COUNT(DISTINCT(b.n_book_id)) AS Book_count
             FROM books AS b
                 LEFT JOIN wrote AS w ON b.n_book_id =  w.n_book_id
@@ -347,8 +347,8 @@ class Selections:
 
     @staticmethod
     def sql_most_loaned_books_per_genre_publisher_author_for_user(b_filter_genre=False, b_filter_publisher=False, b_filter_author=False,
-                                                                  n_top_count=10):
-        if b_filter_genre is False and b_filter_publisher is False and b_filter_author is False:
+                                                                  user_id=None, n_top_count=10, ):
+        if b_filter_genre is False and b_filter_publisher is False and b_filter_author is False and user_id is None:
             s_sql = f"""
             SELECT 
                 rp.user_first_name, 
@@ -357,8 +357,8 @@ class Selections:
             FROM 
             (
                 SELECT 
-                    u.s_first_name AS User_first_name, 
-                    u.s_last_name AS User_last_name, 
+                    u.s_first_name  AS User_first_name, 
+                    u.s_last_name   AS User_last_name, 
                     bo.s_genre AS Genre, 
                     COUNT(bi.n_borrow_item_id) AS Count_borrowed_items, 
                     rank() OVER 
@@ -377,12 +377,12 @@ class Selections:
             ) AS rp
             WHERE rank <= {n_top_count};
             """
-        elif b_filter_genre is True and b_filter_publisher is False and b_filter_author is False:
+        elif b_filter_genre is True and b_filter_publisher is False and b_filter_author is False and user_id is None:
             s_sql = f"""
             SELECT 
                 rp.user_first_name, 
                 rp.user_last_name, 
-                rp.genre AS TOP_genre, 
+                rp.genre                AS TOP_genre, 
                 rp.count_borrowed_items
             FROM 
             (
@@ -410,12 +410,12 @@ class Selections:
             ) AS rp
             WHERE rank <= {n_top_count};
             """
-        elif b_filter_genre is False and b_filter_publisher is True and b_filter_author is False:
+        elif b_filter_genre is False and b_filter_publisher is True and b_filter_author is False and user_id is None:
             s_sql = f"""
             SELECT 
                 rp.user_first_name, 
                 rp.user_last_name, 
-                rp.publisher AS TOP_publisher, 
+                rp.publisher            AS TOP_publisher, 
                 rp.count_borrowed_items
             FROM 
             (
@@ -440,7 +440,7 @@ class Selections:
             ) AS rp
             WHERE rank <= {n_top_count};
             """
-        elif b_filter_genre is False and b_filter_publisher is False and b_filter_author is True:
+        elif b_filter_genre is False and b_filter_publisher is False and b_filter_author is True and user_id is None:
             s_sql = f"""
             SELECT 
                 rp.user_first_name, 
@@ -451,11 +451,11 @@ class Selections:
             FROM 
             (
                 SELECT 
-                    u.s_first_name AS User_first_name, 
-                    u.s_last_name AS User_last_name, 
-                    au.s_first_name AS Author_first_name,
-                    au.s_last_name AS Author_last_name, 
-                    COUNT(bi.n_borrow_item_id) AS Count_borrowed_items, 
+                    u.s_first_name              AS User_first_name, 
+                    u.s_last_name               AS User_last_name, 
+                    au.s_first_name             AS Author_first_name,
+                    au.s_last_name              AS Author_last_name, 
+                    COUNT(bi.n_borrow_item_id)  AS Count_borrowed_items, 
                     rank() OVER 
                     (
                         PARTITION BY 
@@ -479,13 +479,13 @@ class Selections:
             ) AS rp
             WHERE rank <= {n_top_count};
             """
-        elif b_filter_genre is True and b_filter_publisher is True and b_filter_author is False:
+        elif b_filter_genre is True and b_filter_publisher is True and b_filter_author is False and user_id is None:
             s_sql = f"""
             SELECT 
                 rp.user_first_name, 
                 rp.user_last_name, 
-                rp.genre AS TOP_genre, 
-                rp.publisher AS TOP_publisher, 
+                rp.genre                AS TOP_genre, 
+                rp.publisher            AS TOP_publisher, 
                 rp.count_borrowed_items
             FROM 
             (
@@ -516,14 +516,14 @@ class Selections:
             ) AS rp
             WHERE rank <= {n_top_count};
             """
-        elif b_filter_genre is False and b_filter_publisher is True and b_filter_author is True:
+        elif b_filter_genre is False and b_filter_publisher is True and b_filter_author is True and user_id is None:
             s_sql = f"""
             SELECT 
                 rp.user_first_name, 
                 rp.user_last_name, 
-                rp.publisher AS TOP_publisher,
-                rp.Author_first_name AS TOP_Author_first_name, 
-                rp.Author_last_name AS TOP_Author_last_name, 
+                rp.publisher            AS TOP_publisher,
+                rp.Author_first_name    AS TOP_Author_first_name, 
+                rp.Author_last_name     AS TOP_Author_last_name, 
                 rp.count_borrowed_items
             FROM 
             (
@@ -554,14 +554,14 @@ class Selections:
             ) AS rp
             WHERE rank <= {n_top_count};
             """
-        elif b_filter_genre is True and b_filter_publisher is False and b_filter_author is True:
+        elif b_filter_genre is True and b_filter_publisher is False and b_filter_author is True and user_id is None:
             s_sql = f"""
             SELECT 
                 rp.user_first_name, 
                 rp.user_last_name, 
-                rp.genre AS TOP_genre, 
-                rp.Author_first_name AS TOP_Author_first_name, 
-                rp.Author_last_name AS TOP_Author_last_name, 
+                rp.genre                AS TOP_genre, 
+                rp.Author_first_name    AS TOP_Author_first_name, 
+                rp.Author_last_name     AS TOP_Author_last_name, 
                 rp.count_borrowed_items
             FROM 
             (
@@ -595,6 +595,40 @@ class Selections:
             ) AS rp
             WHERE rank <= {n_top_count};
             """
+        elif user_id is not None:
+            s_sql = f"""
+            SELECT rp.genre             AS "Favorite Genre",
+                   rp.publisher         AS "Favorite Genre",
+                   rp.Author_first_name AS "Favorite Author FN",
+                   rp.Author_last_name  AS "Favorite Author LN",
+                   rp.count_borrowed_items
+            FROM (
+                 SELECT bo.s_genre                 AS Genre,
+                        pu.s_pub_name              AS Publisher,
+                        au.s_first_name            AS Author_first_name,
+                        au.s_last_name             AS Author_last_name,
+                        COUNT(bi.n_borrow_item_id) AS Count_borrowed_items,
+                        rank() OVER
+                            (
+                            PARTITION BY
+                                bo.s_genre
+                            ORDER BY COUNT(bi.n_borrow_item_id) DESC
+                            )
+                 FROM users AS u
+                          LEFT JOIN loan AS l ON u.n_user_id = l.n_user_id
+                          LEFT JOIN borrow_item AS bi ON l.n_loan_id = bi.n_loan_id
+                          LEFT JOIN books AS bo ON bi.n_book_id = bo.n_book_id
+                          LEFT JOIN wrote AS w ON bo.n_book_id = w.n_book_id
+                          LEFT JOIN author AS au ON w.n_author_id = au.n_author_id
+                          LEFT JOIN publisher AS pu ON bo.n_publisher_id = pu.n_publisher_id
+                 WHERE u.n_user_id = {user_id}
+                 GROUP BY bo.s_genre,
+                          pu.s_pub_name,
+                          au.s_first_name,
+                          au.s_last_name
+             ) AS rp
+        WHERE rank <= {n_top_count};"""
+
         else:
             s_sql = f"""
             SELECT 
@@ -638,7 +672,8 @@ class Selections:
                     au.s_first_name,
                     au.s_last_name
             ) AS rp
-            WHERE rank <= {n_top_count};
+            WHERE rank <= {n_top_count}
+            LIMIT 1;
             """
         return s_sql
 
@@ -758,6 +793,21 @@ class Selections:
                 LEFT JOIN borrow_item as bi on loan.n_loan_id = bi.n_loan_id
             WHERE n_user_id = {user_id};
         """
+        return s_sql
+
+    @staticmethod
+    def sql_basic_user_information(user_id):
+        s_sql = f"""
+        SELECT  
+            s_first_name, 
+            s_last_name, 
+            dt_date_of_birth, 
+            a.s_country
+        FROM users
+            LEFT JOIN addresses a ON users.n_address_id = a.n_address_id
+        WHERE users.n_user_id = {user_id}
+        """
+        return s_sql
 
     @staticmethod
     def sql_most_read_books_per_genre_publisher_author(b_filter_genre=False, b_filter_publisher=False, b_filter_author=False, n_top_count=10):
