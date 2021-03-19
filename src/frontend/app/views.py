@@ -12,7 +12,7 @@ app.secret_key = 'dljsawadslqk24e21cjn!Ew@@dsa5'
 
 
 @app.context_processor
-def logged_in():
+def logging_in():
     return dict(is_logged_in=session.get('is_logged_in', None),
                 user=session.get('user_name', None),
                 user_id=session.get('user_id', None))
