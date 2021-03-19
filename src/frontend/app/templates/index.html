@@ -4,7 +4,8 @@
 {% block title %}Home{% endblock %}
 {% block heading %}Home{% endblock %}
 {% block body %}
-{% if user == 'no name' %}
+<div>
+   {% if user == 'no name' %}
 <a href="/login">
     <div align="right">
         <span data-feather="user"></span>
@@ -20,5 +21,37 @@
     </div>
 </a>
 {% endif %}
+</div>
+
+<div>
+    <div align="left">
+        <span data-feather="help-circle"></span>
+        <h3>What is Biblio?</h3>
+        <p>
+            Biblio is your tool to manage your own private book collection.
+            Whether you want to keep track of all your books. Find gems you forgot about or keep track of your reading list.
+
+            With Biblio you can also invite friends and family to your private library. It allows you to share and borrow books between each other.
+        </p>
+    </div>
+    <br>
+    <div align="left">
+        <span data-feather="award"></span>
+        <h3>Why Biblio?</h3>
+        <p>
+            We think its important to know your possessions and keep it managed. We can help you to focus on reading rather than searching.
+
+            On the other hand its very important to share, so everybody can enjoy reading and learning new stuff. Biblio helps you to organize this process easily.
+        </p>
+    </div>
+    <br>
+    <div align="left">
+        <span data-feather="more-horizontal"></span>
+        <h3>More</h3>
+        <p>
+            You want to know more? Check out the <a href="/about">About</a> page
+        </p>
+    </div>
+</div>
 
 {% endblock %}

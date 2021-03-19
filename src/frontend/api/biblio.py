@@ -207,7 +207,7 @@ class Biblio:
 if __name__ == "__main__":
     my_class = Biblio()
     my_class.init_db()
-    my_class.get_book_id_by_isbn(9780575097568)
+    # my_class.get_book_id_by_isbn(9780575097568)
     # my_class.test(True)
     # my_class.list_read_books()
     # my_class.make_loan([1, 2], 14)

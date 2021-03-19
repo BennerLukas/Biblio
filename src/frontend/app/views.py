@@ -1,5 +1,4 @@
 from flask import render_template, request, session
-from flask_login import login_required, current_user
 from pandas import DataFrame
 
 from api.selections import Selections
