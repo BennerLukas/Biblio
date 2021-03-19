@@ -89,7 +89,7 @@ class Biblio:
     # ###########################################################################################################
     # USING FUNCTIONS
 
-    def get_select(self, s_sql_statement: str):
+    def get_select(self, s_sql_statement: str) -> object:
         """
         This Function needs a Select-Statements and returns the result in a df.
 

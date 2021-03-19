@@ -228,11 +228,6 @@ def logout():
     #                        text='You have not been logged in.')
 
 
-@app.route('/search', methods=['POST', 'GET'])
-def search():
-    return render_template("app/templates/search.html")
-
-
 @app.route('/active_loans', methods=['POST', 'GET'])
 def active_loans():
     result = bib.get_select(Selections.sql_user_active_loans(session.get('user_id', None)))
