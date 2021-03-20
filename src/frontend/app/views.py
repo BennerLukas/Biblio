@@ -119,6 +119,17 @@ def execute_add_book_manually():
                            text='You have not added the book.')
 
 
+@app.route('/homepage')  # Starting page => didn't change index for future reference
+def homepage():
+    # fetch amount of books currently overdue
+    count_overdue_books = bib.get_select(bib.Selections.sql_exceeded_loans(info=True)).iat[0, 0]
+
+    count_total_books = bib.get_select("SELECT COUNT(DISTINCT(n_book_id)) FROM books").iat[0, 0]
+
+    return render_template("home.html", amount_overdue=count_overdue_books, amount_book_total=count_total_books,
+                           amount_books_loaned=0)
+
+
 @app.route('/profile')  # Profile
 def profile():
     active_user_id = session.get('user_id', None)
@@ -144,7 +155,7 @@ def profile():
                                user=session.get('user_name', None))
     else:
         return render_template("includes/fail.html", title='Error',
-                               text='Site could not be loaded.')
+                               text='You are not logged in!')
 
 
 @app.route('/return_book', methods=['POST', 'GET'])
