@@ -6,21 +6,21 @@
 {% block body %}
 <div>
    {% if user == 'no name' %}
-<a href="/login">
-    <div align="right">
-        <span data-feather="user"></span>
-        <h4>Admin</h4>
-    </div>
-</a>
-{% else %}
-<a href="/logout">
+        <a href="/login">
+            <div align="right">
+                <span data-feather="user"></span>
+                <h4>Admin</h4>
+            </div>
+        </a>
+        {% else %}
+        <a href="/logout">
 
-    <div align="right">
-        <span data-feather="user"></span>
-        <h4>{{user}}</h4>
-    </div>
-</a>
-{% endif %}
+            <div align="right">
+                <span data-feather="user"></span>
+                <h4>{{user}}</h4>
+            </div>
+        </a>
+    {% endif %}
 </div>
 
 <div>

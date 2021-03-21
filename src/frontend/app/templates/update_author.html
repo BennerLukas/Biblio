@@ -1,0 +1,62 @@
+<!-- about.html-->
+
+{% extends "includes/raw.html" %}
+{% block title %}Add book{% endblock %}
+{% block heading %}Add a new book{% endblock %}
+{% block body %}
+
+<div>
+    <p>Add via isbn:</p>
+    <form action="/execute_add_book" method="post">
+        <input type="isbn" name="book_isbn" placeholder="isbn" required>
+        <br><br>
+        <input type="submit" name="execute_add_book" value="Add Book">
+    </form>
+</div>
+
+<br>
+<hr>
+<br>
+<div>
+    <p>Add manually:</p>
+    <form action="/execute_add_book_manually" method="post">
+        <input type="author_first_names" name="author_first_names" placeholder="author_first_names">
+        <br><br>
+        <input type="author_first_names" name="author_last_names" placeholder="author_last_names" required>
+        <br><br>
+        <input type="publisher_name" name="publisher_name" placeholder="publisher_name" required>
+        <br><br>
+        <input type="book_title" name="book_title" placeholder="book_title" required>
+        <br><br>
+        <input type="book_edition" name="book_edition" placeholder="book_edition">
+        <br><br>
+        <input type="book_language" name="book_language" placeholder="book_language">
+        <br><br>
+        <input type="book_genre" name="book_genre" placeholder="book_genre">
+        <br><br>
+        <input type="book_isbn" name="book_isbn" placeholder="book_isbn">
+        <br><br>
+        <input type="publishing_year" name="publishing_year" placeholder="publishing_year">
+        <br><br>
+        <input type="location_id" name="location_id" placeholder="location_id">
+        <br><br>
+        <input type="reco_age" name="reco_age" placeholder="reco_age">
+        <br><br>
+
+        <input type="submit" name="execute_add_book_manually" value="Add Book">
+    </form>
+</div>
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+

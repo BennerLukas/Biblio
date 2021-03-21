@@ -3,7 +3,7 @@ import isbnlib
 
 class Book:
 
-    def __init__(self):
+    def __init__(self) -> object:
         self.author_first_names = None
         self.author_last_names = None
         self.publisher_name = None

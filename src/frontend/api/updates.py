@@ -9,10 +9,7 @@ class Updates:
         return sql_str
 
     @staticmethod
-    def update_book(self, book_obj) -> str:
-        """
-        TODO: Decide how object manipulation is done prior to pushing to update function
-        """
+    def update_book(self, book_obj, book_id=None) -> str:
         s_update = f''' UPDATE books
                         SET (n_book_edition, s_genre, n_publishing_year,
                             s_book_language, n_recommended_age, n_location_id) =
@@ -21,10 +18,19 @@ class Updates:
                         WHERE n_book_id = (
                             SELECT n_book_id
                             FROM books
-                            WHERE s_title = {book_obj.book_title} AND n_book_edition = {book_obj.book_edition});'''
+                            WHERE s_title = {book_obj.book_title} AND n_book_edition = {book_obj.book_edition})
+                                OR n_book_id = {book_id};'''
 
         s_update = self.format_sql_string(s_update)
         return s_update
+
+    @staticmethod
+    def delete_book(self, book_id):
+        s_delete = f"""
+                        DELETE FROM wrote WHERE n_book_id = {book_id};
+                        DELETE FROM books WHERE n_book_id = {book_id};
+        """
+        return s_delete
 
     @staticmethod
     def update_author(self, new_first_name=None, prev_first_name=None, lastname=None, address_id=None) -> str:

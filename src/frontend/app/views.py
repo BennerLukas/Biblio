@@ -272,6 +272,49 @@ def about():
     return render_template("about.html")
 
 
+########################################################################################################################
+# Update Pages
+
+@app.route('/add_book', methods=['POST', 'GET'])
+def add_book():
+    return render_template("add_book.html")
+
+
+@app.route('/execute_update_book_manually', methods=['POST', 'GET'])
+def execute_add_book_manually():
+    new_book = Book()
+
+    # if Edition is not known it will default to 1
+    edition = request.form['book_edition']
+    if edition == "":
+        edition = 1
+
+    book_id = request.form['book_id']
+
+    param_list = [
+        edition,
+        request.form['book_language'],
+        request.form['book_genre'],
+        request.form['publishing_year'],
+        request.form['location_id'],
+        request.form['reco_age']]
+
+    # manipulating result list to include necessary nones for set_manually function
+    result = [item.replace("", None) for item in param_list]
+    result = [None, None, None, None] + result
+    result.insert(7, None)
+
+    new_book.set_manually(result)
+
+    result = bib.Updates.update_book(new_book. book_id)
+
+    if result is True:
+        return render_template("includes/success.html", title='Book updated',
+                               text='Book updated successfully')
+    return render_template("includes/fail.html", title='Book update failed',
+                           text='You have updated the book.')
+
+
 ###########################################################################
 
 

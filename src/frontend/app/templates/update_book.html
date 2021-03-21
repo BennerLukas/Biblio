@@ -1,0 +1,41 @@
+<!-- about.html-->
+
+{% extends "includes/raw.html" %}
+{% block title %}Add book{% endblock %}
+{% block heading %}Add a new book{% endblock %}
+{% block body %}
+
+<div>
+    <p>Add manually:</p>
+    <form action="/execute_update_book_manually" method="post">
+        <input  type="book_id" name = "book_id" placeholder="book_id">
+        <br><br>
+        <input type="book_language" name="book_language" placeholder="book_language">
+        <br><br>
+        <input type="book_genre" name="book_genre" placeholder="book_genre">
+        <br><br>
+        <input type="publishing_year" name="publishing_year" placeholder="publishing_year">
+        <br><br>
+        <input type="location_id" name="location_id" placeholder="location_id">
+        <br><br>
+        <input type="reco_age" name="reco_age" placeholder="reco_age">
+        <br><br>
+
+        <input type="submit" name="execute_add_book_manually" value="Update Book">
+        <input type="submit" name="execute_delete_book_manually" value="Delete Book">
+    </form>
+</div>
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
