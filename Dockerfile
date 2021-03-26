@@ -1,5 +1,4 @@
-#fetches Python image based on Alpine Linux
-#FROM python:3.8-alpine
+#fetches Python image based on Slim
 FROM python:3.8-slim
 
 #setup working directory
@@ -14,4 +13,4 @@ RUN pip install -r /requirements.txt --no-cache-dir
 COPY src/ /app
 
 #Start app via run.py
-CMD /app/frontend/run.py
+CMD python /app/frontend/run.py
