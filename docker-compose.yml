@@ -11,7 +11,7 @@ services:
     postgres:
         ports:
             - '5433:5432'
-        container_name: biblio
+        container_name: biblio_db
         environment:
             - POSTGRES_PASSWORD=1234
         image: 'postgres:12.2'
