@@ -810,7 +810,8 @@ class Selections:
         SELECT  
             s_first_name, 
             s_last_name, 
-            dt_date_of_birth, 
+            dt_date_of_birth,
+            a.s_city, 
             a.s_country
         FROM users
             LEFT JOIN addresses a ON users.n_address_id = a.n_address_id
