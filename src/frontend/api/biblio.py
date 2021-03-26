@@ -23,6 +23,7 @@ class Biblio:
         self.b_initialised = False
 
         self.Selections = Selections()
+        self.Updates = Updates()
 
         self.connect()
 
