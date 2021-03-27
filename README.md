@@ -7,15 +7,15 @@
 
 # Biblio
 
-![Postgres](https://img.shields.io/badge/DB-Postgres-green?style=flat&logo=postgresql)
-![Docker](https://img.shields.io/badge/Container-Docker-green?style=flat&logo=docker)
+![Postgres](https://img.shields.io/badge/DB-Postgres-black?style=flat&logo=postgresql)
+![Docker](https://img.shields.io/badge/Container-Docker-black?style=flat&logo=docker)
 
-![Flask](https://img.shields.io/badge/WebFramework-Flask-green?style=flat&logo=flask)
-![Flask](https://img.shields.io/badge/Framework-Bootstrap-green?style=flat&logo=bootstrap)
+![Flask](https://img.shields.io/badge/WebFramework-Flask-black?style=flat&logo=flask)
+![Flask](https://img.shields.io/badge/Framework-Bootstrap-black?style=flat&logo=bootstrap)
 
-![Python](https://img.shields.io/badge/Language-Python-green?style=flat&logo=python)
-![Flask](https://img.shields.io/badge/Language-HTML-green?style=flat&logo=html5)
-![Flask](https://img.shields.io/badge/Language-CSS-green?style=flat&logo=css3)
+![Python](https://img.shields.io/badge/Language-Python-black?style=flat&logo=python)
+![Flask](https://img.shields.io/badge/Language-HTML-black?style=flat&logo=html5)
+![Flask](https://img.shields.io/badge/Language-CSS-black?style=flat&logo=css3)
 
 Biblio is a tool for your private library. It manages your books and magazines.
 
