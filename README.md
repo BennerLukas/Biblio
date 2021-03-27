@@ -1,7 +1,8 @@
 <div align="center">
 <h2>Biblio</h2>
-<img src="/doc/Design/svg/open_book.svg" alt="Logo" width="400" align="center"/>
+<img src="/doc/Design/svg/open_book.svg" alt="Logo" width="180" align="center"/>
 </div>
+
 [![GitHub issues](https://img.shields.io/github/issues/BennerLukas/biblio)](https://github.com/BennerLukas/biblio/issues)
 [![GitHub forks](https://img.shields.io/github/forks/BennerLukas/biblio)](https://github.com/BennerLukas/biblio/network)
 [![GitHub stars](https://img.shields.io/github/stars/BennerLukas/biblio)](https://github.com/BennerLukas/biblio/stargazers)
