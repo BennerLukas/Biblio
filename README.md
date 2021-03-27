@@ -62,3 +62,10 @@ We think its important to know your possessions and keep it managed. We can help
 For developing Biblio we used Python, Flask, Postgres and a little bit of bootstrap for easier styling.
  
 ## Presentation
+<div>
+<img src="/doc/Design/screenshots/Screenshot%202021-03-27%20203035.png" alt="Screenshot" width="200"/>
+
+<img src="/doc/Design/screenshots/Screenshot%202021-03-27%20203102.png" alt="Screenshot" width="200"/>
+
+<img src="/doc/Design/screenshots/Screenshot%202021-03-27%20203118.png" alt="Screenshot" width="200"/>
+</div>
