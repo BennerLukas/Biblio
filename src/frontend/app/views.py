@@ -24,15 +24,8 @@ def index():
 
 @app.route('/search', methods=['POST', 'GET'])
 def search():
-    req = request
-    print(req)
     text = request.form['search_text']
     result = bib.get_select(f"SELECT * FROM book_extended WHERE s_title LIKE '%{text}%'")
-    col = result.columns.drop(['s_first_name', 'Abel'])
-
-    result = result.groupby(col, axis=0, as_index=False)
-    print(request)
-    print(result)
     if isinstance(result, DataFrame):
         return render_template("includes/table.html", column_names=result.columns.values,
                                row_data=list(result.values.tolist()),
@@ -47,8 +40,6 @@ def search():
 def book():
     result = bib.get_select("SELECT * FROM book_extended")
     result = result.drop_duplicates(subset=["n_book_id"], keep='last')  # better visualisation
-    print(request)
-    print(result)
     if isinstance(result, DataFrame):
         return render_template("includes/table.html", column_names=result.columns.values,
                                row_data=list(result.values.tolist()),
@@ -66,7 +57,6 @@ def loan_or_read_book():
             result = bib.make_loan(int(request.form['book_id']))
         if request.form['do'] == 'Read':
             result = bib.mark_book_as_read(int(request.form['book_id']))
-            print(f"Book read: {result}")
         if result is True:
             return render_template("includes/success.html", title='Success',
                                    text='Action executed successfully.')

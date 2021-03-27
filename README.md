@@ -7,16 +7,58 @@
 
 # Biblio
 
-![Python](https://img.shields.io/badge/Language-Python-green?style=flat&logo=python)
 ![Postgres](https://img.shields.io/badge/DB-Postgres-green?style=flat&logo=postgresql)
 ![Docker](https://img.shields.io/badge/Container-Docker-green?style=flat&logo=docker)
+
 ![Flask](https://img.shields.io/badge/WebFramework-Flask-green?style=flat&logo=flask)
+![Flask](https://img.shields.io/badge/Framework-Bootstrap-green?style=flat&logo=bootstrap)
+
+![Python](https://img.shields.io/badge/Language-Python-green?style=flat&logo=python)
+![Flask](https://img.shields.io/badge/Language-HTML-green?style=flat&logo=html5)
+![Flask](https://img.shields.io/badge/Language-CSS-green?style=flat&logo=css3)
 
 Biblio is a tool for your private library. It manages your books and magazines.
 
 
 ## Using
-
+First create a database container:
 ```bash
 docker container run -p 5433:5432 --name biblio -e POSTGRES_PASSWORD=1234 postgres:12.2 
 ````
+
+Then init the biblio databse by running :
+```bash
+cd src/api
+python biblio.py
+```
+
+After that start the flask server by:
+```bash
+cd src/
+python run.py
+```
+
+## Docker Container
+
+Otherwise you can use the docker-image provided in the repository.
+
+
+## About the project
+
+### Team
+- [Lukas Benner](https://github.com/BennerLukas)
+- [Phillip Lange](https://github.com/Sabokou)
+- [Alina Buss](https://github.com/Alinabuss)
+
+### Target
+With Biblio we want to build a system to keep track of your private book collection like its a real library.
+
+Biblio is your tool to manage your own private book collection. Whether you want to keep track of all your books. Find gems you forgot about or keep track of your reading list. With Biblio you can also invite friends and family to your private library. It allows you to share and borrow books between each other.
+
+We think its important to know your possessions and keep it managed. We can help you to focus on reading rather than searching. On the other hand its very important to share, so everybody can enjoy reading and learning new stuff. Biblio helps you to organize this process easily.
+
+
+### Tools
+For developing Biblio we used Python, Flask, Postgres and a little bit of bootstrap for easier styling.
+ 
+## Presentation
