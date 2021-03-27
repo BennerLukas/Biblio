@@ -131,7 +131,7 @@ class Selections:
                 LEFT JOIN loan AS l ON u.n_user_id = l.n_user_id
                 LEFT JOIN borrow_item AS bi ON l.n_loan_id = bi.n_loan_id
                 LEFT JOIN books AS bo ON bi.n_book_id = bo.n_book_id
-            WHERE u.n_user_id ={s_user_id};
+            WHERE u.n_user_id ={s_user_id} AND bi.b_active = False;
             """
         return s_sql
 

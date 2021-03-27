@@ -177,10 +177,13 @@ class Biblio:
                 else:
                     continue
                 if bool(b_is_available) is False:
-                    # return book
-                    result = self.return_book(book_id)
-                    if result is True:
-                        book_ids.pop(idx)
+                    book_ids.pop(idx)
+                    logging.error('Book not available')
+
+                    # # return book
+                    # result = self.return_book(book_id)
+                    # if result is True:
+                    #     book_ids.pop(idx)
                     continue
             if len(book_ids) == 0:
                 return True

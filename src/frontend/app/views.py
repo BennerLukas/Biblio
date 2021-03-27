@@ -22,18 +22,21 @@ def index():
     return render_template("/index.html", user=session.get('user_name'))
 
 
-@app.route('/search', methods=['POST', 'GET'])  # Home
+@app.route('/search', methods=['POST', 'GET'])
 def search():
     req = request
     print(req)
     text = request.form['search_text']
     result = bib.get_select(f"SELECT * FROM book_extended WHERE s_title LIKE '%{text}%'")
+    col = result.columns.drop(['s_first_name', 'Abel'])
+
+    result = result.groupby(col, axis=0, as_index=False)
     print(request)
     print(result)
     if isinstance(result, DataFrame):
         return render_template("includes/table.html", column_names=result.columns.values,
                                row_data=list(result.values.tolist()),
-                               title='Books', sub_header='List of all your books', link_column='none',
+                               title='Search', sub_header='Your search result', link_column='none',
                                zip=zip)
     else:
         return render_template("includes/fail.html", title='Error',
@@ -43,6 +46,7 @@ def search():
 @app.route('/book')
 def book():
     result = bib.get_select("SELECT * FROM book_extended")
+    result = result.drop_duplicates(subset=["n_book_id"], keep='last')  # better visualisation
     print(request)
     print(result)
     if isinstance(result, DataFrame):
@@ -58,7 +62,6 @@ def book():
 @app.route('/loan_or_read_book', methods=['POST', 'GET'])
 def loan_or_read_book():
     if request.method == 'POST':
-        id = request.form['book_id']
         if request.form['do'] == 'Loan':
             result = bib.make_loan(int(request.form['book_id']))
         if request.form['do'] == 'Read':
@@ -208,10 +211,6 @@ def list_read_books():
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     return render_template("login.html")
-    # return render_template("includes/success.html", title='Successful Log-In',
-    #                        text='You have been successfully logged in.')
-    # return render_template("includes/fail.html", title='Failed Log-In',
-    #                        text='You have not been logged in.')
 
 
 @app.route('/logged_in', methods=['POST', 'GET'])
@@ -235,8 +234,6 @@ def logout():
     bib.s_user = None
     return render_template("includes/success.html", title='Successful Logout',
                            text='You have been successfully logged out.')
-    # return render_template("includes/fail.html", title='Failed Log-In',
-    #                        text='You have not been logged in.')
 
 
 @app.route('/active_loans', methods=['POST', 'GET'])
