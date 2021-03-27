@@ -7,15 +7,19 @@
 
 # Biblio
 
-![Postgres](https://img.shields.io/badge/DB-Postgres-black?style=flat&logo=postgresql)
-![Docker](https://img.shields.io/badge/Container-Docker-black?style=flat&logo=docker)
+<div>
+<img src="/doc/Design/svg/Logo.svg" alt="Logo" width="400" align="center"/>
+</div>
 
-![Flask](https://img.shields.io/badge/WebFramework-Flask-black?style=flat&logo=flask)
-![Flask](https://img.shields.io/badge/Framework-Bootstrap-black?style=flat&logo=bootstrap)
+![Postgres](https://img.shields.io/badge/DB-Postgres-lightgrey?style=flat&logo=postgresql)
+![Docker](https://img.shields.io/badge/Container-Docker-lightgrey?style=flat&logo=docker)
 
-![Python](https://img.shields.io/badge/Language-Python-black?style=flat&logo=python)
-![Flask](https://img.shields.io/badge/Language-HTML-black?style=flat&logo=html5)
-![Flask](https://img.shields.io/badge/Language-CSS-black?style=flat&logo=css3)
+![Flask](https://img.shields.io/badge/WebFramework-Flask-lightgrey?style=flat&logo=flask)
+![Flask](https://img.shields.io/badge/Framework-Bootstrap-lightgrey?style=flat&logo=bootstrap)
+
+![Python](https://img.shields.io/badge/Language-Python-lightgrey?style=flat&logo=python)
+![Flask](https://img.shields.io/badge/Language-HTML-lightgrey?style=flat&logo=html5)
+![Flask](https://img.shields.io/badge/Language-CSS-lightgrey?style=flat&logo=css3)
 
 Biblio is a tool for your private library. It manages your books and magazines.
 
