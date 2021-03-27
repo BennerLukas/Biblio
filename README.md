@@ -67,6 +67,6 @@ For developing Biblio we used Python, Flask, Postgres and a little bit of bootst
 <br>
 <img src="/doc/Design/screenshots/Screenshot%202021-03-27%20203102.png" alt="Screenshot" width="800"/>
 <br>
-<img src="/doc/Design/screenshots/Screenshot%202021-03-27%20203118.png" alt="Screenshot" width="800"/>
+<img src="/doc/Design/screenshots/Screenshot%202021-03-27%20203118.png" alt="Screenshot" width="600"/>
 <br>
 </div>
