@@ -8,7 +8,7 @@
 # Biblio
 
 <div>
-<img src="/doc/Design/svg/open_book.svg.svg" alt="Logo" width="400" align="center"/>
+<img src="/doc/Design/svg/open_book.svg" alt="Logo" width="400" align="center"/>
 </div>
 
 ![Postgres](https://img.shields.io/badge/DB-Postgres-lightgrey?style=flat&logo=postgresql)
