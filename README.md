@@ -1,5 +1,7 @@
-<img src="https://raw.githubusercontent.com/BennerLukas/biblio/main/doc/Design/svg/Logo.svg" alt="Logo" width="200"/>
-
+<div align="center">
+<h2>Biblio</h2>
+<img src="/doc/Design/svg/open_book.svg" alt="Logo" width="400" align="center"/>
+</div>
 [![GitHub issues](https://img.shields.io/github/issues/BennerLukas/biblio)](https://github.com/BennerLukas/biblio/issues)
 [![GitHub forks](https://img.shields.io/github/forks/BennerLukas/biblio)](https://github.com/BennerLukas/biblio/network)
 [![GitHub stars](https://img.shields.io/github/stars/BennerLukas/biblio)](https://github.com/BennerLukas/biblio/stargazers)
@@ -7,9 +9,6 @@
 
 # Biblio
 
-<div>
-<img src="/doc/Design/svg/open_book.svg" alt="Logo" width="400" align="center"/>
-</div>
 
 ![Postgres](https://img.shields.io/badge/DB-Postgres-lightgrey?style=flat&logo=postgresql)
 ![Docker](https://img.shields.io/badge/Container-Docker-lightgrey?style=flat&logo=docker)
