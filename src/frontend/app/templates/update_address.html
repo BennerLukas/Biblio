@@ -1,0 +1,51 @@
+<!-- about.html-->
+
+{% extends "includes/raw.html" %}
+{% block title %}Add book{% endblock %}
+{% block heading %}Add a new book{% endblock %}
+{% block body %}
+
+<div>
+    <p>Add manually:</p>
+    <form action="/execute_change_address_manually" method="post">
+        <input type="address_id" name = "address_id" placeholder="address_id">
+        <br><br>
+        <input type="street" name = "street" placeholder="street" required>
+        <br><br>
+        <input type="housenumber" name = "housenumber" placeholder="housenumber" required>
+        <br><br>
+        <input type="city" name="city" placeholder="city" required>
+        <br><br>
+        <input type="zipcode" name="zipcode" placeholder="zipcode" required>
+        <br><br>
+        <input type="country" name="country" placeholder="country" required>
+
+        <br>
+
+        <input type="radio" id="add" name="operator" value="add" required>
+        <label for="add">Add Address</label>
+        <input type="radio" id="update" name="operator" value="update" required>
+        <label for="update">Update Address</label>
+        <input type="radio" id="delete" name="operator" value="delete" required>
+        <label for="delete">Delete Address</label>
+
+        <br>
+
+        <input type="submit" name="execute_update_address_manually" value="Submit">
+    </form>
+
+</div>
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
