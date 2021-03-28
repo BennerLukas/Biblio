@@ -7,8 +7,12 @@
 
 <div>
     <p>Add manually:</p>
-    <form action="/execute_update_book_manually" method="post">
-        <input  type="book_id" name = "book_id" placeholder="book_id">
+    <form action="/execute_change_book_manually" method="post">
+        <input type="book_id" name = "book_id" placeholder="book_id">
+        <br><br>
+        <input type="book_isbn" name = "book_isbn" placeholder="book_isbn">
+        <br><br>
+        <input type="book_edition" name = "book_edition" placeholder="book_edition">
         <br><br>
         <input type="book_language" name="book_language" placeholder="book_language">
         <br><br>
@@ -21,9 +25,14 @@
         <input type="reco_age" name="reco_age" placeholder="reco_age">
         <br><br>
 
-        <input type="submit" name="execute_add_book_manually" value="Update Book">
-        <input type="submit" name="execute_delete_book_manually" value="Delete Book">
+        <input type="radio" id="update" name="operator" value="update" required>
+        <label for="female">Update book</label><br>
+        <input type="radio" id="delete" name="operator" value="delete" required>
+        <label for="other">Delete book</label>
+
+        <input type="submit" name="execute_update_book_manually" value="Submit Change">
     </form>
+
 </div>
 
 {% endblock %}
