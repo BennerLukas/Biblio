@@ -62,8 +62,8 @@ class Book:
             return None
 
         call = f"""CALL add_book(
-                        ARRAY{list(self.author_first_names)}, 
-                        ARRAY{list(self.author_last_names)},
+                        ARRAY{self.author_first_names.split(" ")}, 
+                        ARRAY{self.author_last_names.split(" ")},
                         {self.publishing_year}, 
                         '{self.publisher_name}',
                         '{self.book_title}', 
