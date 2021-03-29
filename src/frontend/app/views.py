@@ -1,5 +1,6 @@
 from flask import render_template, request, session
 from pandas import DataFrame
+import psycopg2
 
 from api.selections import Selections
 from api.biblio import Biblio
@@ -260,46 +261,213 @@ def about():
 
 
 ########################################################################################################################
-# Update Pages
+# Update / Delete Pages
 
-# @app.route('/add_book', methods=['POST', 'GET'])
-# def add_book():
-#     return render_template("add_book.html")
+@app.route('/update_book', methods=['POST', 'GET'])
+def update_book():
+    return render_template("update_book.html")
 
 
-# @app.route('/execute_update_book_manually', methods=['POST', 'GET'])
-# def execute_add_book_manually():
-#     new_book = Book()
-#
-#     # if Edition is not known it will default to 1
-#     edition = request.form['book_edition']
-#     if edition == "":
-#         edition = 1
-#   TODO: Fetch ID via ISBN
-#     book_id = request.form['book_id']
-#
-#     param_list = [
-#         edition,
-#         request.form['book_language'],
-#         request.form['book_genre'],
-#         request.form['publishing_year'],
-#         request.form['location_id'],
-#         request.form['reco_age']]
-#
-#     # manipulating result list to include necessary nones for set_manually function
-#     result = [item.replace("", None) for item in param_list]
-#     result = [None, None, None, None] + result
-#     result.insert(7, None)
-#
-#     new_book.set_manually(result)
-#
-#     result = bib.exec_statement(bib.Updates.update_book(new_book. book_id))
-#
-#     if result is True:
-#         return render_template("includes/success.html", title='Book updated',
-#                                text='Book updated successfully')
-#     return render_template("includes/fail.html", title='Book update failed',
-#                            text='You have updated the book.')
+@app.route('/execute_change_book_manually', methods=['POST', 'GET'])
+def execute_change_book_manually():
+    new_book = Book()
+
+    # if Edition is not known it will default to 1
+    book_edition = request.form['book_edition']
+    if book_edition == "":
+        book_edition = 1
+
+    book_id = request.form['book_id']
+
+    book_isbn = request.form['book_isbn']
+    if book_isbn == "" and book_id == "":
+        return render_template("includes/fail.html", title='Book update failed',
+                               text='Update failed! Reason: Missing book identifier.')
+    elif book_id == "" and book_isbn != "":
+        book_id = bib.get_select(f"""SELECT n_book_id FROM books 
+                                     WHERE s_isbn = {book_isbn}  AND n_book_edition = {book_edition}""").iat[0, 0]
+
+    # Operation defined by radio button in form
+    if request.form['operator'] == "delete":
+        book_id = request.form['book_id']
+        book_isbn = request.form['book_isbn']
+
+        # if Edition is not known it will default to 1
+        book_edition = request.form['book_edition']
+        if book_edition == "":
+            book_edition = 1
+
+        if book_isbn == "" and book_id == "":
+            return render_template("includes/fail.html", title='Book update failed',
+                                   text='Update failed! Reason: Missing book identifier.')
+        elif book_id == "" and book_isbn != "":
+            book_id = bib.get_select(f"""SELECT n_book_id FROM books
+                                           WHERE s_isbn = {book_isbn} AND n_book_edition = {book_edition}""").iat[0, 0]
+        try:
+            bib.exec_statement(f"""DELETE FROM wrote WHERE n_book_id = {book_id};
+                                   DELETE FROM books WHERE n_book_id = {book_id};""")
+        except psycopg2.errors.ForeignKeyViolation:
+            return render_template("includes/fail.html", title='Book deletion failed',
+                                   text='Delete failed! Reason: Book is currently lent.')
+        except psycopg2.errors.InFailedSqlTransaction:
+            return render_template("includes/fail.html", title='Book deletion failed',
+                                   text='Delete failed! Reason: Book does not exist.')
+        else:
+            return render_template("includes/success.html", title='Book deleted',
+                                   text='Book was successfully deleted.')
+    else:
+        param_list = [
+            book_edition,
+            request.form['book_language'],
+            request.form['book_genre'],
+            request.form['publishing_year'],
+            request.form['location_id'],
+            request.form['reco_age']]
+
+        # manipulating result list to include necessary nones for set_manually function
+        result = [None, None, None, None]
+        for item in param_list:
+            if item == "":
+                result.append(None)
+            else:
+                result.append(item)
+        result.insert(7, None)
+
+        new_book.set_manually(result)
+
+        result = bib.exec_statement(bib.Updates.update_book(new_book.book_id))
+
+        if result is True:
+            return render_template("includes/success.html", title='Book updated',
+                                   text='Book updated successfully')
+            return render_template("includes/fail.html", title='Book update failed',
+                                   text='You have updated the book.')
+
+
+@app.route('/update_author', methods=['POST', 'GET'])
+def update_author():
+    return render_template("update_author.html")
+
+
+@app.route('/execute_change_author_manually', methods=['POST', 'GET'])
+def execute_change_author_manually():
+    author_id = request.form['author_id']
+
+    if author_id == "":
+        return render_template("includes/fail.html", title='Author update failed',
+                               text='Update failed! Reason: Missing Author identifier.')
+
+    # Operation defined by radio button in form
+    if request.form['operator'] == "delete":
+
+        try:
+            bib.exec_statement(f"""DELETE FROM wrote WHERE n_author_id = {author_id};
+                                   DELETE FROM author WHERE n_author_id = {author_id};""")
+        except psycopg2.errors.ForeignKeyViolation:
+            return render_template("includes/fail.html", title='Author deletion failed',
+                                   text='Delete failed! Reason: Author still has Books associated with them.')
+        except psycopg2.errors.InFailedSqlTransaction:
+            return render_template("includes/fail.html", title='Author deletion failed',
+                                   text='Delete failed! Reason: Author does not exist.')
+        else:
+            return render_template("includes/success.html", title='Author deleted',
+                                   text='Author was successfully deleted.')
+    else:
+        param_list = [
+            request.form['author_first_name'],
+            request.form['author_last_name'],
+            request.form['address_id']]
+        # manipulating result list to include necessary nones for set_manually function
+        result = list()
+        for item in param_list:
+            if item == "":
+                result.append(None)
+            else:
+                result.append(item)
+
+        if param_list[1] is None:
+            old_last_name = bib.get_select(f"SELECT s_last_name FROM author WHERE n_author_id = {author_id}").iat[0, 0]
+            if old_last_name != "Null":
+                param_list[2] = old_last_name
+
+        if param_list[2] is None:
+            old_address_id = bib.get_select(f"SELECT n_address_id FROM author WHERE n_author_id = {author_id}").iat[
+                0, 0]
+            if old_address_id != "Null":
+                param_list[2] = old_address_id
+
+        prev_first_name = bib.get_select(f"SELECT s_fist_name FROM author WHERE n_author_id = {author_id}").iat[0, 0]
+
+        result = bib.exec_statement(
+            bib.Updates.update_author(author_id, new_first_name=param_list[0], prev_first_name=prev_first_name,
+                                      lastname=param_list[1], address_id=param_list[2]))
+
+        if result is True:
+            return render_template("includes/success.html", title='Book updated',
+                                   text='Book updated successfully')
+            return render_template("includes/fail.html", title='Author update failed',
+                                   text='You have not updated the author. Inputs do not comply with table restrictions')
+
+
+@app.route('/update_address', methods=['POST', 'GET'])
+def update_book():
+    return render_template("update_address.html")
+
+
+@app.route('/execute_change_address_manually', methods=['POST', 'GET'])
+def execute_change_address_manually():
+    address_id = request.form['book_id']
+    param_list = [
+        request.form['street'],
+        request.form['housenumber'],
+        request.form['city'],
+        request.form['zipcode'],
+        request.form['country']]
+
+    # Operation defined by radio button in form
+    if request.form['operator'] == "delete":
+        if address_id == "":
+            return render_template("includes/fail.html", title='Address Deletion failed',
+                                   text='Deletion failed! Reason: Missing address identifier.')
+
+        try:
+            bib.exec_statement(f'DELETE FROM address WHERE n_address_id = {address_id}')
+        except psycopg2.errors.ForeignKeyViolation:
+            return render_template("includes/fail.html", title='Address deletion failed',
+                                   text='Delete failed! Reason: Address is used elsewhere.')
+        except psycopg2.errors.InFailedSqlTransaction:
+            return render_template("includes/fail.html", title='Address deletion failed',
+                                   text='Delete failed! Reason: Address ID does not exist.')
+        else:
+            return render_template("includes/success.html", title='Address deleted',
+                                   text='Address was successfully deleted.')
+
+    elif request.form['operator'] == "add":
+        try:
+            bib.exec_statement(f"""INSERT INTO ADDRESSES 
+                                        (s_street, s_house_number, 
+                                        s_city, n_zipcode, 
+                                        s_country)
+                                   VALUES
+                                        ('{param_list[0]}', '{param_list[1]}', 
+                                        '{param_list[2]}', '{param_list[3]}', 
+                                        '{param_list[4]}'""")
+        except:
+            return render_template("includes/fail.html", title='Address addition failed',
+                                   text='Addition failed!')
+        else:
+            return render_template("includes/success.html", title='Address added',
+                                   text='Address was successfully added.')
+
+    elif request.form['operator'] == "update":
+
+        result = bib.exec_statement(bib.Updates.update_address(param_list, address_id))
+
+        if result is True:
+            return render_template("includes/success.html", title='Book updated',
+                                   text='Book updated successfully')
+            return render_template("includes/fail.html", title='Book update failed',
+                                   text='You have updated the book.')
 
 
 ###########################################################################

@@ -33,14 +33,20 @@ class Updates:
         return s_delete
 
     @staticmethod
-    def update_author(self, new_first_name=None, prev_first_name=None, lastname=None, address_id=None) -> str:
-        s_update = f''' UPDATE author
-                        SET (s_first_name, n_address_id) = ( {new_first_name} {address_id})
-                        WHERE n_author_id = ( 
-                            SELECT n_author_id 
-                            FROM author 
-                            WHERE s_last_name = {lastname} AND s_first_name = {prev_first_name});'''
+    def update_author(self, author_id=None, new_first_name=None, prev_first_name=None, lastname=None,
+                      address_id=None) -> str:
 
+        if author_id is None:
+            s_update = f''' UPDATE author
+                            SET (s_first_name, n_address_id) = ( '{new_first_name}', {address_id})
+                            WHERE n_author_id = ( 
+                                SELECT n_author_id 
+                                FROM author 
+                                WHERE s_last_name = '{lastname}' AND s_first_name = '{prev_first_name})';'''
+        else:
+            s_update = f"""UPDATE author
+                           SET (s_first_name, s_last_name, n_address_id) = ( '{new_first_name}', '{lastname}', {address_id} ) 
+                           WHERE n_author_id = {author_id}"""
         s_update = self.format_sql_string(s_update)
         return s_update
 
@@ -52,5 +58,14 @@ class Updates:
                             SELECT n_publisher_id 
                             FROM publisher 
                             WHERE s_pub_name = {publisher_name});'''
+        s_update = self.format_sql_string(s_update)
+        return s_update
+
+    @staticmethod
+    def update_address(self, parameters, address_id):
+        s_update = f"""UPDATE address
+                       SET (s_street, s_house_number, s_city, n_zipcode, s_country) =
+                       ('{parameters[0]}', '{parameters[1]}', '{parameters[2]}', '{parameters[3]}', '{parameters[4]}'
+                       WHERE n_address_id = {address_id}"""
         s_update = self.format_sql_string(s_update)
         return s_update
