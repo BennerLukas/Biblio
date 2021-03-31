@@ -410,7 +410,7 @@ def execute_change_author_manually():
 
 
 @app.route('/update_address', methods=['POST', 'GET'])
-def update_book():
+def update_address():
     return render_template("update_address.html")
 
 
