@@ -152,6 +152,45 @@
                             </a>
                     </li>
                 </ul>
+                <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                    <span>Manage Objects</span>
+                    <a class="link-secondary" aria-label="extra">
+                        <span data-feather="sliders"></span>
+                    </a>
+                </h6>
+                 <ul class="nav flex-column mb-2">
+                    <li class="nav-item">
+                        {% if request.path == '/update_book' %}
+                        <a class="nav-link active" href="/update_book">
+                            {% else %}
+                            <a class="nav-link" href="/update_book">
+                                {% endif %}
+                                <span data-feather="file-text"></span>
+                                Update Books
+                            </a>
+                    </li>
+                    <li class="nav-item">
+                        {% if request.path == '/update_author' %}
+                        <a class="nav-link active" href="/update_author">
+                            {% else %}
+                            <a class="nav-link" href="/update_author">
+                                {% endif %}
+                                <span data-feather="file-text"></span>
+                                Update Authors
+                            </a>
+                    </li>
+                    <li class="nav-item">
+                        {% if request.path == '/update_address' %}
+                        <a class="nav-link active" href="/update_address">
+                            {% else %}
+                            <a class="nav-link" href="/update_address">
+                                {% endif %}
+                                <span data-feather="file-text"></span>
+                                Manage Addresses
+                            </a>
+                    </li>
+                </ul>
+
 
                 <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
                     <span>Extra</span>
