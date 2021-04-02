@@ -50,6 +50,11 @@ python run.py
 
 Otherwise you can use the docker-image provided in the repository.
 
+For executing PostgreSQL inside the docker container
+````bash
+docker exec -it biblio bash 
+psql --dbname=postgres --username=postgres
+````
 
 ## About the project
 

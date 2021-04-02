@@ -5,8 +5,8 @@ import pandas as pd
 import logging
 import re
 
-from api.selections import Selections
-from api.updates import Updates
+from app.selections import Selections
+from app.updates import Updates
 
 
 class Biblio:

@@ -2,9 +2,9 @@ from flask import render_template, request, session
 from pandas import DataFrame
 import psycopg2
 
-from api.selections import Selections
-from api.biblio import Biblio
-from api.book import Book
+from app.selections import Selections
+from app.biblio import Biblio
+from app.book import Book
 from app import app
 
 bib = Biblio()
