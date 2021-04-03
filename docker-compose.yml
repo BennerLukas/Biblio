@@ -1,17 +1,16 @@
 version: '3.3'
 services:
-
-    web:
-      build: .
-      ports:
-        - 5001:5000
-      depends_on:
-        - postgres
-
-    postgres:
+    database:
         ports:
             - '5433:5432'
-        container_name: biblio_db
         environment:
             - POSTGRES_PASSWORD=1234
         image: 'postgres:12.2'
+
+    webapp:
+      build: .
+      ports:
+        - '5000:5000'
+      depends_on:
+        - database
+      #command: ["./wait-for-it.sh", "database:5433", "--", "echo", "database ready!"]

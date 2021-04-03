@@ -76,7 +76,13 @@ class Biblio:
         :return:
         """
         if self.b_connected:
-            s_sql_statement = open("../../database/init.sql", "r").read()
+            try:
+                s_sql_statement = open("../../database/init.sql", "r").read()
+                logging.info("Used original File Path")
+            except FileNotFoundError:
+                s_sql_statement = open("../database/init.sql", "r").read()
+                logging.info("Alternate File Path - Called from init.py")
+
             s_sql_statement = re.sub(r"--.*|\n|\t", " ",
                                      s_sql_statement)  # cleaning file from comments and escape functions
 
