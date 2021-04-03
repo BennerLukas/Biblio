@@ -37,11 +37,10 @@ class Biblio:
         :return:
         """
         try:
-            self.alchemy_engine = sqlalchemy.create_engine('postgres+psycopg2://postgres:1234@localhost:5433/postgres')
+            self.alchemy_engine = sqlalchemy.create_engine('postgres+psycopg2://postgres:1234@database:5432/postgres')
             self.alchemy_connection = self.alchemy_engine.connect()
-            self.psycopg2_connection = psycopg2.connect(database="postgres", user="postgres", port=5433,
-                                                        password="1234",
-                                                        host="localhost")
+            self.psycopg2_connection = psycopg2.connect(database="postgres", user="postgres", port=5432,
+                                                        password="1234", host="database")
             self.b_connected = True
             print("Database Connected")
             logging.info("Connected to DB")
@@ -80,7 +79,7 @@ class Biblio:
                 s_sql_statement = open("../../database/init.sql", "r").read()
                 logging.info("Used original File Path")
             except FileNotFoundError:
-                s_sql_statement = open("../database/init.sql", "r").read()
+                s_sql_statement = open("/app/database/init.sql", "r").read()
                 logging.info("Alternate File Path - Called from init.py")
 
             s_sql_statement = re.sub(r"--.*|\n|\t", " ",
