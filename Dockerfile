@@ -2,23 +2,17 @@
 FROM python:3.8-slim
 
 # setup working directory
-WORKDIR /app
+WORKDIR /src
 
 # install requirements
-COPY requirements.txt /
+COPY requirements.txt requirements.txt
 RUN pip install -U pip
-RUN pip install -r /requirements.txt --no-cache-dir
-
-
-# copy waiting script
-COPY wait-for-it.sh /
-
+RUN pip install -r requirements.txt
 
 # copy folder into working directory
-COPY src/ /app
+COPY src/ /src
 
+EXPOSE 5000
 
-
-
-# Start app via run.py
-#
+CMD ["python", "/src/code/init.py"]
+CMD ["python", "/src/code/run.py"]

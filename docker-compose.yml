@@ -13,4 +13,3 @@ services:
         - '5000:5000'
       depends_on:
         - database
-      #command: ["./wait-for-it.sh", "database:5433", "--", "echo", "database ready!"]
