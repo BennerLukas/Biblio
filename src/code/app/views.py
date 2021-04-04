@@ -322,10 +322,10 @@ def execute_change_book_manually():
             request.form['book_genre'],
             request.form['publishing_year'],
             request.form['location_id'],
-            request.form['reco_age']]
+            request.form['reco_age'],
+            book_isbn]
 
-        # manipulating result list to include necessary nones for set_manually function
-        result = [None, None, None, None]
+        result = list()
         for item in param_list:
             if item == "":
                 result.append(None)
@@ -333,15 +333,14 @@ def execute_change_book_manually():
                 result.append(item)
         result.insert(7, None)
 
-        new_book.set_manually(result)
-
-        result = bib.exec_statement(bib.Updates.update_book(new_book.book_id))
+        print(result)
+        result = bib.exec_statement(bib.Updates.update_book(result, book_id))
 
         if result is True:
             return render_template("includes/success.html", title='Book updated',
                                    text='Book updated successfully')
             return render_template("includes/fail.html", title='Book update failed',
-                                   text='You have updated the book.')
+                                   text='You have not updated the book.')
 
 
 @app.route('/update_author', methods=['POST', 'GET'])
@@ -361,8 +360,7 @@ def execute_change_author_manually():
     if request.form['operator'] == "delete":
 
         try:
-            bib.exec_statement(f"""DELETE FROM wrote WHERE n_author_id = {author_id};
-                                   DELETE FROM author WHERE n_author_id = {author_id};""")
+            bib.exec_statement(f"""DELETE FROM author WHERE n_author_id = {author_id};""")
         except psycopg2.errors.ForeignKeyViolation:
             return render_template("includes/fail.html", title='Author deletion failed',
                                    text='Delete failed! Reason: Author still has Books associated with them.')
@@ -396,7 +394,7 @@ def execute_change_author_manually():
             if old_address_id != "Null":
                 param_list[2] = old_address_id
 
-        prev_first_name = bib.get_select(f"SELECT s_fist_name FROM author WHERE n_author_id = {author_id}").iat[0, 0]
+        prev_first_name = bib.get_select(f"SELECT s_fist_name FROM AUTHOR WHERE n_author_id = {author_id}").iat[0, 0]
 
         result = bib.exec_statement(
             bib.Updates.update_author(author_id, new_first_name=param_list[0], prev_first_name=prev_first_name,
@@ -416,7 +414,7 @@ def update_address():
 
 @app.route('/execute_change_address_manually', methods=['POST', 'GET'])
 def execute_change_address_manually():
-    address_id = request.form['book_id']
+    address_id = request.form['address_id']
     param_list = [
         request.form['street'],
         request.form['housenumber'],
@@ -431,7 +429,7 @@ def execute_change_address_manually():
                                    text='Deletion failed! Reason: Missing address identifier.')
 
         try:
-            bib.exec_statement(f'DELETE FROM address WHERE n_address_id = {address_id}')
+            bib.exec_statement(f'DELETE FROM ADDRESSES WHERE n_address_id = {address_id}')
         except psycopg2.errors.ForeignKeyViolation:
             return render_template("includes/fail.html", title='Address deletion failed',
                                    text='Delete failed! Reason: Address is used elsewhere.')

@@ -50,7 +50,7 @@ class Book:
         self.publishing_year = meta_data['Year']
         self.book_isbn = list(meta_data.values())[0]
 
-        # print(meta_data)
+        print(self)
 
     def get_s_sql_call(self) -> str or None:
 
