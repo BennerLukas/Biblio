@@ -2,13 +2,13 @@
 
 {% extends "includes/raw.html" %}
 {% block title %}Update book{% endblock %}
-{% block heading %}Update or Delete books{% endblock %}
+{% block heading %}Update or Delete Books{% endblock %}
 {% block body %}
 
 <div>
-    <p>Add manually:</p>
+    <p>book_id or a combination of book_isbn and book_edition can be used to identify the book</p>
     <form action="/execute_change_book_manually" method="post">
-        <input type="book_id" name = "book_id" placeholder="book_id" required>
+        <input type="book_id" name = "book_id" placeholder="book_id">
         <br><br>
         <input type="book_isbn" name = "book_isbn" placeholder="book_isbn">
         <br><br>

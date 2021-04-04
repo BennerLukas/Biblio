@@ -1,14 +1,13 @@
 <!-- about.html-->
 
 {% extends "includes/raw.html" %}
-{% block title %}Update Author{% endblock %}
+{% block title %}Update Authors{% endblock %}
 {% block heading %}Update or Delete Authors{% endblock %}
 {% block body %}
 
 <div>
-    <p>Add manually:</p>
-    <form action="/execute_change_book_manually" method="post">
-        <input type="author_id" name = "author_id" placeholder="author_id" required>
+    <form action="/execute_change_author_manually" method="post">
+        <input type="author_id" name = "author_id" placeholder="author_id">
         <br><br>
         <input type="author_first_name" name="author_first_name" placeholder="author_first_name">
         <br><br>
@@ -20,11 +19,11 @@
         <br><br>
 
         <input type="radio" id="update" name="operator" value="update" required>
-        <label for="update">Update book</label><br>
+        <label for="update">Update Author</label><br>
         <input type="radio" id="delete" name="operator" value="delete" required>
-        <label for="delete">Delete book</label>
+        <label for="delete">Delete Author</label>
 
-        <input type="submit" name="execute_update_book_manually" value="Submit Change">
+        <input type="submit" name="execute_update_author_manually" value="Submit Change">
     </form>
 
 </div>

@@ -1,12 +1,11 @@
 <!-- about.html-->
 
 {% extends "includes/raw.html" %}
-{% block title %}Mange Adresses{% endblock %}
-{% block heading %}Update or Manage existing Addresses{% endblock %}
+{% block title %}Manage Addresses{% endblock %}
+{% block heading %}Update, Add or Delete Addresses{% endblock %}
 {% block body %}
 
 <div>
-    <p>Add manually:</p>
     <form action="/execute_change_address_manually" method="post">
         <input type="address_id" name = "address_id" placeholder="address_id">
         <br><br>

@@ -6,21 +6,26 @@
 {% block body %}
 <div>
    {% if user == 'no name' %}
-<a href="/login">
-    <div align="right">
-        <span data-feather="user"></span>
-        <h4>None</h4>
-    </div>
-</a>
-{% else %}
-<a href="/logout">
+        <a href="/login">
+            <div align="right">
+                <span data-feather="user"></span>
+                <h4>Admin</h4>
+            </div>
+        </a>
+        {% else %}
+        <a href="/logout">
 
-    <div align="right">
-        <span data-feather="user"></span>
-        <h4>{{user}}</h4>
-    </div>
-</a>
-{% endif %}
+            <div align="right">
+                <span data-feather="user"></span>
+                <h4>{{user}}</h4>
+            </div>
+        </a>
+    {% endif %}
+</div>
+<div align="center">
+    <p>Amount of overdue books: {{ amount_overdue }}</p>
+    <p>Total amount of books in the system: {{ amount_book_total }}</p>
+    <p>Books currently loaned: {{ amount_books_loaned }}</p>
 </div>
 
 <div>
@@ -53,5 +58,6 @@
         </p>
     </div>
 </div>
+
 
 {% endblock %}

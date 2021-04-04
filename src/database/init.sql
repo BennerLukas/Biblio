@@ -36,7 +36,7 @@ CREATE TABLE AUTHOR
     s_last_name  VARCHAR(128)  NOT NULL,
     n_address_id INT,
     PRIMARY KEY (n_author_id),
-    FOREIGN KEY (n_address_id) REFERENCES ADDRESSES (n_address_id)
+    FOREIGN KEY (n_address_id) REFERENCES ADDRESSES (n_address_id) ON DELETE SET NULL
 );
 
 CREATE TABLE PUBLISHER
@@ -45,7 +45,7 @@ CREATE TABLE PUBLISHER
     s_pub_name     VARCHAR(128)  NOT NULL,
     n_address_id   INT,
     PRIMARY KEY (n_publisher_id),
-    FOREIGN KEY (n_address_id) REFERENCES ADDRESSES (n_address_id)
+    FOREIGN KEY (n_address_id) REFERENCES ADDRESSES (n_address_id) ON DELETE SET NULL
 );
 
 
@@ -58,7 +58,7 @@ CREATE TABLE LIB_LOCATION
     n_loc_floor   INT,
     n_address_id  INT,
     PRIMARY KEY (n_location_id),
-    FOREIGN KEY (n_address_id) REFERENCES ADDRESSES (n_address_id)
+    FOREIGN KEY (n_address_id) REFERENCES ADDRESSES (n_address_id) ON DELETE CASCADE
 );
 
 
@@ -68,7 +68,7 @@ CREATE TABLE BOOKS
     n_book_id         SERIAL UNIQUE NOT NULL,
     s_isbn            VARCHAR(13) UNIQUE,
     s_title           VARCHAR(4096) NOT NULL,
-    n_book_edition    INT NOT NULL DEFAULT 1,
+    n_book_edition    INT           NOT NULL DEFAULT 1,
     s_genre           CHAR(20),
     n_publishing_year INT,
     s_book_language   CHAR(3),
@@ -77,22 +77,22 @@ CREATE TABLE BOOKS
     n_publisher_id    INT,
     n_location_id     INT,
     PRIMARY KEY (n_book_id),
-    FOREIGN KEY (n_publisher_id) REFERENCES PUBLISHER (n_publisher_id),
-    FOREIGN KEY (n_location_id) REFERENCES LIB_LOCATION (n_location_id)
+    FOREIGN KEY (n_publisher_id) REFERENCES PUBLISHER (n_publisher_id) ON DELETE SET NULL,
+    FOREIGN KEY (n_location_id) REFERENCES LIB_LOCATION (n_location_id) ON DELETE SET NULL
 );
 
 CREATE TABLE USERS
 (
-    n_user_id        SERIAL UNIQUE NOT NULL,
+    n_user_id        SERIAL UNIQUE       NOT NULL,
     s_user_name      VARCHAR(128) UNIQUE NOT NULL,
-    s_password       VARCHAR(128)  NOT NULL,
+    s_password       VARCHAR(128)        NOT NULL,
     s_first_name     VARCHAR(128),
     s_last_name      VARCHAR(128),
 
     dt_date_of_birth DATE,
     n_address_id     INT,
     PRIMARY KEY (n_user_id),
-    FOREIGN KEY (n_address_id) REFERENCES ADDRESSES (n_address_id)
+    FOREIGN KEY (n_address_id) REFERENCES ADDRESSES (n_address_id) ON DELETE SET NULL
 );
 
 CREATE TABLE LOAN
@@ -101,7 +101,7 @@ CREATE TABLE LOAN
     ts_now    TIMESTAMP     NOT NULL DEFAULT current_timestamp,
     n_user_id INT           NOT NULL,
     PRIMARY KEY (n_loan_id),
-    FOREIGN KEY (n_user_id) REFERENCES USERS (n_user_id)
+    FOREIGN KEY (n_user_id) REFERENCES USERS (n_user_id) ON DELETE CASCADE
 );
 
 
@@ -113,8 +113,8 @@ CREATE TABLE BORROW_ITEM
     n_loan_id        INT           NOT NULL,
     b_active         BOOL          NOT NULL DEFAULT true,
     PRIMARY KEY (n_borrow_item_id),
-    FOREIGN KEY (n_book_id) REFERENCES BOOKS (n_book_id),
-    FOREIGN KEY (n_loan_id) REFERENCES LOAN (n_loan_id)
+    FOREIGN KEY (n_book_id) REFERENCES BOOKS (n_book_id) ON DELETE CASCADE,
+    FOREIGN KEY (n_loan_id) REFERENCES LOAN (n_loan_id) ON DELETE CASCADE
 );
 
 
@@ -124,8 +124,8 @@ CREATE TABLE READ_BOOKS
     n_book_id       INT           NOT NULL,
     n_user_id       INT           NOT NULL,
     PRIMARY KEY (n_read_books_id),
-    FOREIGN KEY (n_book_id) REFERENCES BOOKS (n_book_id),
-    FOREIGN KEY (n_user_id) REFERENCES USERS (n_user_id)
+    FOREIGN KEY (n_book_id) REFERENCES BOOKS (n_book_id) ON DELETE CASCADE,
+    FOREIGN KEY (n_user_id) REFERENCES USERS (n_user_id) ON DELETE CASCADE
 );
 
 
@@ -136,8 +136,8 @@ CREATE TABLE WROTE
     n_book_id   INT           NOT NULL,
     n_author_id INT           NOT NULL,
     PRIMARY KEY (n_wrote_id),
-    FOREIGN KEY (n_book_id) REFERENCES BOOKS (n_book_id),
-    FOREIGN KEY (n_author_id) REFERENCES AUTHOR (n_author_id)
+    FOREIGN KEY (n_book_id) REFERENCES BOOKS (n_book_id) ON DELETE CASCADE,
+    FOREIGN KEY (n_author_id) REFERENCES AUTHOR (n_author_id) ON DELETE CASCADE
 );
 
 INSERT INTO ADDRESSES (s_street, s_house_number, s_city, s_country, n_zipcode)
@@ -163,12 +163,12 @@ VALUES ('2B', '3', '203', 1, 2),
 
 INSERT INTO BOOKS(s_isbn, s_title, n_book_edition, s_genre, n_publishing_year, s_book_language, n_recommended_age,
                   b_is_available, n_publisher_id, n_location_id)
-VALUES ('9780575097568', 'Rivers of London', 1, 'Urban Fantasy', 2010, 'en', NULL, true, 1, 2),   -- Author 1
-       ('9780345524591', 'Moon Over Soho', 2, 'Urban Fantasy', 2011, NULL, NULL, true, 1, 2),     -- Author 1
-       ('9780525516019', 'A Land of Permanent Goodbyes', 1, NULL, NULL, 'en', 18, true, 1, 1), -- Author 3
+VALUES ('9780575097568', 'Rivers of London', 1, 'Urban Fantasy', 2010, 'en', NULL, true, 1, 2), -- Author 1
+       ('9780345524591', 'Moon Over Soho', 2, 'Urban Fantasy', 2011, NULL, NULL, true, 1, 2),   -- Author 1
+       ('9780525516019', 'A Land of Permanent Goodbyes', 1, NULL, NULL, 'en', 18, true, 1, 1),  -- Author 3
        (NULL, 'Der Text des Lebens', 1, NULL, NULL, 'de', 40, true, 2, 3); -- Author 2
 
-INSERT INTO USERS(s_user_name, s_password,s_first_name, s_last_name, dt_date_of_birth, n_address_id)
+INSERT INTO USERS(s_user_name, s_password, s_first_name, s_last_name, dt_date_of_birth, n_address_id)
 VALUES ('benni', '1234', 'Ben', 'Hell', DATE '1987-04-03', 3),
        ('nadia', '1234', 'Nadia', 'Tall', DATE '1968-10-31', 4),
        ('susi', '1234', 'Susanne', 'Nieble', DATE'2001-02-25', NULL);
