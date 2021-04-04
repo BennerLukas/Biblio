@@ -1,12 +1,11 @@
 <!-- about.html-->
 
 {% extends "includes/raw.html" %}
-{% block title %}Add book{% endblock %}
-{% block heading %}Add a new book{% endblock %}
+{% block title %}Update Authors{% endblock %}
+{% block heading %}Update or Delete Authors{% endblock %}
 {% block body %}
 
 <div>
-    <p>Add manually:</p>
     <form action="/execute_change_book_manually" method="post">
         <input type="author_id" name = "author_id" placeholder="author_id">
         <br><br>
