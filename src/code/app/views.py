@@ -20,7 +20,17 @@ def logging_in():
 
 @app.route('/')  # Home
 def index():
-    return render_template("/index.html", user=session.get('user_name'))
+    # fetch amount of books currently overdue
+    count_overdue_books = bib.get_select(bib.Selections.sql_exceeded_loans(info=True)).iat[0, 0]
+    count_loaned_books = bib.get_select("""SELECT COUNT(DISTINCT (n_borrow_item_id)) AS Amount
+                                               FROM borrow_item AS bi
+                                                    LEFT JOIN loan AS l ON bi.n_loan_id = l.n_loan_id
+                                               WHERE bi.b_active = 'TRUE'""").iat[0, 0]
+    count_total_books = bib.get_select("SELECT COUNT(DISTINCT(n_book_id)) FROM books").iat[0, 0]
+
+    return render_template("/index.html", amount_overdue=count_overdue_books, amount_book_total=count_total_books,
+                           amount_books_loaned=count_loaned_books)
+    # return render_template("/index.html", user=session.get('user_name'))
 
 
 @app.route('/search', methods=['POST', 'GET'])
@@ -113,17 +123,6 @@ def execute_add_book_manually():
                            text='You have not added the book.')
 
 
-@app.route('/homepage')  # Starting page => didn't change index for future reference
-def homepage():
-    # fetch amount of books currently overdue
-    count_overdue_books = bib.get_select(bib.Selections.sql_exceeded_loans(info=True)).iat[0, 0]
-
-    count_total_books = bib.get_select("SELECT COUNT(DISTINCT(n_book_id)) FROM books").iat[0, 0]
-
-    return render_template("home.html", amount_overdue=count_overdue_books, amount_book_total=count_total_books,
-                           amount_books_loaned=0)
-
-
 @app.route('/profile')  # Profile
 def profile():
     active_user_id = session.get('user_id', None)
@@ -131,21 +130,23 @@ def profile():
         count_read_books = bib.get_select(bib.Selections.sql_total_loans_user(active_user_id)).iat[0, 0]
 
         user_info = bib.get_select(bib.Selections.sql_basic_user_information(active_user_id))
-        user_info_names = ["First Name", "Last Name", "Date of Birth", "Country of Residency"]
+        user_info_names = ["First Name", "Last Name", "Date of Birth", "City", "Country of Residency"]
 
         # select favorite Genre + Publisher + Author
         favorites = bib.get_select(
             Selections.sql_most_loaned_books_per_genre_publisher_author_for_user(user_id=active_user_id))
 
         # combine names of author and drop unnecessary columns
-        favorites["Favorite Author"] = favorites["Favorite Author FN"] + favorites["Favorite Author LN"]
+        favorites["Favorite Author"] = favorites["Favorite Author FN"] + " " + favorites["Favorite Author LN"]
         favorites.drop(['Favorite Author FN', 'Favorite Author LN', 'count_borrowed_items'], axis=1, inplace=True)
+        favorites.columns = ["Favorite Genre", "Favorite Publisher", "Favorite Author"]
 
+        row_data_fav = list(["None" if x is None else x for x in favorites.values.tolist()[0]])
         return render_template("profile.html", read_books_count=count_read_books, user_info=user_info,
                                column_names=user_info_names,
                                row_data=list(user_info.values.tolist()), zip=zip,
                                column_names_fav=list(favorites.columns.values),
-                               row_data_fav=list(favorites.values.tolist()),
+                               row_data_fav=row_data_fav, zip2=zip,
                                user=session.get('user_name', None))
     else:
         return render_template("includes/fail.html", title='Error',
@@ -447,9 +448,9 @@ def execute_change_address_manually():
                                         s_city, n_zipcode, 
                                         s_country)
                                    VALUES
-                                        ('{param_list[0]}', '{param_list[1]}', 
-                                        '{param_list[2]}', '{param_list[3]}', 
-                                        '{param_list[4]}'""")
+                                        ('{param_list[0]}', {param_list[1]}, 
+                                        '{param_list[2]}', {param_list[3]}, 
+                                        '{param_list[4]}');""")
         except:
             return render_template("includes/fail.html", title='Address addition failed',
                                    text='Addition failed!')

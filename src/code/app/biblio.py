@@ -207,7 +207,7 @@ class Biblio:
             self.exec_statement(call)
         except Exception as an_exception:
             logging.error(an_exception)
-            logging.error("Book couldn't be loaned.")
+            logging.error("Book couldn't be added.")
             return False
         return True
 

@@ -33,7 +33,11 @@ class Book:
         self.reco_age = param_list[10]
 
     def set_via_isbn(self, s_isbn: str = "9780062893338"):
+        # remove "-" from isbn string
+        s_isbn = "".join(s_isbn.strip("-"))
+
         meta_data = isbnlib.meta(s_isbn)
+        print(meta_data)
 
         self.author_first_names = []
         self.author_last_names = []
@@ -50,14 +54,15 @@ class Book:
         self.publishing_year = meta_data['Year']
         self.book_isbn = list(meta_data.values())[0]
 
-        print(self)
+        if self.publisher_name == "":
+            self.publisher_name = None
 
     def get_s_sql_call(self) -> str or None:
 
         if self.book_title is None:
             return None
-        if self.publisher_name is None:
-            return None
+        # if self.publisher_name is None:
+        #     return None
         if self.author_last_names is None:
             return None
 
