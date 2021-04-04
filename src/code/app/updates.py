@@ -1,3 +1,6 @@
+from book import Book
+
+
 class Updates:
 
     def __init__(self):
@@ -9,16 +12,17 @@ class Updates:
         return sql_str
 
     @staticmethod
-    def update_book(self, book_obj, book_id=None) -> str:
+    def update_book(self, list_book_obj, book_id=None) -> str:
+        print(book_obj)
         s_update = f''' UPDATE books
                         SET (n_book_edition, s_genre, n_publishing_year,
                             s_book_language, n_recommended_age, n_location_id) =
-                            ({book_obj.book_edition}, {book_obj.book_genre}, {book_obj.publishing_year},
-                             {book_obj.book_language}, {book_obj.reco_age}, {book_obj.location_id})
+                            ({list_book_obj[0]}, '{list_book_obj[2]}', {list_book_obj[3]},
+                             '{list_book_obj[1]}', {list_book_obj[5]}, {list_book_obj[4]})
                         WHERE n_book_id = (
                             SELECT n_book_id
                             FROM books
-                            WHERE s_title = {book_obj.book_title} AND n_book_edition = {book_obj.book_edition})
+                            WHERE s_isbn = {list_book_obj[6]} AND n_book_edition = {list_book_obj[0]})
                                 OR n_book_id = {book_id};'''
 
         s_update = self.format_sql_string(s_update)
@@ -57,7 +61,7 @@ class Updates:
                         WHERE n_publisher_id = ( 
                             SELECT n_publisher_id 
                             FROM publisher 
-                            WHERE s_pub_name = {publisher_name});'''
+                            WHERE s_pub_name = '{publisher_name}');'''
         s_update = self.format_sql_string(s_update)
         return s_update
 
