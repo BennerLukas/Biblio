@@ -273,46 +273,42 @@ def update_book():
 def execute_change_book_manually():
     new_book = Book()
 
+    # Determine book_id for future operations
     # if Edition is not known it will default to 1
     book_edition = request.form['book_edition']
     if book_edition == "":
         book_edition = 1
 
-    book_id = request.form['book_id']
+    # fetch title to use for checks
+    book_title = request.form['book_title']
 
-    book_isbn = request.form['book_isbn']
-    if book_isbn == "" and book_id == "":
-        return render_template("includes/fail.html", title='Book update failed',
-                               text='Update failed! Reason: Missing book identifier.')
-    elif book_id == "" and book_isbn != "":
-        book_id = bib.get_select(f"""SELECT n_book_id FROM books 
-                                     WHERE s_isbn = {book_isbn}  AND n_book_edition = {book_edition}""").iat[0, 0]
+    # check how to determine the book_id
+    # cannot determine which book if title is not present
+    if book_title == "":
+        return render_template("includes/fail.html", title='Transaction failed',
+                               text='Transaction failed! Reason: Missing book identifier.')
+    elif book_title != "":
+        try:
+            book_id = bib.get_select(f"""SELECT n_book_id FROM books 
+                                         WHERE s_title = '{book_title}'  AND n_book_edition = {book_edition}""").iat[0, 0]
+        except IndexError:
+            return render_template("includes/fail.html", title="Transaction failed",
+                                   text=f"Transaction failed! Reason: Book cannot be found or does it not exist?")
 
     # Operation defined by radio button in form
     if request.form['operator'] == "delete":
-        book_id = request.form['book_id']
-        book_isbn = request.form['book_isbn']
 
-        # if Edition is not known it will default to 1
-        book_edition = request.form['book_edition']
-        if book_edition == "":
-            book_edition = 1
-
-        if book_isbn == "" and book_id == "":
-            return render_template("includes/fail.html", title='Book update failed',
-                                   text='Update failed! Reason: Missing book identifier.')
-        elif book_id == "" and book_isbn != "":
-            book_id = bib.get_select(f"""SELECT n_book_id FROM books
-                                           WHERE s_isbn = {book_isbn} AND n_book_edition = {book_edition}""").iat[0, 0]
         try:
-            bib.exec_statement(f"""DELETE FROM wrote WHERE n_book_id = {book_id};
-                                   DELETE FROM books WHERE n_book_id = {book_id};""")
+            bib.exec_statement(f"""DELETE FROM books WHERE n_book_id = {book_id};""")
         except psycopg2.errors.ForeignKeyViolation:
             return render_template("includes/fail.html", title='Book deletion failed',
-                                   text='Delete failed! Reason: Book is currently lent.')
+                                   text='Delete failed! Reason: Book id cannot be deleted because of table constraints.')
         except psycopg2.errors.InFailedSqlTransaction:
             return render_template("includes/fail.html", title='Book deletion failed',
                                    text='Delete failed! Reason: Book does not exist.')
+        except Exception as err:
+            return render_template("includes/fail.html", title="Book deletion failed",
+                                   text=f"Delete failed! Reason {err}")
         else:
             return render_template("includes/success.html", title='Book deleted',
                                    text='Book was successfully deleted.')
@@ -324,7 +320,8 @@ def execute_change_book_manually():
             request.form['publishing_year'],
             request.form['location_id'],
             request.form['reco_age'],
-            book_isbn]
+            request.form['book_isbn'],
+            book_title]
 
         result = list()
         for item in param_list:
@@ -332,10 +329,14 @@ def execute_change_book_manually():
                 result.append(None)
             else:
                 result.append(item)
-        result.insert(7, None)
 
-        print(result)
-        result = bib.exec_statement(bib.Updates.update_book(result, book_id))
+        result = bib.exec_statement(f'''UPDATE books
+                                        SET (n_book_edition, s_genre, n_publishing_year,
+                                            s_book_language, n_recommended_age, n_location_id, s_isbn) =
+                                            ({result[0]}, '{result[2]}', {result[3]},
+                                             '{result[1]}', {result[5]}, {result[4]}, {result[6]})
+                                        WHERE n_book_id = {book_id};'''.replace("'None'", "NULL").replace("None",
+                                                                                                          "NULL"))
 
         if result is True:
             return render_template("includes/success.html", title='Book updated',
@@ -395,15 +396,15 @@ def execute_change_author_manually():
             if old_address_id != "Null":
                 param_list[2] = old_address_id
 
-        prev_first_name = bib.get_select(f"SELECT s_fist_name FROM AUTHOR WHERE n_author_id = {author_id}").iat[0, 0]
+        prev_first_name = bib.get_select(f"SELECT s_first_name FROM AUTHOR WHERE n_author_id = {author_id}").iat[0, 0]
 
         result = bib.exec_statement(
             bib.Updates.update_author(author_id, new_first_name=param_list[0], prev_first_name=prev_first_name,
                                       lastname=param_list[1], address_id=param_list[2]))
 
         if result is True:
-            return render_template("includes/success.html", title='Book updated',
-                                   text='Book updated successfully')
+            return render_template("includes/success.html", title='Author updated',
+                                   text='Author updated successfully')
             return render_template("includes/fail.html", title='Author update failed',
                                    text='You have not updated the author. Inputs do not comply with table restrictions')
 
