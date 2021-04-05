@@ -9,7 +9,7 @@ class Selections:
             s_sql = """
             SELECT 
                 bi.n_borrow_item_id AS Borrowed_item, 
-                bi.n_loan_id AS Loan_id, 
+                bi.n_loan_id AS "Loan id", 
                 bi.n_duration + DATE(l.ts_now) AS "Due Date"
             FROM borrow_item AS bi
                 LEFT JOIN loan AS l ON bi.n_loan_id = l.n_loan_id
@@ -121,12 +121,12 @@ class Selections:
                 u.s_first_name AS "User's first name", 
                 u.s_last_name AS "User's last name", 
                 l.n_loan_id AS Loan_id,
-                l.ts_now AS Loan_timestamp, 
-                bi.n_duration AS Loan_duration, 
-                bi.b_active AS Loan_active, 
-                bo.s_isbn AS Book_ISBN,
-                bo.s_title AS Book_title, 
-                bo.n_book_edition AS Book_edition
+                l.ts_now AS "Loan timestamp", 
+                bi.n_duration AS "Loan duration", 
+                bi.b_active AS "Loan active", 
+                bo.s_isbn AS "ISBN",
+                bo.s_title AS "Book title", 
+                bo.n_book_edition AS "Book edition"
             FROM users AS u
                 LEFT JOIN loan AS l ON u.n_user_id = l.n_user_id
                 LEFT JOIN borrow_item AS bi ON l.n_loan_id = bi.n_loan_id
@@ -140,15 +140,16 @@ class Selections:
         if s_user_id is None:
             s_sql = """
             SELECT 
-                bo.n_book_id as action, u.s_first_name AS "User's first name", 
+                bo.n_book_id as action, 
+                u.s_first_name AS "User's first name", 
                 u.s_last_name AS "User's last name", 
-                l.n_loan_id AS Loan_id,
-                l.ts_now AS Loan_timestamp, 
-                bi.n_duration AS Loan_duration, 
-                bi.b_active AS Loan_active, 
-                bo.s_isbn AS Book_ISBN,
-                bo.s_title AS Book_title, 
-                bo.n_book_edition AS Book_edition
+                l.n_loan_id AS "Loan id",
+                l.ts_now AS "Loan timestamp", 
+                bi.n_duration AS "Loan duration", 
+                bi.b_active AS "Loan status", 
+                bo.s_isbn AS "Book ISBN",
+                bo.s_title AS "Book title", 
+                bo.n_book_edition AS "Book edition"
             FROM users AS u 
                 LEFT JOIN loan AS l ON u.n_user_id = l.n_user_id
                 LEFT JOIN borrow_item AS bi ON l.n_loan_id = bi.n_loan_id
@@ -160,13 +161,13 @@ class Selections:
             SELECT 
                 u.s_first_name AS "User's first name", 
                 u.s_last_name AS "User's last name", 
-                l.n_loan_id AS Loan_id,
-                l.ts_now AS Loan_timestamp, 
-                bi.n_duration AS Loan_duration, 
-                bi.b_active AS Loan_active, 
-                bo.s_isbn AS Book_ISBN,
-                bo.s_title AS Book_title, 
-                bo.n_book_edition AS Book_edition
+                l.n_loan_id AS "Loan id",
+                l.ts_now AS "Loan timestamp", 
+                bi.n_duration AS "Loan duration", 
+                bi.b_active AS "Loan status", 
+                bo.s_isbn AS "ISBN",
+                bo.s_title AS "Book title", 
+                bo.n_book_edition AS "Book edition"
             FROM users AS u
                 LEFT JOIN loan AS l ON u.n_user_id = l.n_user_id
                 LEFT JOIN borrow_item AS bi ON l.n_loan_id = bi.n_loan_id
