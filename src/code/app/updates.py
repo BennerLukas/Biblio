@@ -39,12 +39,12 @@ class Updates:
                             WHERE n_author_id = ( 
                                 SELECT n_author_id 
                                 FROM author 
-                                WHERE s_last_name = '{lastname}' AND s_first_name = '{prev_first_name})';'''
+                                WHERE s_last_name = '{lastname}' AND s_first_name = '{prev_first_name}');'''
         else:
             s_update = f"""UPDATE author
                            SET (s_first_name, s_last_name, n_address_id) = ( '{new_first_name}', '{lastname}', {address_id} ) 
-                           WHERE n_author_id = {author_id}"""
-        s_update = self.format_sql_string(s_update)
+                           WHERE n_author_id = {author_id};"""
+        s_update = s_update.replace("'None'", "NULL").replace("None", "NULL")
         return s_update
 
     @staticmethod
@@ -64,5 +64,5 @@ class Updates:
                        SET (s_street, s_house_number, s_city, n_zipcode, s_country) =
                        ('{parameters[0]}', '{parameters[1]}', '{parameters[2]}', '{parameters[3]}', '{parameters[4]}'
                        WHERE n_address_id = {address_id}"""
-        s_update = self.format_sql_string(s_update)
+        s_update = s_update.replace("'None'", "NULL").replace("None", "NULL")
         return s_update

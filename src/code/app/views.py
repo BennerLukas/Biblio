@@ -279,18 +279,21 @@ def execute_change_book_manually():
     if book_edition == "":
         book_edition = 1
 
-    # fetch book id and title to use for checks
-    book_id = request.form['book_id']
+    # fetch title to use for checks
     book_title = request.form['book_title']
 
-    # check how to determine the book_id if not provided
-    # cannot determine which book if title or id not present
-    if book_title == "" and book_id == "":
-        return render_template("includes/fail.html", title='Book update failed',
-                               text='Update failed! Reason: Missing book identifier.')
-    elif book_id == "" and book_title != "":
-        book_id = bib.get_select(f"""SELECT n_book_id FROM books 
-                                     WHERE s_title = '{book_title}'  AND n_book_edition = {book_edition}""").iat[0, 0]
+    # check how to determine the book_id
+    # cannot determine which book if title is not present
+    if book_title == "":
+        return render_template("includes/fail.html", title='Transaction failed',
+                               text='Transaction failed! Reason: Missing book identifier.')
+    elif book_title != "":
+        try:
+            book_id = bib.get_select(f"""SELECT n_book_id FROM books 
+                                         WHERE s_title = '{book_title}'  AND n_book_edition = {book_edition}""").iat[0, 0]
+        except IndexError:
+            return render_template("includes/fail.html", title="Transaction failed",
+                                   text=f"Transaction failed! Reason: Book cannot be found or does it not exist?")
 
     # Operation defined by radio button in form
     if request.form['operator'] == "delete":
@@ -393,15 +396,15 @@ def execute_change_author_manually():
             if old_address_id != "Null":
                 param_list[2] = old_address_id
 
-        prev_first_name = bib.get_select(f"SELECT s_fist_name FROM AUTHOR WHERE n_author_id = {author_id}").iat[0, 0]
+        prev_first_name = bib.get_select(f"SELECT s_first_name FROM AUTHOR WHERE n_author_id = {author_id}").iat[0, 0]
 
         result = bib.exec_statement(
             bib.Updates.update_author(author_id, new_first_name=param_list[0], prev_first_name=prev_first_name,
                                       lastname=param_list[1], address_id=param_list[2]))
 
         if result is True:
-            return render_template("includes/success.html", title='Book updated',
-                                   text='Book updated successfully')
+            return render_template("includes/success.html", title='Author updated',
+                                   text='Author updated successfully')
             return render_template("includes/fail.html", title='Author update failed',
                                    text='You have not updated the author. Inputs do not comply with table restrictions')
 
