@@ -4,8 +4,6 @@
 <br><br>
 </div>
 
-
-
 # Documentation
 
 [![GitHub issues](https://img.shields.io/github/issues/BennerLukas/biblio)](https://github.com/BennerLukas/biblio/issues)
@@ -27,54 +25,94 @@
 
 Biblio is a tool for your private library. It manages your books and magazines.
 
-
 ## Using
-First create a database container:
+
+There are two main ways to start using biblio in a development environment. The first is to use your location python intallation. The second is to
+use a docker-compose which is described under the next paragraph.
+
+To use your local python installation you need to firstly install the given packages:
+
+```bash
+pip install -r requirements.txt
+```
+
+Secondly, create the database container:
+
 ```bash
 docker container run -p 5433:5432 --name biblio -e POSTGRES_PASSWORD=1234 postgres:12.2 
 ````
 
-Then init the biblio databse by running :
+Then initialise the biblio database by running :
+
 ```bash
 cd src/code
 python init.py
 ```
 
 After that start the flask server by:
+
 ```bash
 cd src/code
 python run.py
 ```
 
-## Docker Container
-
-Otherwise you can use the docker-image provided in the repository.
-
 For executing PostgreSQL inside the docker container
+
 ````bash
 docker exec -it biblio bash 
 psql --dbname=postgres --username=postgres
 ````
 
+## Composed Docker Containers
+
+Otherwise, you can use the docker-image provided in the repository.
+
+The first time you use this docker-compose you must initialise the containers with:
+
+```bash
+docker-compose up
+```
+
+Afterwards, the container may be started with
+
+```bash
+docker-compose start
+```
+
+To shut down the container you can either use a different terminal and use
+
+```bash
+docker-compose stop
+```
+
+or by pressing Ctrl + C in the terminal used to initialise the container.
+
 ## About the project
 
 ### Team
+
 - [Lukas Benner](https://github.com/BennerLukas)
 - [Phillip Lange](https://github.com/Sabokou)
 - [Alina Buss](https://github.com/Alinabuss)
 
 ### Target
+
 With Biblio we want to build a system to keep track of your private book collection like its a real library.
 
-Biblio is your tool to manage your own private book collection. Whether you want to keep track of all your books. Find gems you forgot about or keep track of your reading list. With Biblio you can also invite friends and family to your private library. It allows you to share and borrow books between each other.
+Biblio is your tool to manage your own private book collection. Whether you want to keep track of all your books. Find
+gems you forgot about or keep track of your reading list. With Biblio you can also invite friends and family to your
+private library. It allows you to share and borrow books between each other.
 
-We think its important to know your possessions and keep it managed. We can help you to focus on reading rather than searching. On the other hand its very important to share, so everybody can enjoy reading and learning new stuff. Biblio helps you to organize this process easily.
-
+We think its important to know your possessions and keep it managed. We can help you to focus on reading rather than
+searching. On the other hand its very important to share, so everybody can enjoy reading and learning new stuff. Biblio
+helps you to organize this process easily.
 
 ### Tools
+
 For developing Biblio we used Python, Flask, Postgres and a little bit of bootstrap for easier styling.
- 
+
 ## Presentation
+
 <div>
 <img src="/doc/Design/screenshots/Screenshot%202021-03-27%20203035.png" alt="Screenshot" width="800"/>
 <br>
