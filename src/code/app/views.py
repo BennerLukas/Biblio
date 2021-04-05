@@ -290,7 +290,7 @@ def execute_change_book_manually():
                                text='Update failed! Reason: Missing book identifier.')
     elif book_id == "" and book_title != "":
         book_id = bib.get_select(f"""SELECT n_book_id FROM books 
-                                     WHERE s_book_title = {book_title}  AND n_book_edition = {book_edition}""").iat[0, 0]
+                                     WHERE s_title = '{book_title}'  AND n_book_edition = {book_edition}""").iat[0, 0]
 
     # Operation defined by radio button in form
     if request.form['operator'] == "delete":
@@ -327,7 +327,13 @@ def execute_change_book_manually():
             else:
                 result.append(item)
 
-        result = bib.exec_statement(bib.Updates.update_book(result, book_id))
+        result = bib.exec_statement(f'''UPDATE books
+                                        SET (n_book_edition, s_genre, n_publishing_year,
+                                            s_book_language, n_recommended_age, n_location_id, s_isbn) =
+                                            ({result[0]}, '{result[2]}', {result[3]},
+                                             '{result[1]}', {result[5]}, {result[4]}, {result[6]})
+                                        WHERE n_book_id = {book_id};'''.replace("'None'", "NULL").replace("None",
+                                                                                                          "NULL"))
 
         if result is True:
             return render_template("includes/success.html", title='Book updated',

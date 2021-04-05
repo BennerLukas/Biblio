@@ -6,27 +6,25 @@
 {% block body %}
 
 <div>
-    <p>book_id or a combination of book_isbn and book_edition can be used to identify the book</p>
+    <p>The combination of Book title and Book edition will be used to identify the book</p>
     <form action="/execute_change_book_manually" method="post">
         <h6>Which book to use?</h6>
-        <input type="book_id" name = "book_id" placeholder="book_id">
-        <br><b>or</b><br>
-        <input type="book_title" name="book_title" placeholder="Book title">
-        <input type="book_edition" name = "book_edition" placeholder="Book edition">
+        <input type="book_title" name="book_title" placeholder="Book title" required>
+        <input type="book_edition" name = "book_edition" placeholder="Book edition" required>
         <br><br>
         <br><br>
         <h6>Everything to be updated</h6>
-        <input type="book_isbn" name = "book_isbn" placeholder="book_isbn">
+        <input type="book_isbn" name = "book_isbn" placeholder="book_isbn" required>
         <br><br>
-        <input type="book_language" name="book_language" placeholder="book_language">
+        <input type="book_language" name="book_language" placeholder="book_language" required>
         <br><br>
-        <input type="book_genre" name="book_genre" placeholder="book_genre">
+        <input type="book_genre" name="book_genre" placeholder="book_genre" required>
         <br><br>
-        <input type="publishing_year" name="publishing_year" placeholder="publishing_year">
+        <input type="publishing_year" name="publishing_year" placeholder="publishing_year" required>
         <br><br>
-        <input type="location_id" name="location_id" placeholder="location_id">
+        <input type="location_id" name="location_id" placeholder="location_id" required>
         <br><br>
-        <input type="reco_age" name="reco_age" placeholder="reco_age">
+        <input type="reco_age" name="reco_age" placeholder="reco_age" required>
         <br><br>
         <br><br>
         <input type="radio" id="update" name="operator" value="update" required>
