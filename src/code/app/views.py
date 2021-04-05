@@ -273,46 +273,39 @@ def update_book():
 def execute_change_book_manually():
     new_book = Book()
 
+    # Determine book_id for future operations
     # if Edition is not known it will default to 1
     book_edition = request.form['book_edition']
     if book_edition == "":
         book_edition = 1
 
+    # fetch book id and title to use for checks
     book_id = request.form['book_id']
+    book_title = request.form['book_title']
 
-    book_isbn = request.form['book_isbn']
-    if book_isbn == "" and book_id == "":
+    # check how to determine the book_id if not provided
+    # cannot determine which book if title or id not present
+    if book_title == "" and book_id == "":
         return render_template("includes/fail.html", title='Book update failed',
                                text='Update failed! Reason: Missing book identifier.')
-    elif book_id == "" and book_isbn != "":
+    elif book_id == "" and book_title != "":
         book_id = bib.get_select(f"""SELECT n_book_id FROM books 
-                                     WHERE s_isbn = {book_isbn}  AND n_book_edition = {book_edition}""").iat[0, 0]
+                                     WHERE s_book_title = {book_title}  AND n_book_edition = {book_edition}""").iat[0, 0]
 
     # Operation defined by radio button in form
     if request.form['operator'] == "delete":
-        book_id = request.form['book_id']
-        book_isbn = request.form['book_isbn']
 
-        # if Edition is not known it will default to 1
-        book_edition = request.form['book_edition']
-        if book_edition == "":
-            book_edition = 1
-
-        if book_isbn == "" and book_id == "":
-            return render_template("includes/fail.html", title='Book update failed',
-                                   text='Update failed! Reason: Missing book identifier.')
-        elif book_id == "" and book_isbn != "":
-            book_id = bib.get_select(f"""SELECT n_book_id FROM books
-                                           WHERE s_isbn = {book_isbn} AND n_book_edition = {book_edition}""").iat[0, 0]
         try:
-            bib.exec_statement(f"""DELETE FROM wrote WHERE n_book_id = {book_id};
-                                   DELETE FROM books WHERE n_book_id = {book_id};""")
+            bib.exec_statement(f"""DELETE FROM books WHERE n_book_id = {book_id};""")
         except psycopg2.errors.ForeignKeyViolation:
             return render_template("includes/fail.html", title='Book deletion failed',
-                                   text='Delete failed! Reason: Book is currently lent.')
+                                   text='Delete failed! Reason: Book id cannot be deleted because of table constraints.')
         except psycopg2.errors.InFailedSqlTransaction:
             return render_template("includes/fail.html", title='Book deletion failed',
                                    text='Delete failed! Reason: Book does not exist.')
+        except Exception as err:
+            return render_template("includes/fail.html", title="Book deletion failed",
+                                   text=f"Delete failed! Reason {err}")
         else:
             return render_template("includes/success.html", title='Book deleted',
                                    text='Book was successfully deleted.')
@@ -324,7 +317,8 @@ def execute_change_book_manually():
             request.form['publishing_year'],
             request.form['location_id'],
             request.form['reco_age'],
-            book_isbn]
+            request.form['book_isbn'],
+            book_title]
 
         result = list()
         for item in param_list:
@@ -332,9 +326,7 @@ def execute_change_book_manually():
                 result.append(None)
             else:
                 result.append(item)
-        result.insert(7, None)
 
-        print(result)
         result = bib.exec_statement(bib.Updates.update_book(result, book_id))
 
         if result is True:

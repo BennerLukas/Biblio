@@ -8,11 +8,15 @@
 <div>
     <p>book_id or a combination of book_isbn and book_edition can be used to identify the book</p>
     <form action="/execute_change_book_manually" method="post">
+        <h6>Which book to use?</h6>
         <input type="book_id" name = "book_id" placeholder="book_id">
+        <br><b>or</b><br>
+        <input type="book_title" name="book_title" placeholder="Book title">
+        <input type="book_edition" name = "book_edition" placeholder="Book edition">
         <br><br>
+        <br><br>
+        <h6>Everything to be updated</h6>
         <input type="book_isbn" name = "book_isbn" placeholder="book_isbn">
-        <br><br>
-        <input type="book_edition" name = "book_edition" placeholder="book_edition">
         <br><br>
         <input type="book_language" name="book_language" placeholder="book_language">
         <br><br>
@@ -24,7 +28,7 @@
         <br><br>
         <input type="reco_age" name="reco_age" placeholder="reco_age">
         <br><br>
-
+        <br><br>
         <input type="radio" id="update" name="operator" value="update" required>
         <label for="Update">Update book</label><br>
         <input type="radio" id="delete" name="operator" value="delete" required>
