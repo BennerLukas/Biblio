@@ -36,13 +36,13 @@ docker container run -p 5433:5432 --name biblio -e POSTGRES_PASSWORD=1234 postgr
 
 Then init the biblio databse by running :
 ```bash
-cd src/api
-python biblio.py
+cd src/code
+python init.py
 ```
 
 After that start the flask server by:
 ```bash
-cd src/
+cd src/code
 python run.py
 ```
 
