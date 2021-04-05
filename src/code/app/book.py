@@ -39,6 +39,10 @@ class Book:
         meta_data = isbnlib.meta(s_isbn)
         print(meta_data)
 
+        if bool(meta_data) is False:          # empty dict => False
+            print("Book not found!")
+            return None
+
         self.author_first_names = []
         self.author_last_names = []
         for author in meta_data['Authors']:
