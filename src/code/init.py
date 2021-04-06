@@ -24,6 +24,7 @@ def try_init(retries=10):
 
 
 if __name__ == '__main__':
+    logging.error("Init called")
     count = try_init()
     logging.info(f"Remaining retries: {count}")
     logging.error("Connection possible -- trying to initialize database")

@@ -1,9 +1,11 @@
+import os
 import sqlalchemy
 import psycopg2
 import psycopg2.extras
 import pandas as pd
 import logging
 import re
+import time
 
 from app.selections import Selections
 from app.updates import Updates
@@ -26,6 +28,7 @@ class Biblio:
         self.Updates = Updates()
 
         self.connect()
+        self.test()
 
     # ###########################################################################################################
     # INIT FUNCTIONS
@@ -36,17 +39,20 @@ class Biblio:
 
         :return:
         """
-        try:
-            self.alchemy_engine = sqlalchemy.create_engine('postgres+psycopg2://postgres:1234@database:5432/postgres')
-            self.alchemy_connection = self.alchemy_engine.connect()
-            self.psycopg2_connection = psycopg2.connect(database="postgres", user="postgres", port=5432,
-                                                        password="1234", host="database")
-            self.b_connected = True
-            print("Database Connected")
-            logging.info("Connected to DB")
-        except Exception as an_exception:
-            logging.error(an_exception)
-            logging.error("Not connected to DB")
+        
+        while self.b_connected is False:
+            try:
+                self.alchemy_engine = sqlalchemy.create_engine('postgres+psycopg2://postgres:1234@database:5432/postgres')
+                self.alchemy_connection = self.alchemy_engine.connect()
+                self.psycopg2_connection = psycopg2.connect(database="postgres", user="postgres", port=5432,
+                                                            password="1234", host="database")
+                self.b_connected = True
+                print("Database Connected")
+                logging.info("Connected to DB")
+            except Exception as an_exception:
+                logging.error(an_exception)
+                logging.error("Not connected to DB")
+                time.sleep(5)
         return True
 
     def test(self, b_verbose=True):
@@ -56,12 +62,16 @@ class Biblio:
         :param b_verbose:
         :return:
         """
-        # needs data to query; use init_db() beforehand.
+        # checks if data / tables are present if it fails it initialises the database
         if self.b_connected:
-            df = pd.read_sql_query('SELECT * FROM books LIMIT 1', self.alchemy_connection)
-            if b_verbose:
-                print(df)
-            return df
+            try:
+                df = pd.read_sql_query('SELECT * FROM books LIMIT 1', self.alchemy_connection)
+                if b_verbose:
+                    print(df)
+                return df
+            except Exception as err:
+                self.init_db()
+                logging.error("Tables not initialized")
         return False
 
     def init_db(self):
@@ -79,8 +89,12 @@ class Biblio:
                 s_sql_statement = open("../../database/init.sql", "r").read()
                 logging.info("Used original File Path")
             except FileNotFoundError:
-                s_sql_statement = open("/app/database/init.sql", "r").read()
-                logging.info("Alternate File Path - Called from init.py")
+                for root, dirs, files in os.walk("/src/"):
+                    if "init.sql" in files:
+                        path = os.path.join(root, "init.sql")
+
+                s_sql_statement = open(path, "r").read()
+                logging.error("Alternate File Path for init - Called from inside docker")
 
             s_sql_statement = re.sub(r"--.*|\n|\t", " ",
                                      s_sql_statement)  # cleaning file from comments and escape functions

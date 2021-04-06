@@ -6,10 +6,11 @@ services:
         environment:
             - POSTGRES_PASSWORD=1234
         image: 'postgres:12.2'
+        depends_on:
+          - webapp
 
     webapp:
       build: .
       ports:
         - '5000:5000'
-      depends_on:
-        - database
+

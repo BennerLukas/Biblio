@@ -14,5 +14,4 @@ COPY src/ /src
 
 EXPOSE 5000
 
-CMD ["python", "/src/code/init.py"]
 CMD ["python", "/src/code/run.py"]
