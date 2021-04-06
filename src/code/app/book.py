@@ -36,8 +36,24 @@ class Book:
         # remove "-" from isbn string
         s_isbn = "".join(s_isbn.strip("-"))
 
-        meta_data = isbnlib.meta(s_isbn)
+        meta_data = isbnlib.meta(s_isbn, service='goob')
         print(meta_data)
+
+        # check if google books has information on the isbn
+        if bool(meta_data) is False:            # empty dict => False | not empty => use found meta_data
+            # fetch data from wiki api
+            meta_data = isbnlib.meta(s_isbn, service='wiki')
+
+            # check if wikipedia api has information on the isbn
+            if bool(meta_data) is False:        # empty dict => False | not empty => use found meta_data
+                # fetch data from openlibrary api
+                meta_data = isbnlib.meta(s_isbn, service='openl')
+
+                # check if openlibrary api has information on the isbn
+                if bool(meta_data) is False:    # empty dict => False | not empty => use found meta_data
+                    # if not => no information could be found on the isbn
+                    print("Book not found!")
+                    return None
 
         self.author_first_names = []
         self.author_last_names = []

@@ -15,7 +15,7 @@ class Biblio:
 
     def __init__(self):
         self.s_user = None
-        self.s_user = 1
+        self.s_user = None
 
         self.alchemy_engine = None
         self.alchemy_connection = None
@@ -167,6 +167,9 @@ class Biblio:
         return False
 
     def mark_book_as_read(self, book_id):
+        if self.s_user is None:
+            print(f"Not logged in: {self.s_user}")
+            return False
         s_insert = f"INSERT INTO READ_BOOKS(n_book_id, n_user_id) VALUES ({book_id}, {self.s_user});"
         self.exec_statement(s_insert)
         return True
@@ -204,8 +207,13 @@ class Biblio:
                     # if result is True:
                     #     book_ids.pop(idx)
                     continue
-            if len(book_ids) == 0:
-                return True
+            if len(book_ids) == 0:  # book does not exist
+                print("len(book) ids == 0")
+                return False
+            if self.s_user is None:
+                print(f"No User: {self.s_user}")
+                return False
+
             call = f"CALL new_loan({self.s_user}, ARRAY{book_ids}, {duration});"
             self.exec_statement(call)
         except Exception as an_exception:
