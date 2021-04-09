@@ -25,7 +25,37 @@
 
 Biblio is a tool for your private library. It manages your books and magazines.
 
-## Using
+## Composed Docker Containers
+
+Otherwise, you can use the docker-image provided in the repository.
+
+The first time you use this docker-compose you must initialise the containers with:
+
+```bash
+cd biblio
+docker-compose up
+```
+
+The Frontend is now visible under ````localhost:5000````
+
+Afterwards, the container may be started with
+
+```bash
+docker-compose start
+```
+
+To shut down the container you can either use a different terminal and use
+
+```bash
+docker-compose stop
+```
+
+or by pressing Ctrl + C in the terminal used to initialise the container.
+
+
+## [DEPRECATED] Using by hand
+
+*current version does not support old connection type. Please use docker.*
 
 There are two main ways to start using biblio in a development environment. The first is to use your location python intallation. The second is to
 use a docker-compose which is described under the next paragraph.
@@ -62,30 +92,6 @@ For executing PostgreSQL inside the docker container
 docker exec -it biblio bash 
 psql --dbname=postgres --username=postgres
 ````
-
-## Composed Docker Containers
-
-Otherwise, you can use the docker-image provided in the repository.
-
-The first time you use this docker-compose you must initialise the containers with:
-
-```bash
-docker-compose up
-```
-
-Afterwards, the container may be started with
-
-```bash
-docker-compose start
-```
-
-To shut down the container you can either use a different terminal and use
-
-```bash
-docker-compose stop
-```
-
-or by pressing Ctrl + C in the terminal used to initialise the container.
 
 ## About the project
 
