@@ -7,14 +7,13 @@
 
 <div>
     <form action="/execute_change_author_manually" method="post">
-        <input type="author_id" name = "author_id" placeholder="author_id">
+        <input type="number" name = "author_id" placeholder="Author ID">
         <br><br>
-        <input type="author_first_name" name="author_first_name" placeholder="author_first_name">
+        <input type="text" name="author_first_name" placeholder="Author's first name">
         <br><br>
-        <input type="author_last_name" name="author_last_name" placeholder="author_last_name">
+        <input type="text" name="author_last_name" placeholder="Author's last name">
         <br><br>
-        <input type="address_id" name="address_id" placeholder="address_id">
-
+        <input type="number" name="address_id" placeholder="Address ID">
 
         <br>
         <br>
@@ -29,7 +28,25 @@
 
         <input type="submit" name="execute_update_author_manually" value="Submit Change">
     </form>
+</div>
 
+<br><br>
+
+<div class="table-responsive">
+    <table class="table table-striped table-sm">
+        <tr>
+            {% for col in column_names %}
+            <th>{{col}}</th>
+            {% endfor %}
+        </tr>
+        {% for row in row_data %}
+        <tr>
+            {% for col, row_ in zip(column_names, row) %}
+            <td>{{row_}}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
 </div>
 
 {% endblock %}

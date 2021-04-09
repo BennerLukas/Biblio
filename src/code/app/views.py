@@ -290,7 +290,8 @@ def execute_change_book_manually():
     elif book_title != "":
         try:
             book_id = bib.get_select(f"""SELECT n_book_id FROM books 
-                                         WHERE s_title = '{book_title}'  AND n_book_edition = {book_edition}""").iat[0, 0]
+                                         WHERE s_title = '{book_title}'  AND n_book_edition = {book_edition}""").iat[
+                0, 0]
         except IndexError:
             return render_template("includes/fail.html", title="Transaction failed",
                                    text=f"Transaction failed! Reason: Book cannot be found or does it not exist?")
@@ -347,7 +348,14 @@ def execute_change_book_manually():
 
 @app.route('/update_author', methods=['POST', 'GET'])
 def update_author():
-    return render_template("update_author.html")
+    df_authors = bib.get_select("""SELECT n_author_id   as "Author ID",
+                                          s_first_name  as "Author's first name",
+                                          s_last_name   as "Author's last name",
+                                          n_address_id   as "Address ID"
+                                   FROM author""")
+
+    return render_template("update_author.html",
+                           column_names=df_authors.columns.values, row_data=list(df_authors.values.tolist()), zip=zip)
 
 
 @app.route('/execute_change_author_manually', methods=['POST', 'GET'])
@@ -411,7 +419,16 @@ def execute_change_author_manually():
 
 @app.route('/update_address', methods=['POST', 'GET'])
 def update_address():
-    return render_template("update_address.html")
+    df_address = bib.get_select("""SELECT n_address_id as "Address ID",
+                                          s_street as street,
+                                          s_house_number as housenumber,
+                                          s_city as city,
+                                          n_zipcode as zipcode,
+                                          s_country as country
+                                   FROM addresses""")
+
+    return render_template("update_address.html",
+                           column_names=df_address.columns.values, row_data=list(df_address.values.tolist()), zip=zip)
 
 
 @app.route('/execute_change_address_manually', methods=['POST', 'GET'])

@@ -7,17 +7,17 @@
 
 <div>
     <form action="/execute_change_address_manually" method="post">
-        <input type="address_id" name = "address_id" placeholder="address_id">
+        <input type="text" name = "address_id" placeholder="Address ID">
         <br><br>
-        <input type="street" name = "street" placeholder="street" required>
+        <input type="text" name = "street" placeholder="street" required>
         <br><br>
-        <input type="housenumber" name = "housenumber" placeholder="housenumber" required>
+        <input type="text" name = "housenumber" placeholder="housenumber" required>
         <br><br>
-        <input type="city" name="city" placeholder="city" required>
+        <input type="text" name="city" placeholder="city" required>
         <br><br>
-        <input type="zipcode" name="zipcode" placeholder="zipcode" required>
+        <input type="number" name="zipcode" placeholder="zipcode" required>
         <br><br>
-        <input type="country" name="country" placeholder="country" required>
+        <input type="text" name="country" placeholder="country" required>
 
         <br>
         <br>
@@ -35,7 +35,23 @@
 
         <input type="submit" name="execute_update_address_manually" value="Submit">
     </form>
-
+</div>
+<br><br>
+<div class="table-responsive">
+    <table class="table table-striped table-sm">
+        <tr>
+            {% for col in column_names %}
+            <th>{{col}}</th>
+            {% endfor %}
+        </tr>
+        {% for row in row_data %}
+        <tr>
+            {% for col, row_ in zip(column_names, row) %}
+            <td>{{row_}}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
 </div>
 
 {% endblock %}
