@@ -1,3 +1,4 @@
+import logging
 import isbnlib
 
 
@@ -36,24 +37,31 @@ class Book:
         # remove "-" from isbn string
         s_isbn = "".join(s_isbn.strip("-"))
 
-        meta_data = isbnlib.meta(s_isbn, service='goob')
-        print(meta_data)
-
         # check if google books has information on the isbn
-        if bool(meta_data) is False:            # empty dict => False | not empty => use found meta_data
+        meta_google = isbnlib.meta(s_isbn, service='goob')
+        if bool(meta_google) is False:            # empty dict => False | not empty => use found meta_data
             # fetch data from wiki api
-            meta_data = isbnlib.meta(s_isbn, service='wiki')
+            logging.info("Book not found in Google API")
+            meta_wiki = isbnlib.meta(s_isbn, service='wiki')
 
             # check if wikipedia api has information on the isbn
-            if bool(meta_data) is False:        # empty dict => False | not empty => use found meta_data
+            if bool(meta_wiki) is False:        # empty dict => False | not empty => use found meta_data
                 # fetch data from openlibrary api
-                meta_data = isbnlib.meta(s_isbn, service='openl')
+                logging.info("Book not found in Wiki API")
+                meta_open = isbnlib.meta(s_isbn, service='openl')
 
                 # check if openlibrary api has information on the isbn
-                if bool(meta_data) is False:    # empty dict => False | not empty => use found meta_data
+                if bool(meta_open) is False:    # empty dict => False | not empty => use found meta_data
                     # if not => no information could be found on the isbn
+                    logging.warning("Book not found in any APIs")
                     print("Book not found!")
                     return None
+                else:
+                    meta_data = meta_open
+            else:
+                meta_data = meta_wiki
+        else:
+            meta_data = meta_google
 
         self.author_first_names = []
         self.author_last_names = []
@@ -83,8 +91,8 @@ class Book:
             return None
 
         call = f"""CALL add_book(
-                        ARRAY{self.author_first_names.split(" ")}, 
-                        ARRAY{self.author_last_names.split(" ")},
+                        ARRAY{self.author_first_names}, 
+                        ARRAY{self.author_last_names},
                         {self.publishing_year}, 
                         '{self.publisher_name}',
                         '{self.book_title}', 

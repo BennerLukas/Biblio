@@ -273,13 +273,15 @@ BEGIN
         END LOOP;
 
 
-    IF NOT EXISTS(SELECT n_publisher_id
-                  FROM PUBLISHER
-                  WHERE publisher_name = s_pub_name
-        )
-    THEN
-        INSERT INTO PUBLISHER(s_pub_name)
-        VALUES (publisher_name);
+    IF publisher_name IS NOT NULL THEN
+        IF NOT EXISTS(SELECT n_publisher_id
+                      FROM PUBLISHER
+                      WHERE publisher_name = s_pub_name
+            )
+        THEN
+            INSERT INTO PUBLISHER(s_pub_name)
+            VALUES (publisher_name);
+        END IF;
     END IF;
 
     IF NOT EXISTS(SELECT n_book_id

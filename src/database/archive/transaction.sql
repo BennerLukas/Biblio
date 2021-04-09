@@ -25,12 +25,14 @@ BEGIN
         VALUES (author_first_name, author_last_name, author_address)
     END IF;
 
-    IF NOT EXITS    (   SELECT n_publisher_id
-                        FROM PUBLISHER
-                        WHERE publisher_name = s_pub_name)
-    THEN
-        INSERT INTO PUBLISHER(s_pub_name, n_address_id)
-        VALUES (publisher_name, publisher_address)
+    IF publisher_name IS NOT NULL THEN
+        IF NOT EXITS    (   SELECT n_publisher_id
+                            FROM PUBLISHER
+                            WHERE publisher_name = s_pub_name)
+        THEN
+            INSERT INTO PUBLISHER(s_pub_name, n_address_id)
+            VALUES (publisher_name, publisher_address)
+        END IF;
     END IF;
 
     IF NOT EXISTS   (   SELECT n_book_id
