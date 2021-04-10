@@ -485,10 +485,10 @@ def execute_change_address_manually():
         result = bib.exec_statement(bib.Updates.update_address(param_list, address_id))
 
         if result is True:
-            return render_template("includes/success.html", title='Book updated',
-                                   text='Book updated successfully')
-            return render_template("includes/fail.html", title='Book update failed',
-                                   text='You have updated the book.')
+            return render_template("includes/success.html", title='Address updated',
+                                   text='Address updated successfully')
+            return render_template("includes/fail.html", title='Address update failed',
+                                   text='You have updated the address.')
 
 
 ###########################################################################
