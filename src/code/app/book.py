@@ -28,7 +28,7 @@ class Book:
         self.book_edition = param_list[4]
         self.book_language = param_list[5]
         self.book_genre = param_list[6]
-        self.book_isbn = param_list[7]
+        self.book_isbn = "".join(param_list[7].strip("-"))
         self.publishing_year = param_list[8]
         self.location_id = param_list[9]
         self.reco_age = param_list[10]
