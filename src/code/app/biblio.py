@@ -134,11 +134,18 @@ class Biblio:
         :param sql:
         :return:
         """
-        db_cursor = self.psycopg2_connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
-        db_cursor.execute(sql)
-        self.psycopg2_connection.commit()
-        db_cursor.close()
-        return True
+        try:
+            db_cursor = self.psycopg2_connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+            db_cursor.execute(sql)
+            self.psycopg2_connection.commit()
+            db_cursor.close()
+            return True
+        except psycopg2.errors.InFailedSqlTransaction:
+            self.b_connected = False
+            self.connect()
+            logging.error("Transaction Failed - Review given inputs!")
+            return False
+
 
     # ###########################################################################################################
     # EXECUTING FUNCTIONS
