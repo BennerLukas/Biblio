@@ -39,10 +39,11 @@ class Biblio:
 
         :return:
         """
-        
+
         while self.b_connected is False:
             try:
-                self.alchemy_engine = sqlalchemy.create_engine('postgres+psycopg2://postgres:1234@database:5432/postgres')
+                self.alchemy_engine = sqlalchemy.create_engine(
+                    'postgres+psycopg2://postgres:1234@database:5432/postgres')
                 self.alchemy_connection = self.alchemy_engine.connect()
                 self.psycopg2_connection = psycopg2.connect(database="postgres", user="postgres", port=5432,
                                                             password="1234", host="database")
@@ -145,7 +146,6 @@ class Biblio:
             self.connect()
             logging.error("Transaction Failed - Review given inputs!")
             return False
-
 
     # ###########################################################################################################
     # EXECUTING FUNCTIONS
