@@ -9,7 +9,7 @@ class Updates:
         return sql_str
 
     @staticmethod
-    def update_book(self, list_book_obj, book_id=None) -> str:
+    def update_book(list_book_obj, book_id=None) -> str:
         s_update = f''' UPDATE books
                         SET (n_book_edition, s_genre, n_publishing_year,
                             s_book_language, n_recommended_age, n_location_id, s_isbn) =
@@ -25,12 +25,12 @@ class Updates:
         return s_update
 
     @staticmethod
-    def delete_book(self, book_id):
+    def delete_book(book_id):
         s_delete = f"""DELETE FROM books WHERE n_book_id = {book_id};"""
         return s_delete
 
     @staticmethod
-    def update_author(self, author_id=None, new_first_name=None, prev_first_name=None, lastname=None,
+    def update_author(author_id=None, new_first_name=None, prev_first_name=None, lastname=None,
                       address_id=None) -> str:
 
         if author_id is None:
@@ -48,7 +48,7 @@ class Updates:
         return s_update
 
     @staticmethod
-    def update_publisher(self, publisher_name=None, address_id=None) -> str:
+    def update_publisher(publisher_name=None, address_id=None) -> str:
         s_update = f''' UPDATE publisher
                         SET (n_address_id) = ({address_id})
                         WHERE n_publisher_id = ( 
@@ -59,7 +59,7 @@ class Updates:
         return s_update
 
     @staticmethod
-    def update_address(self, parameters, address_id):
+    def update_address(parameters, address_id):
         s_update = f"""UPDATE address
                        SET (s_street, s_house_number, s_city, n_zipcode, s_country) =
                        ('{parameters[0]}', '{parameters[1]}', '{parameters[2]}', '{parameters[3]}', '{parameters[4]}'
