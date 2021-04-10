@@ -21,8 +21,8 @@ class Book:
         if len(param_list) == 10:
             return False
 
-        self.author_first_names = param_list[0]
-        self.author_last_names = param_list[1]
+        self.author_first_names = list(param_list[0])
+        self.author_last_names = list(param_list[1])
         self.publisher_name = param_list[2]
         self.book_title = param_list[3]
         self.book_edition = param_list[4]
