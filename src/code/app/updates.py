@@ -21,7 +21,7 @@ class Updates:
                             WHERE s_book_title = {list_book_obj[7]} AND n_book_edition = {list_book_obj[0]})
                         OR n_book_id = {book_id};'''
 
-        s_update = self.format_sql_string(s_update)
+        s_update = s_update.replace("'None'", "NULL").replace("None", "NULL")
         return s_update
 
     @staticmethod
@@ -55,14 +55,14 @@ class Updates:
                             SELECT n_publisher_id 
                             FROM publisher 
                             WHERE s_pub_name = '{publisher_name}');'''
-        s_update = self.format_sql_string(s_update)
+        s_update = s_update.replace("'None'", "NULL").replace("None", "NULL")
         return s_update
 
     @staticmethod
     def update_address(parameters, address_id):
         s_update = f"""UPDATE address
                        SET (s_street, s_house_number, s_city, n_zipcode, s_country) =
-                       ('{parameters[0]}', '{parameters[1]}', '{parameters[2]}', '{parameters[3]}', '{parameters[4]}'
+                       ('{parameters[0]}', '{parameters[1]}', '{parameters[2]}', '{parameters[3]}', '{parameters[4]}')
                        WHERE n_address_id = {address_id}"""
         s_update = s_update.replace("'None'", "NULL").replace("None", "NULL")
         return s_update

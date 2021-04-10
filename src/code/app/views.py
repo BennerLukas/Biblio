@@ -266,7 +266,7 @@ def about():
 
 @app.route('/update_book', methods=['POST', 'GET'])
 def update_book():
-    df_book = bib.get_select("SELECT * FROM books")
+    df_book = bib.get_select("SELECT * FROM books ORDER BY n_book_id ASC")
     return render_template("update_book.html",
                            column_names=df_book.columns.values, row_data=list(df_book.values.tolist()), zip=zip)
 
@@ -354,7 +354,8 @@ def update_author():
                                           s_first_name  as "Author's first name",
                                           s_last_name   as "Author's last name",
                                           n_address_id   as "Address ID"
-                                   FROM author""")
+                                   FROM author
+                                   ORDER BY n_author_id ASC""")
 
     return render_template("update_author.html",
                            column_names=df_authors.columns.values, row_data=list(df_authors.values.tolist()), zip=zip)
@@ -427,7 +428,8 @@ def update_address():
                                           s_city as city,
                                           n_zipcode as zipcode,
                                           s_country as country
-                                   FROM addresses""")
+                                   FROM addresses
+                                   ORDER BY n_address_id ASC""")
 
     return render_template("update_address.html",
                            column_names=df_address.columns.values, row_data=list(df_address.values.tolist()), zip=zip)

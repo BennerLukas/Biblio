@@ -21,17 +21,32 @@ class Book:
         if len(param_list) == 10:
             return False
 
-        self.author_first_names = list(param_list[0])
-        self.author_last_names = list(param_list[1])
+        self.author_first_names = param_list[0]
+        self.author_last_names = param_list[1]
         self.publisher_name = param_list[2]
         self.book_title = param_list[3]
         self.book_edition = param_list[4]
         self.book_language = param_list[5]
         self.book_genre = param_list[6]
-        self.book_isbn = "".join(param_list[7].strip("-"))
+        self.book_isbn = param_list[7]
         self.publishing_year = param_list[8]
         self.location_id = param_list[9]
         self.reco_age = param_list[10]
+
+        if self.book_isbn is not None:
+            self.book_isbn = "".join(param_list[7].strip("-"))
+
+        if " " in self.author_first_names:
+            self.author_first_names.strip(" ")
+        else:
+            self.author_first_names = [].append(self.author_first_names)
+
+        if " " in self.author_last_names:
+            self.author_last_names.strip(" ")
+        else:
+            self.author_last_names = [].append(self.author_last_names)
+
+
 
     def set_via_isbn(self, s_isbn: str = "9780062893338"):
         # remove "-" from isbn string
