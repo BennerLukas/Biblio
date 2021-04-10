@@ -33,20 +33,27 @@ class Book:
         self.location_id = param_list[9]
         self.reco_age = param_list[10]
 
+        print(f"Author Firstname: {self.author_first_names}")
+
         if self.book_isbn is not None:
             self.book_isbn = "".join(param_list[7].strip("-"))
 
-        if " " in self.author_first_names:
-            self.author_first_names.strip(" ")
+        if ";" in self.author_first_names:
+            self.author_first_names = self.author_first_names.strip(";")
+            print(f"Author Firstname stripped: {self.author_first_names}")
         else:
-            self.author_first_names = [].append(self.author_first_names)
+            placeholder = list()
+            placeholder.append(self.author_first_names)
+            self.author_first_names = placeholder
+            print(f"Author Firstname: {self.author_first_names}")
 
-        if " " in self.author_last_names:
-            self.author_last_names.strip(" ")
+        if ";" in self.author_last_names:
+            self.author_last_names = self.author_last_names.strip(";")
         else:
-            self.author_last_names = [].append(self.author_last_names)
-
-
+            placeholder = list()
+            placeholder.append(self.author_last_names)
+            self.author_last_names = placeholder
+        # # logging.error(self.__str__())
 
     def set_via_isbn(self, s_isbn: str = "9780062893338"):
         # remove "-" from isbn string
@@ -54,19 +61,19 @@ class Book:
 
         # check if google books has information on the isbn
         meta_google = isbnlib.meta(s_isbn, service='goob')
-        if bool(meta_google) is False:            # empty dict => False | not empty => use found meta_data
+        if bool(meta_google) is False:  # empty dict => False | not empty => use found meta_data
             # fetch data from wiki api
             logging.info("Book not found in Google API")
             meta_wiki = isbnlib.meta(s_isbn, service='wiki')
 
             # check if wikipedia api has information on the isbn
-            if bool(meta_wiki) is False:        # empty dict => False | not empty => use found meta_data
+            if bool(meta_wiki) is False:  # empty dict => False | not empty => use found meta_data
                 # fetch data from openlibrary api
                 logging.info("Book not found in Wiki API")
                 meta_open = isbnlib.meta(s_isbn, service='openl')
 
                 # check if openlibrary api has information on the isbn
-                if bool(meta_open) is False:    # empty dict => False | not empty => use found meta_data
+                if bool(meta_open) is False:  # empty dict => False | not empty => use found meta_data
                     # if not => no information could be found on the isbn
                     logging.warning("Book not found in any APIs")
                     print("Book not found!")

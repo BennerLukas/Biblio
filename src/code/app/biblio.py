@@ -86,7 +86,7 @@ class Biblio:
         """
         if self.b_connected:
             try:
-                s_sql_statement = open("../../database/init.sql", "r").read()
+                s_sql_statement = open("../database/init.sql", "r").read()
                 logging.info("Used original File Path")
             except FileNotFoundError:
                 for root, dirs, files in os.walk("/src/"):
