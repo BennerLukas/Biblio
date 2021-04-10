@@ -266,7 +266,9 @@ def about():
 
 @app.route('/update_book', methods=['POST', 'GET'])
 def update_book():
-    return render_template("update_book.html")
+    df_book = bib.get_select("SELECT * FROM books")
+    return render_template("update_book.html",
+                           column_names=df_book.columns.values, row_data=list(df_book.values.tolist()), zip=zip)
 
 
 @app.route('/execute_change_book_manually', methods=['POST', 'GET'])
