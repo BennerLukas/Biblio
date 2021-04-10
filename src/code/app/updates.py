@@ -60,7 +60,7 @@ class Updates:
 
     @staticmethod
     def update_address(parameters, address_id):
-        s_update = f"""UPDATE address
+        s_update = f"""UPDATE addresses
                        SET (s_street, s_house_number, s_city, n_zipcode, s_country) =
                        ('{parameters[0]}', '{parameters[1]}', '{parameters[2]}', '{parameters[3]}', '{parameters[4]}')
                        WHERE n_address_id = {address_id}"""
