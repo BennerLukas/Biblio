@@ -6,9 +6,11 @@ import pandas as pd
 import logging
 import re
 import time
+from multiprocessing.dummy import Pool as ThreadPool
 
 from app.selections import Selections
 from app.updates import Updates
+from app.book import Book
 
 
 class Biblio:
@@ -86,6 +88,7 @@ class Biblio:
         :return:
         """
         if self.b_connected:
+            # gets path to sql init file -- different paths in docker to running in test environment
             try:
                 s_sql_statement = open("../database/init.sql", "r").read()
                 logging.info("Used original File Path")
@@ -102,10 +105,32 @@ class Biblio:
 
             self.alchemy_connection.execute(s_sql_statement)
 
+            # Fill database with more books
+            # gets path to isbn list
+            try:
+                path = "../database/isbn.txt"
+                open(path)
+                logging.info("Used original File Path")
+            except FileNotFoundError:
+                for root, dirs, files in os.walk("/src/"):
+                    if "isbn.txt" in files:
+                        path = os.path.join(root, "isbn.txt")
+
+            # iterates over isbns and adds them via add_new_book function
+            results = list()
+            pool = ThreadPool(8)
+            results = pool.map(self.add_book_to_database, open(path, "r").readlines())
+
             logging.info("Database initialised")
             print("Database initialised")
             self.b_initialised = True
             return True
+
+    def add_book_to_database(self, isbn):
+        new_book = Book()
+        new_book.set_via_isbn(isbn)
+        self.add_new_book(new_book)
+        return True
 
     # ###########################################################################################################
     # USING FUNCTIONS
