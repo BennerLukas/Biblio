@@ -57,9 +57,9 @@ or by pressing Ctrl + C in the terminal used to initialise the container.
 
 ### Team
 
-- [Lukas Benner](https://github.com/BennerLukas)
-- [Phillip Lange](https://github.com/Sabokou)
-- [Alina Buss](https://github.com/Alinabuss)
+- [Lukas Benner](https://github.com/BennerLukas) (6550912)
+- [Phillip Lange](https://github.com/Sabokou) (5920414)
+- [Alina Buss](https://github.com/Alinabuss) ()
 
 ### Target
 
@@ -105,9 +105,6 @@ The used database schema und functionalities are described in the following:
 - The database can tracks which books a particular user already read.
 - The Address is handled in a seperate table and has the following attributes: city, country, street, house number, zipcode and a unique identifier.
 
-## Video
-The video can be found on YouTube under:
-https://youtu.be/rB1QyN_s4V4
 
 ## ER-Model
 <div>
@@ -119,7 +116,42 @@ https://youtu.be/rB1QyN_s4V4
 <img src="/doc/DB/diagrams-Relational%20Model.png" alt="Screenshot" width="775"/>
 </div>
 
+
+## Database Modeling Explanation
+
+1. atomar attributes
+
+- There are only Single Valued Attributes.
+- Attribute Domain does not change.
+- There is a Unique name for every Attribute/Column.
+- The order in which data is stored, does not matter.
+
+    Therefore, we did following:
+    - split address
+    - split names
+    - allowed several authors
+    - unique names inside a table
+
+2. remove the repeated information
+
+- Second Normal Form (2NF) is based on the concept of full functional dependency.
+
+    Therefore, we did following:
+    - delete address attributes
+    - make separate address table
+
+3. No non-primary-key attribute is transitively dependent on the primary key
+
+- A relation is in third normal form, if there is no transitive dependency for non-prime attributes as well as it is in second normal form.
+
+    Therefore, we did following:
+    - made separate tables for author, publisher and connected it with the books table
+
+## Video
+The video can be found on YouTube here:
+[https://youtu.be/rB1QyN_s4V4](https://youtu.be/rB1QyN_s4V4)
+
 ## Links
-- [Queries](https://github.com/BennerLukas/biblio/blob/main/src/database/select.sql) (more acan be found i)
+- [Queries](https://github.com/BennerLukas/biblio/blob/main/src/database/select.sql) (more can be found in the code)
 - [SQL-File](https://github.com/BennerLukas/biblio/blob/main/src/database/init.sql)
 - [Github](https://github.com/BennerLukas/biblio)
