@@ -99,7 +99,7 @@ def execute_add_book_manually():
     if edition == "":
         edition = 1
     param_list = [request.form['author_first_names'],
-                  request.form['author_first_names'],
+                  request.form['author_last_names'],
                   request.form['publisher_name'],
                   request.form['book_title'],
                   edition,

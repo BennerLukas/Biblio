@@ -6,9 +6,11 @@ import pandas as pd
 import logging
 import re
 import time
+from multiprocessing.dummy import Pool as ThreadPool
 
 from app.selections import Selections
 from app.updates import Updates
+from app.book import Book
 
 
 class Biblio:
@@ -39,10 +41,11 @@ class Biblio:
 
         :return:
         """
-        
+
         while self.b_connected is False:
             try:
-                self.alchemy_engine = sqlalchemy.create_engine('postgres+psycopg2://postgres:1234@database:5432/postgres')
+                self.alchemy_engine = sqlalchemy.create_engine(
+                    'postgres+psycopg2://postgres:1234@database:5432/postgres')
                 self.alchemy_connection = self.alchemy_engine.connect()
                 self.psycopg2_connection = psycopg2.connect(database="postgres", user="postgres", port=5432,
                                                             password="1234", host="database")
@@ -85,8 +88,9 @@ class Biblio:
         :return:
         """
         if self.b_connected:
+            # gets path to sql init file -- different paths in docker to running in test environment
             try:
-                s_sql_statement = open("../../database/init.sql", "r").read()
+                s_sql_statement = open("../database/init.sql", "r").read()
                 logging.info("Used original File Path")
             except FileNotFoundError:
                 for root, dirs, files in os.walk("/src/"):
@@ -101,10 +105,32 @@ class Biblio:
 
             self.alchemy_connection.execute(s_sql_statement)
 
+            # Fill database with more books
+            # gets path to isbn list
+            try:
+                path = "../database/isbn.txt"
+                open(path)
+                logging.info("Used original File Path")
+            except FileNotFoundError:
+                for root, dirs, files in os.walk("/src/"):
+                    if "isbn.txt" in files:
+                        path = os.path.join(root, "isbn.txt")
+
+            # iterates over isbns and adds them via add_new_book function
+            results = list()
+            pool = ThreadPool(8)
+            results = pool.map(self.add_book_to_database, open(path, "r").readlines())
+
             logging.info("Database initialised")
             print("Database initialised")
             self.b_initialised = True
             return True
+
+    def add_book_to_database(self, isbn):
+        new_book = Book()
+        new_book.set_via_isbn(isbn)
+        self.add_new_book(new_book)
+        return True
 
     # ###########################################################################################################
     # USING FUNCTIONS
@@ -134,11 +160,17 @@ class Biblio:
         :param sql:
         :return:
         """
-        db_cursor = self.psycopg2_connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
-        db_cursor.execute(sql)
-        self.psycopg2_connection.commit()
-        db_cursor.close()
-        return True
+        try:
+            db_cursor = self.psycopg2_connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+            db_cursor.execute(sql)
+            self.psycopg2_connection.commit()
+            db_cursor.close()
+            return True
+        except psycopg2.errors.InFailedSqlTransaction:
+            self.b_connected = False
+            self.connect()
+            logging.error("Transaction Failed - Review given inputs!")
+            return False
 
     # ###########################################################################################################
     # EXECUTING FUNCTIONS
