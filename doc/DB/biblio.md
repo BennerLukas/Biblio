@@ -59,7 +59,7 @@ or by pressing Ctrl + C in the terminal used to initialise the container.
 
 - [Lukas Benner](https://github.com/BennerLukas) (6550912)
 - [Phillip Lange](https://github.com/Sabokou) (5920414)
-- [Alina Buss](https://github.com/Alinabuss) ()
+- [Alina Buss](https://github.com/Alinabuss) (4163246)
 
 ### Target
 

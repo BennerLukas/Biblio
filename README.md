@@ -93,37 +93,6 @@ docker exec -it biblio bash
 psql --dbname=postgres --username=postgres
 ````
 
-## About the project
-
-### Team
-
-- [Lukas Benner](https://github.com/BennerLukas)
-- [Phillip Lange](https://github.com/Sabokou)
-- [Alina Buss](https://github.com/Alinabuss)
-
-### Target
-
-With Biblio we want to build a system to keep track of your private book collection like its a real library.
-
-Biblio is your tool to manage your own private book collection. Whether you want to keep track of all your books. Find
-gems you forgot about or keep track of your reading list. With Biblio you can also invite friends and family to your
-private library. It allows you to share and borrow books between each other.
-
-We think its important to know your possessions and keep it managed. We can help you to focus on reading rather than
-searching. On the other hand its very important to share, so everybody can enjoy reading and learning new stuff. Biblio
-helps you to organize this process easily.
-
-### Tools
-
-For developing Biblio we used Python, Flask, Postgres and a little bit of bootstrap for easier styling.
-
-## Presentation
-
-<div>
-<img src="/doc/Design/screenshots/Screenshot%202021-03-27%20203035.png" alt="Screenshot" width="800"/>
-<br>
-<img src="/doc/Design/screenshots/Screenshot%202021-03-27%20203102.png" alt="Screenshot" width="800"/>
-<br>
-<img src="/doc/Design/screenshots/Screenshot%202021-03-27%20203118.png" alt="Screenshot" width="600"/>
-<br>
-</div>
+## More  Information
+For more information see here:
+[https://github.com/BennerLukas/biblio/blob/main/doc/DB/biblio.md](https://github.com/BennerLukas/biblio/blob/main/doc/DB/biblio.md)
