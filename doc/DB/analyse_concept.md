@@ -27,4 +27,3 @@
 
     Therefore we did following:
     - made seperate tables for author, publisher and connected it with the books table
-    - 
