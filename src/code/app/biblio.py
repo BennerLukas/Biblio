@@ -29,6 +29,7 @@ class Biblio:
         self.Selections = Selections()
         self.Updates = Updates()
 
+        # automatically establish a connection to the database and test if the database was initialised
         self.connect()
         self.test()
 
@@ -77,7 +78,7 @@ class Biblio:
                 logging.error("Tables not initialized")
         return False
 
-    def init_db(self):
+    def init_db(self) -> bool:
         """
         --CAUTION--
 
@@ -98,7 +99,7 @@ class Biblio:
                         path = os.path.join(root, "init.sql")
 
                 s_sql_statement = open(path, "r").read()
-                logging.error("Alternate File Path for init - Called from inside docker")
+                logging.info("Alternate File Path for init - Called from inside docker")
 
             s_sql_statement = re.sub(r"--.*|\n|\t", " ",
                                      s_sql_statement)  # cleaning file from comments and escape functions
@@ -116,7 +117,7 @@ class Biblio:
                     if "isbn.txt" in files:
                         path = os.path.join(root, "isbn.txt")
 
-            # iterates over isbns and adds them via add_new_book function
+            # iterates over isbns and adds them multithreaded via add_new_book function
             results = list()
             pool = ThreadPool(8)
             results = pool.map(self.add_book_to_database, open(path, "r").readlines())
@@ -126,7 +127,13 @@ class Biblio:
             self.b_initialised = True
             return True
 
-    def add_book_to_database(self, isbn):
+    def add_book_to_database(self, isbn) -> bool:
+        """
+        Creates a new Book object and initialises it with the given isbn. The book is then added to the database.
+
+        :param isbn:
+        :return:
+        """
         new_book = Book()
         new_book.set_via_isbn(isbn)
         self.add_new_book(new_book)

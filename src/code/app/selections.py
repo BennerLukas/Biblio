@@ -85,7 +85,7 @@ class Selections:
                 ad.s_city AS "Location:city", 
                 ad.s_country AS "Location:country", 
                 ad.n_zipcode AS "Location:zipcode", 
-                pu.s_pub_name AS Publisher
+                pu.s_pub_name AS "Publisher"
             FROM books AS b
                 LEFT JOIN wrote AS w ON b.n_book_id =  w.n_book_id
                 LEFT JOIN author AS au ON w.n_author_id = au.n_author_id
@@ -107,9 +107,9 @@ class Selections:
                 l.ts_now AS "Loan timestamp", 
                 bi.n_duration AS "Loan duration", 
                 bi.b_active AS "Loan status", 
-                bo.s_isbn AS ISBN,
-                bo.s_title AS Book, 
-                bo.n_book_edition AS Edition
+                bo.s_isbn AS "ISBN",
+                bo.s_title AS "Book", 
+                bo.n_book_edition AS "Edition"
             FROM users AS u
                 LEFT JOIN loan AS l ON u.n_user_id = l.n_user_id
                 LEFT JOIN borrow_item AS bi ON l.n_loan_id = bi.n_loan_id
