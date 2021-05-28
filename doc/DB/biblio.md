@@ -33,7 +33,7 @@ The first time you use this docker-compose you must initialise the containers wi
 
 ```bash
 cd biblio
-docker-compose up
+docker compose up
 ```
 
 The Frontend is now visible under ````localhost:5000````
@@ -41,13 +41,13 @@ The Frontend is now visible under ````localhost:5000````
 Afterwards, the container may be started with
 
 ```bash
-docker-compose start
+docker compose start
 ```
 
 To shut down the container you can either use a different terminal and use
 
 ```bash
-docker-compose stop
+docker compose stop
 ```
 
 or by pressing Ctrl + C in the terminal used to initialise the container.
