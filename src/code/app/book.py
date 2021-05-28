@@ -5,6 +5,9 @@ import isbnlib
 class Book:
 
     def __init__(self) -> object:
+        """
+        Sets base parameters for a book. Matches the available columns in the database.
+        """
         self.author_first_names = None
         self.author_last_names = None
         self.publisher_name = None
@@ -18,6 +21,11 @@ class Book:
         self.reco_age = None
 
     def set_manually(self, param_list):
+        """
+        Can be used to set a book by hand i.e. passing all required components in a list.
+        :param param_list: 
+        :return: 
+        """
         if len(param_list) == 10:
             return False
 
@@ -36,8 +44,10 @@ class Book:
         print(f"Author Firstname: {self.author_first_names}")
 
         if self.book_isbn is not None:
+            # removes "-" from isbns
             self.book_isbn = "".join(param_list[7].strip("-"))
 
+        # seperates author names into a list
         if ";" in self.author_first_names:
             self.author_first_names = self.author_first_names.strip(";")
             print(f"Author Firstname stripped: {self.author_first_names}")
@@ -56,6 +66,11 @@ class Book:
         # # logging.error(self.__str__())
 
     def set_via_isbn(self, s_isbn: str = "9780062893338"):
+        """
+        Automatically fetches information on a book with the given isbn.
+        :param s_isbn:
+        :return:
+        """
         # remove "-" from isbn string
         s_isbn = "".join(s_isbn.strip("-"))
 
@@ -104,7 +119,10 @@ class Book:
             self.publisher_name = None
 
     def get_s_sql_call(self) -> str or None:
-
+        """
+        Returns the SQL call to add the book object into the database.
+        :return str or None:
+        """
         if self.book_title is None:
             return None
         # if self.publisher_name is None:
@@ -130,6 +148,9 @@ class Book:
         return call
 
     def __str__(self):
+        """
+        Function used for debugging. Allows print({book}) with detailed information.
+        """
         return (f"""ISBN: {self.book_isbn}
                 Titel: {self.book_title}
                 Author First Names: {self.author_first_names}

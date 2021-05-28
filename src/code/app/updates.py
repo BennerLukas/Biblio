@@ -4,7 +4,12 @@ class Updates:
         pass
 
     @staticmethod
-    def format_sql_string(sql_str) -> str:
+    def format_sql_string(sql_str: str) -> str:
+        """
+        Fixes inconsistencies between Python and SQL.
+        :param sql_str:
+        :return:
+        """
         sql_str = sql_str.replace("'None'", "NULL").replace("None", "NULL")
         return sql_str
 
