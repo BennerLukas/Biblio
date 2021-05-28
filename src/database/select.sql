@@ -1,26 +1,26 @@
 -- 1. The first query selects all basic information to all books, as i.e. author, title, ISBN, Location, Publisher... . 
 -- The second query represents the collection of the basic information for a particular book.
 
-SELECT b.s_isbn             AS ISBN,
-       b.s_title            AS Booktitle,
-       b.n_book_edition     AS Bookedition,
-       b.s_genre            AS Bookgenre,
-       b.n_publishing_year  AS Publishingdate,
-       b.s_book_language    AS Booklenguage,
-       b.n_recommended_age  AS Recommended_Age,
-       b.b_is_available     AS Availabilty,
-       au.s_first_name      AS Author_first_name,
-       au.s_last_name       AS Author_last_name,
-       l.s_compartment      AS Location_compartment,
-       l.s_shelf            AS Location_shelf,
-       l.s_room             AS Location_room,
-       l.n_loc_floor        AS Location_floor,
-       ad.s_street          AS Location_street,
-       ad.s_house_number    AS Location_house_number,
-       ad.s_city            AS Location_city,
-       ad.s_country         AS Location_country,
-       ad.n_zipcode         AS Location_zipcode,
-       pu.s_pub_name        AS Publisher
+SELECT b.s_isbn            AS ISBN,
+       b.s_title           AS Booktitle,
+       b.n_book_edition    AS Bookedition,
+       b.s_genre           AS Bookgenre,
+       b.n_publishing_year AS Publishingdate,
+       b.s_book_language   AS Booklenguage,
+       b.n_recommended_age AS Recommended_Age,
+       b.b_is_available    AS Availabilty,
+       au.s_first_name     AS Author_first_name,
+       au.s_last_name      AS Author_last_name,
+       l.s_compartment     AS Location_compartment,
+       l.s_shelf           AS Location_shelf,
+       l.s_room            AS Location_room,
+       l.n_loc_floor       AS Location_floor,
+       ad.s_street         AS Location_street,
+       ad.s_house_number   AS Location_house_number,
+       ad.s_city           AS Location_city,
+       ad.s_country        AS Location_country,
+       ad.n_zipcode        AS Location_zipcode,
+       pu.s_pub_name       AS Publisher
 FROM books AS b
          LEFT JOIN wrote AS w ON b.n_book_id = w.n_book_id
          LEFT JOIN author AS au ON w.n_author_id = au.n_author_id
@@ -29,26 +29,26 @@ FROM books AS b
          LEFT JOIN publisher AS pu ON b.n_publisher_id = pu.n_publisher_id;
 
 
-SELECT b.s_isbn             AS ISBN,
-       b.s_title            AS Booktitle,
-       b.n_book_edition     AS Bookedition,
-       b.s_genre            AS Bookgenre,
+SELECT b.s_isbn            AS ISBN,
+       b.s_title           AS Booktitle,
+       b.n_book_edition    AS Bookedition,
+       b.s_genre           AS Bookgenre,
        b.n_publishing_year AS Publishingdate,
-       b.s_book_language    AS Booklenguage,
-       b.n_recommended_age  AS Recommended_Age,
-       b.b_is_available     AS Availabilty,
-       au.s_first_name      AS Author_first_name,
-       au.s_last_name       AS Author_last_name,
-       l.s_compartment      AS Location_compartment,
-       l.s_shelf            AS Location_shelf,
-       l.s_room             AS Location_room,
-       l.n_loc_floor        AS Location_floor,
-       ad.s_street          AS Location_street,
-       ad.s_house_number    AS Location_house_number,
-       ad.s_city            AS Location_city,
-       ad.s_country         AS Location_country,
-       ad.n_zipcode         AS Location_zipcode,
-       pu.s_pub_name        AS Publisher
+       b.s_book_language   AS Booklenguage,
+       b.n_recommended_age AS Recommended_Age,
+       b.b_is_available    AS Availabilty,
+       au.s_first_name     AS Author_first_name,
+       au.s_last_name      AS Author_last_name,
+       l.s_compartment     AS Location_compartment,
+       l.s_shelf           AS Location_shelf,
+       l.s_room            AS Location_room,
+       l.n_loc_floor       AS Location_floor,
+       ad.s_street         AS Location_street,
+       ad.s_house_number   AS Location_house_number,
+       ad.s_city           AS Location_city,
+       ad.s_country        AS Location_country,
+       ad.n_zipcode        AS Location_zipcode,
+       pu.s_pub_name       AS Publisher
 FROM books AS b
          LEFT JOIN wrote AS w ON b.n_book_id = w.n_book_id
          LEFT JOIN author AS au ON w.n_author_id = au.n_author_id
@@ -173,11 +173,13 @@ WHERE b.s_book_language = 'en';
 
 -- 7. The queries are generating the Count of all books per genre, publisher and author. 
 
-SELECT b.s_genre AS Genre, COUNT(DISTINCT (b.n_book_id)) AS Book_count
+SELECT b.s_genre                     AS Genre,
+       COUNT(DISTINCT (b.n_book_id)) AS Book_count
 FROM books AS b
 GROUP BY b.s_genre;
 
-SELECT pu.s_pub_name AS Publisher, COUNT(DISTINCT (b.n_book_id)) AS Book_count
+SELECT pu.s_pub_name                 AS Publisher,
+       COUNT(DISTINCT (b.n_book_id)) AS Book_count
 FROM books AS b
          LEFT JOIN publisher AS pu ON b.n_publisher_id = pu.n_publisher_id
 GROUP BY pu.s_pub_name;
@@ -198,7 +200,8 @@ FROM (SELECT u.s_first_name             AS User_first_name,
              bo.s_genre                 AS Genre,
              COUNT(bi.n_borrow_item_id) AS Count_borrowed_items,
              rank()
-             OVER (PARTITION BY u.s_first_name, u.s_last_name, bo.s_genre ORDER BY COUNT(bi.n_borrow_item_id) DESC)
+             OVER (
+                 PARTITION BY u.s_first_name, u.s_last_name, bo.s_genre ORDER BY COUNT(bi.n_borrow_item_id) DESC)
       FROM users AS u
                LEFT JOIN loan AS l ON u.n_user_id = l.n_user_id
                LEFT JOIN borrow_item AS bi ON l.n_loan_id = bi.n_loan_id
@@ -342,3 +345,17 @@ FROM (SELECT u.s_first_name           AS User_first_name,
                LEFT JOIN publisher AS pu ON bo.n_publisher_id = pu.n_publisher_id
       GROUP BY u.s_first_name, u.s_last_name, pu.s_pub_name) AS rp
 WHERE rank <= 10;
+
+-- 12. Selecting only books from a specific decade
+SELECT *
+FROM   books
+
+EXCEPT
+
+SELECT *
+FROM   books
+WHERE  n_publishing_year NOT BETWEEN 2010 AND 2029;
+
+-- 13. Fetches information on a list of isbns from the view "overview"
+
+SELECT title, author, publisher  FROM overview WHERE isbn IN ('9780575097568', '9783257071481')
