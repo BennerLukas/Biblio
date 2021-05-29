@@ -299,7 +299,11 @@ GROUP BY u.s_first_name, u.s_last_name;
 
 -- 11. The queries are selecting the 10 most read genre,author and publisher per user.
 
-SELECT rp.user_first_name, rp.user_last_name, rp.genre AS TOP10_genre, rp.count_read_books
+-- Top genre by read books
+SELECT rp.user_first_name,
+       rp.user_last_name,
+       rp.genre AS TOP10_genre,
+       rp.count_read_books
 FROM (SELECT u.s_first_name           AS User_first_name,
              u.s_last_name            AS User_last_name,
              bo.s_genre               AS Genre,
@@ -311,6 +315,7 @@ FROM (SELECT u.s_first_name           AS User_first_name,
       GROUP BY u.s_first_name, u.s_last_name, bo.s_genre) AS rp
 WHERE rank <= 10;
 
+-- Top author by read books
 
 SELECT rp.user_first_name,
        rp.user_last_name,
@@ -332,7 +337,11 @@ FROM (SELECT u.s_first_name           AS User_first_name,
       GROUP BY u.s_first_name, u.s_last_name, au.s_first_name, au.s_last_name) AS rp
 WHERE rank <= 10;
 
-SELECT rp.user_first_name, rp.user_last_name, rp.publisher AS TOP10_publisher, rp.count_read_books
+-- Top publisher by read books
+SELECT rp.user_first_name,
+       rp.user_last_name,
+       rp.publisher AS TOP10_publisher,
+       rp.count_read_books
 FROM (SELECT u.s_first_name           AS User_first_name,
              u.s_last_name            AS User_last_name,
              pu.s_pub_name            AS Publisher,
@@ -346,7 +355,52 @@ FROM (SELECT u.s_first_name           AS User_first_name,
       GROUP BY u.s_first_name, u.s_last_name, pu.s_pub_name) AS rp
 WHERE rank <= 10;
 
--- 12. Selecting only books from a specific decade
+-- 12. Selection of a user's favorite author, genre, publisher by count borrowed items
+SELECT
+    rp.user_first_name,
+    rp.user_last_name,
+    rp.genre AS TOP_genre,
+    rp.publisher AS TOP_publisher,
+    rp.Author_first_name AS TOP_Author_first_name,
+    rp.Author_last_name AS TOP_Author_last_name,
+    rp.count_borrowed_items
+FROM
+(
+    SELECT
+        u.s_first_name AS User_first_name,
+        u.s_last_name AS User_last_name,
+        bo.s_genre AS Genre,
+        pu.s_pub_name AS Publisher,
+        au.s_first_name AS Author_first_name,
+        au.s_last_name AS Author_last_name,
+        COUNT(bi.n_borrow_item_id) AS Count_borrowed_items,
+        rank() OVER
+        (
+            PARTITION BY
+                u.s_first_name,
+                u.s_last_name,
+                bo.s_genre
+            ORDER BY COUNT(bi.n_borrow_item_id) DESC
+        )
+    FROM users AS u
+        LEFT JOIN loan AS l ON u.n_user_id = l.n_user_id
+        LEFT JOIN borrow_item AS bi ON l.n_loan_id = bi.n_loan_id
+        LEFT JOIN books AS bo ON bi.n_book_id = bo.n_book_id
+        LEFT JOIN wrote AS w ON bo.n_book_id =  w.n_book_id
+        LEFT JOIN author AS au ON w.n_author_id = au.n_author_id
+        LEFT JOIN publisher AS pu ON bo.n_publisher_id = pu.n_publisher_id
+    GROUP BY
+        u.s_first_name,
+        u.s_last_name,
+        bo.s_genre,
+        pu.s_pub_name,
+        au.s_first_name,
+        au.s_last_name
+) AS rp
+WHERE rank <= 10
+LIMIT 1;
+
+-- 13. Selecting only books from a specific decade
 SELECT *
 FROM   books
 
@@ -356,6 +410,6 @@ SELECT *
 FROM   books
 WHERE  n_publishing_year NOT BETWEEN 2010 AND 2029;
 
--- 13. Fetches information on a list of isbns from the view "overview"
+-- 14. Fetches information on a list of isbns from the view "overview"
 
 SELECT title, author, publisher  FROM overview WHERE isbn IN ('9780575097568', '9783257071481')
