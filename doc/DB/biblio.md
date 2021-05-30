@@ -1,6 +1,6 @@
 <div align="center">
 <h2>Biblio</h2>
-<img src="/doc/Design/svg/open_book.svg" alt="Logo" width="180" align="center"/>
+<img src="https://raw.githubusercontent.com/BennerLukas/biblio/8cd061606ecdb4669df90e89f87b5dd37ca22531/doc/Design/svg/open_book.svg" alt="Logo" width="180" align="center"/>
 <br><br>
 </div>
 
@@ -24,6 +24,9 @@
 ![Flask](https://img.shields.io/badge/Language-CSS-lightgrey?style=flat&logo=css3)
 
 Biblio is a tool for your private library. It manages your books and magazines.
+
+The code can be found here: [https://github.com/BennerLukas/biblio](https://github.com/BennerLukas/biblio). It is recommended to do a ```git clone``` and look at the code like this. But its via the zip-folder or github.com possible as well.
+
 
 ## Composed Docker Containers
 
@@ -77,17 +80,6 @@ helps you to organize this process easily.
 
 For developing Biblio we used Python, Flask, Postgres and a little bit of bootstrap for easier styling.
 
-## Presentation
-
-<div>
-<img src="/doc/Design/screenshots/Screenshot%202021-03-27%20203035.png" alt="Screenshot" width="800"/>
-<br>
-<img src="/doc/Design/screenshots/Screenshot%202021-03-27%20203102.png" alt="Screenshot" width="800"/>
-<br>
-<img src="/doc/Design/screenshots/Screenshot%202021-03-27%20203118.png" alt="Screenshot" width="600"/>
-<br>
-</div>
-
 ## Specification
 
 'Biblio' will be a webapp for organizing your private book collection.
@@ -105,15 +97,23 @@ The used database schema und functionalities are described in the following:
 - The database can tracks which books a particular user already read.
 - The Address is handled in a seperate table and has the following attributes: city, country, street, house number, zipcode and a unique identifier.
 
-
-## ER-Model
+## Presentation & Model
 <div>
-<img src="/doc/DB/diagrams-ER-Model.png" alt="Screenshot" width="821"/>
+<img src="https://raw.githubusercontent.com/BennerLukas/biblio/main/doc/Design/screenshots/Screenshot%202021-03-27%20203035.png" alt="Screenshot" width="800"/>
+<br>
+<img src="https://raw.githubusercontent.com/BennerLukas/biblio/main/doc/Design//screenshots/Screenshot%202021-03-27%20203102.png" alt="Screenshot" width="800"/>
+<br>
+<img src="https://raw.githubusercontent.com/BennerLukas/biblio/main/doc/Design//screenshots/Screenshot%202021-03-27%20203118.png" alt="Screenshot" width="600"/>
+<br>
 </div>
 
-## Relational Model
+
 <div>
-<img src="/doc/DB/diagrams-Relational%20Model.png" alt="Screenshot" width="775"/>
+<img src="https://raw.githubusercontent.com/BennerLukas/biblio/main/doc/DB/diagrams-ER-Model.png" alt="Screenshot" width="821"/>
+</div>
+<br><br>
+<div>
+<img src="https://raw.githubusercontent.com/BennerLukas/biblio/main/doc/DB/diagrams-Relational%20Model.png" alt="Screenshot" width="775"/>
 </div>
 
 
